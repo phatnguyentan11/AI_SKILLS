@@ -41,6 +41,13 @@ Mọi quyết định trong hệ thống đều tuân theo 3 nguyên tắc:
 | **KISS** — Keep It Simple, Stupid | Chọn giải pháp đơn giản nhất hoạt động được | 20 dòng code rõ ràng > 5 dòng "clever" |
 | **DRY** — Don't Repeat Yourself | Không lặp logic, extract ra shared module | Một hàm validate dùng chung, không copy-paste |
 
+Advanced Architectural & Clean Code Principles:
+
+Separation of Concerns (SoC) — Divide the system into distinct modules, each addressing a separate domain or infrastructure concern.
+Composition Over Inheritance — Favor assembling interchangeable behaviors over building rigid, deeply nested class hierarchies.
+Fail Fast — Stop operation and report errors immediately upon encountering an invalid state, preventing cascading system failures.
+Boy Scout Rule — Always leave the codebase a little cleaner than you found it.
+
 > **Tại sao quan trọng?** Khi AI viết code không có kiểm soát, nó có xu hướng over-engineer — thêm layer, thêm abstraction, thêm feature không cần thiết. Ba nguyên tắc này là constraint để AI giữ code đơn giản và maintainable.
 
 ---
