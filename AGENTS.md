@@ -48,6 +48,38 @@ Use prompts from `.github/prompts/` in chat with `/plan`, `/code`, `/fix`, `/deb
 
 - Files must be under **200 lines** — split if larger.
 - Use kebab-case for file names.
-- **NEVER commit** secrets, API keys, `.env` files, or credentials.
-- Conventional commits: `type(scope): description`
-- No AI attribution in commits, PRs, or documentation.
+
+---
+
+## Shared Documentation (`./docs/`)
+
+> Applies to ALL projects in this workspace. Read before working on any service.
+
+| File | Nội dung |
+|------|---------|
+| `docs/codebase-summary.md` | Tech stack, cấu trúc folder, controllers, DB patterns |
+| `docs/system-architecture.md` | Kiến trúc layers, request lifecycle, external integrations |
+| `docs/code-standards.md` | Naming, project structure, git rules, AI/Copilot rules |
+| `docs/code-patterns.md` | Controller, Service, Repository patterns với code examples |
+| `docs/aspnet-setup.md` | Program.cs, DI/ServiceStartup, Swagger setup |
+| `docs/aspnet-controllers.md` | Controller pattern, Auth (RabbitMQ), Response/Result types |
+| `docs/aspnet-middleware.md` | Middleware, Configuration, Validation, Exceptions |
+| `docs/aspnet-apigateway.md` | API Gateway integration: ApiHelper, ApimService, HttpAuth |
+| `docs/aspnet-database.md` | PostgreSQL (Dapper) và SQL Server patterns chi tiết |
+| `docs/aspnet-fileblob.md` | File upload (IFormFile), Azure Blob Storage, download, zip |
+| `docs/aspnet-fileblob-flows.md` | Blob usage flows: serve browser, email, CSV import, forward API |
+
+---
+
+## Projects in This Workspace
+
+| Project | Loại | Docs |
+|---------|------|------|
+| `mssapi/` | ASP.NET Core Web API (legacy SmartSale.Server) | `mssapi/AI/docs/` |
+| `myss-tools/` | .NET 8 microservice — Tools/CIC/EInvoice | `myss-tools/AI/docs/` |
+| `myss-lead/` | .NET 8 microservice — Lead management | `myss-lead/AI/docs/` |
+| `myss-acl/` | .NET 8 microservice — ACL/Permissions | `myss-acl/AI/docs/` |
+| `smartsale-admin/` | React 17 SPA Admin Panel (ASP.NET Core 2.1 host) | `smartsale-admin/AI/docs/` |
+
+> `AI/docs/` (root) = shared patterns cho **tất cả .NET microservices**.
+> `smartsale-admin` là React SPA — **không** follow shared ASP.NET Core patterns.

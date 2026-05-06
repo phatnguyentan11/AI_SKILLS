@@ -115,11 +115,17 @@ Spawn multiple agents simultaneously for independent work:
 ## Documentation Management
 
 ### Key Documents (always read before working in a repo)
-- `./docs/code-standards.md` — Coding conventions for this project
-- `./docs/system-architecture.md` — System architecture details
-- `./docs/development-roadmap.md` — Development roadmap and milestones
-- `./docs/project-changelog.md` — Version history and changes
-- `./docs/aspnet/` — ASP.NET Core reference docs (API design, auth, DI, middleware, testing)
+- `./docs/codebase-summary.md` — Tech stack, folder structure, controllers, DB patterns
+- `./docs/system-architecture.md` — System architecture, request lifecycle, integrations
+- `./docs/code-standards.md` — Naming, structure, git rules, AI/Copilot rules
+- `./docs/code-patterns.md` — Controller, Service, Repository patterns
+- `./docs/aspnet-setup.md` — Program.cs, DI registration, Swagger
+- `./docs/aspnet-controllers.md` — Controller pattern, Auth, Response/Result
+- `./docs/aspnet-middleware.md` — Middleware, Config, Validation, Exceptions
+- `./docs/aspnet-apigateway.md` — API Gateway (ApiHelper, ApimService, HttpAuth)
+- `./docs/aspnet-database.md` — PostgreSQL Dapper patterns + SQL Server patterns
+- `./docs/aspnet-fileblob.md` — File upload (IFormFile), Azure Blob Storage, download, zip
+- `./docs/aspnet-fileblob-flows.md` — Blob usage flows: serve browser, email, CSV import, forward API
 
 ### Auto-update Triggers
 The `@project-manager` agent MUST update these documents when:
@@ -143,3 +149,61 @@ The `@project-manager` agent MUST update these documents when:
 - **Honest & Brutally Direct**: No sugarcoating — state problems clearly.
 - **Unresolved Questions**: Always list unresolved questions at the end of reports.
 - **No AI attribution**: Never include phrases like "As an AI..." in commits, PRs, or docs.
+
+---
+
+## Project-Specific: VIB SmartSales Platform
+
+> Rules below apply to ALL microservices in this workspace (`myss-tools`, `myss-lead`, `myss-acl`, `mssapi`).
+
+### Platform Identity
+- **Platform:** VIB SmartSales — internal banking sales platform
+- **Framework:** .NET 8, ASP.NET Core Web API
+- **Language:** C# 12
+- **Shared infrastructure:** PostgreSQL + pgvector, SQL Server, Redis, RabbitMQ, Azure OpenAI, Azure Blob, Azure Key Vault
+
+### Common Conventions (all services)
+
+**1. Always use interfaces for DI**
+```csharp
+private readonly IXyzService _xyz;    // ✅ Interface
+private readonly XyzService _xyz;     // ❌ Concrete class
+```
+
+**2. Response envelope — always wrap in Response\<T\>**
+```csharp
+return new Response<T> { Type = (int)ResponseBasicType.Success, Code = "00", Message = "...", Data = data };
+```
+
+**3. Configuration — use service-specific IConfiguration interface**
+- Never use `IConfiguration` directly or hardcode values
+- Always inject the service's own `IToolsConfiguration` / equivalent
+- Secrets come from Azure Key Vault; non-sensitive values from environment variables
+
+**4. Register DI in `Startups/ServiceStartup.cs`, never in `Program.cs`**
+
+**5. Async/await — always**
+```csharp
+public async Task<T> GetByIdAsync(...)   // ✅ Async suffix required
+var result = _service.GetAsync().Result; // ❌ Never block
+```
+
+**6. Logging — structured templates, never interpolated strings**
+```csharp
+_logger.LogError(ex, "Failed {FunctionName} for user {UserId}", fnName, userId); // ✅
+_logger.LogError(ex, $"Failed {fnName}");                                         // ❌
+```
+
+**7. Never log secrets, tokens, passwords, or PII**
+
+### Per-Service References
+- `myss-tools` → [codebase-summary](./docs/codebase-summary.md) | [architecture](./docs/system-architecture.md)
+- Full coding standards → [code-standards](./docs/code-standards.md) | [code-patterns](./docs/code-patterns.md)
+- API integration → [aspnet-apigateway](./docs/aspnet-apigateway.md)
+- Database → [aspnet-database](./docs/aspnet-database.md)
+- File/Blob → [aspnet-fileblob](./docs/aspnet-fileblob.md) | [usage flows](./docs/aspnet-fileblob-flows.md)
+
+### Domain Knowledge
+**User roles:** `RM`, `RMC`, `PB`, `PRM`, `SM`, `PBM`, `BM`, `RME`, `TRSMAKER`, `TRSCHECKER`, `CA`, `AMCA`, `WSM`, `FS`, `FSM`
+
+**Business domains:** CIS (Customer Info), CIC (Credit), CNA Tool, ODS (Debt), DCS, EInvoice, AML, AI Genie chatbot (RAG, Vietnamese-only)
