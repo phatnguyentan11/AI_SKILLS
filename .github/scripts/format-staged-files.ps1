@@ -162,7 +162,7 @@ if ($Mode -eq "PreCommit") {
     Write-Info "Scanning staged files for secrets and sensitive data..."
 
     $secretPatterns = @(
-        @{ Name = "Private Key";        Pattern = "-----BEGIN (RSA|DSA|EC|OPENSSH|PRIVATE) KEY-----" },
+        @{ Name = "Private Key";        Pattern = "-----BEGIN [A-Z ]*(RSA|DSA|EC|OPENSSH|PRIVATE)[A-Z ]* KEY-----" },
         @{ Name = "GitHub Token";       Pattern = "gh[pousr]_[A-Za-z0-9_]{30,}" },
         @{ Name = "AWS Access Key";     Pattern = "AKIA[0-9A-Z]{16}" },
         @{ Name = "Credential in code"; Pattern = '(?i)(password|passwd|pwd|secret|token|api[_-]?key|client[_-]?secret)\s*[:=]\s*[\"''][^\"''\s]{12,}[\"'']' },
@@ -199,14 +199,15 @@ if ($Mode -eq "PreCommit") {
     Write-Host ""
     if ($secretFindings.Count -gt 0) {
         Write-Host ""
-        Write-Host "  ╔══════════════════════════════════════════════════════════════╗" -ForegroundColor Red
-        Write-Host "  ║  [SECURITY WARNING] Potential secrets detected in staged files ║" -ForegroundColor Red
-        Write-Host "  ╚══════════════════════════════════════════════════════════════╝" -ForegroundColor Red
-        $secretFindings | ForEach-Object { Write-Warning "  $_" }
+        Write-Host "  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" -ForegroundColor Red
+        Write-Host "  !! [SECURITY WARNING] Potential secrets detected in staged files !!" -ForegroundColor Red
+        Write-Host "  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" -ForegroundColor Red
         Write-Host ""
-        Write-Warning "Review the findings above. Remove secrets before committing."
-        Write-Warning "If this is a false positive, you may proceed — the commit is NOT blocked."
-        Write-Warning "To block commits with secrets, set AI_GOVERNANCE_STRICT=1."
+        $secretFindings | ForEach-Object { Write-Host "  [SECRET] $_" -ForegroundColor Yellow }
+        Write-Host ""
+        Write-Host "  >> Review the findings above. Remove secrets before committing." -ForegroundColor Red
+        Write-Host "  >> If false positive, commit will proceed (warn-only mode)." -ForegroundColor Red
+        Write-Host "  >> To BLOCK commits with secrets: set AI_GOVERNANCE_STRICT=1" -ForegroundColor Red
         Write-Host ""
 
         $strict = $env:AI_GOVERNANCE_STRICT
