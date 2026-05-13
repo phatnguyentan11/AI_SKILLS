@@ -35,7 +35,6 @@ if (Get-Module -ListAvailable PSScriptAnalyzer -ErrorAction SilentlyContinue) {
 
 $dotnetCmd = Get-Command dotnet -ErrorAction SilentlyContinue
 
-Write-Info "Mode: $Mode"
 Write-Info "Prettier  : $(if ($prettierCmd) { 'available' } else { 'not found - skipping .md/.yml/.json' })"
 Write-Info "PSAnalyzer: $(if ($hasPSAnalyzer) { 'available' } else { 'not found - skipping .ps1' })"
 Write-Info "dotnet    : $(if ($dotnetCmd) { 'available' } else { 'not found - skipping .cs' })"
