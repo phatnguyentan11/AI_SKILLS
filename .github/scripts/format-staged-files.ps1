@@ -158,6 +158,66 @@ if ($Mode -eq "PreCommit") {
         Write-Info "All staged files already properly formatted."
     }
 
+    # ── Secret / sensitive data scan on staged files ─────────────────────────
+    Write-Info "Scanning staged files for secrets and sensitive data..."
+
+    $secretPatterns = @(
+        @{ Name = "Private Key";        Pattern = "-----BEGIN (RSA|DSA|EC|OPENSSH|PRIVATE) KEY-----" },
+        @{ Name = "GitHub Token";       Pattern = "gh[pousr]_[A-Za-z0-9_]{30,}" },
+        @{ Name = "AWS Access Key";     Pattern = "AKIA[0-9A-Z]{16}" },
+        @{ Name = "Credential in code"; Pattern = '(?i)(password|passwd|pwd|secret|token|api[_-]?key|client[_-]?secret)\s*[:=]\s*[\"''][^\"''\s]{12,}[\"'']' },
+        @{ Name = "Connection string";  Pattern = '(?i)(Server|Data Source|Initial Catalog).{0,80}(Password|PWD)\s*=\s*[^;\"'']{6,}' },
+        @{ Name = "JWT (raw)";          Pattern = "eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}" },
+        @{ Name = "Private IP/internal URL"; Pattern = '(?i)(https?://(10\.|172\.(1[6-9]|2[0-9]|3[01])\.|192\.168\.|localhost|127\.0\.0\.1))' }
+    )
+
+    $secretFindings = [System.Collections.Generic.List[string]]::new()
+
+    foreach ($file in $stagedFiles) {
+        # Only scan text-like files; skip binaries by extension
+        $ext = [IO.Path]::GetExtension($file).ToLower()
+        $skipExts = @(".png",".jpg",".jpeg",".gif",".pdf",".zip",".exe",".dll",".bin",".ico",".woff",".woff2",".ttf",".eot")
+        if ($ext -in $skipExts) { continue }
+
+        try {
+            $content = Get-Content $file -Raw -Encoding UTF8 -ErrorAction SilentlyContinue
+            if (-not $content) { continue }
+
+            foreach ($p in $secretPatterns) {
+                if ($content -match $p.Pattern) {
+                    $lineMatches = Select-String -Path $file -Pattern $p.Pattern -AllMatches -ErrorAction SilentlyContinue
+                    foreach ($lm in $lineMatches) {
+                        $secretFindings.Add("[$($p.Name)] $file : line $($lm.LineNumber)")
+                    }
+                }
+            }
+        } catch {
+            # non-text file or read error — skip silently
+        }
+    }
+
+    Write-Host ""
+    if ($secretFindings.Count -gt 0) {
+        Write-Host ""
+        Write-Host "  ╔══════════════════════════════════════════════════════════════╗" -ForegroundColor Red
+        Write-Host "  ║  [SECURITY WARNING] Potential secrets detected in staged files ║" -ForegroundColor Red
+        Write-Host "  ╚══════════════════════════════════════════════════════════════╝" -ForegroundColor Red
+        $secretFindings | ForEach-Object { Write-Warning "  $_" }
+        Write-Host ""
+        Write-Warning "Review the findings above. Remove secrets before committing."
+        Write-Warning "If this is a false positive, you may proceed — the commit is NOT blocked."
+        Write-Warning "To block commits with secrets, set AI_GOVERNANCE_STRICT=1."
+        Write-Host ""
+
+        $strict = $env:AI_GOVERNANCE_STRICT
+        if ($strict -match "^(1|true|yes)$") {
+            Write-Host "[format] Strict mode: blocking commit due to secret findings." -ForegroundColor Red
+            exit 1
+        }
+    } else {
+        Write-Info "No secrets or sensitive data detected in staged files."
+    }
+
     exit 0
 }
 
