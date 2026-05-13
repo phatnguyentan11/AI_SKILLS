@@ -1,0 +1,22 @@
+#!/usr/bin/env sh
+
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
+if [ -z "$ROOT" ]; then
+  echo "[pre-push][warning] Cannot resolve repository root. Skipping."
+  exit 0
+fi
+
+SCRIPT="$ROOT/.github/scripts/pre-push-dotnet-check.ps1"
+if [ ! -f "$SCRIPT" ]; then
+  echo "[pre-push][warning] Missing $SCRIPT. Skipping."
+  exit 0
+fi
+
+if command -v pwsh >/dev/null 2>&1; then
+  pwsh -NoProfile -File "$SCRIPT"
+elif command -v powershell >/dev/null 2>&1; then
+  powershell -NoProfile -ExecutionPolicy Bypass -File "$SCRIPT"
+else
+  echo "[pre-push][warning] PowerShell not available. Skipping .NET build check."
+  exit 0
+fi
