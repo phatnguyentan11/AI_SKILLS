@@ -210,11 +210,15 @@ if ($Mode -eq "PreCommit") {
         Write-Host "  >> To BLOCK commits with secrets: set AI_GOVERNANCE_STRICT=1" -ForegroundColor Red
         Write-Host ""
 
-        $strict = $env:AI_GOVERNANCE_STRICT
-        if ($strict -match "^(1|true|yes)$") {
-            Write-Host "[format] Strict mode: blocking commit due to secret findings." -ForegroundColor Red
+        # Default: BLOCK commit when secrets found.
+        # To allow commit despite findings, set AI_GOVERNANCE_ALLOW_SECRETS=1 (not recommended).
+        $allow = $env:AI_GOVERNANCE_ALLOW_SECRETS
+        if ($allow -notmatch "^(1|true|yes)$") {
+            Write-Host "[format] Commit BLOCKED. Remove secrets before committing." -ForegroundColor Red
+            Write-Host "[format] To override (not recommended): set AI_GOVERNANCE_ALLOW_SECRETS=1" -ForegroundColor Red
             exit 1
         }
+        Write-Host "[format] WARNING: AI_GOVERNANCE_ALLOW_SECRETS is set. Proceeding despite findings." -ForegroundColor Yellow
     } else {
         Write-Info "No secrets or sensitive data detected in staged files."
     }
