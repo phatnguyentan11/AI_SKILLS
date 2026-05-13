@@ -19,6 +19,7 @@ Purpose: define the standalone `.github/` package layout for GitHub Copilot cust
 | --- | --- | --- |
 | Copilot knowledge base | `.github/copilot/**/*.md` | RAG-friendly guidance for workspace retrieval |
 | Reference knowledge | `.github/copilot/references/**/*.md` | Sanitized deeper guidance migrated from reference packages |
+| External context governance | `.github/copilot/*mcp*.md`, `.github/copilot/*knowledge*.md`, `.github/copilot/deep-research-playbook.md` | MCP, internal knowledge, and research source controls |
 | Package docs base | `.github/docs/**/*.md` | Delivery log, changelog, current package docs |
 
 ## Placement Rules

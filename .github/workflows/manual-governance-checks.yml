@@ -63,6 +63,9 @@ jobs:
             ".github/copilot/workflow-playbook.md",
             ".github/copilot/banking-grade-engineering.md",
             ".github/copilot/codebase-analysis-playbook.md",
+            ".github/copilot/azure-devops-mcp-playbook.md",
+            ".github/copilot/internal-knowledge-playbook.md",
+            ".github/copilot/deep-research-playbook.md",
             ".github/docs/project-docs-base.md",
             ".github/docs/project-changelog.md",
             ".github/docs/feature-delivery-log.md"

@@ -18,6 +18,7 @@ Score after this revision: 9.2/10 for a portable instruction package.
 - Adds manual-only GitHub Actions governance checks for build, test, lint, secret scanning, CodeQL SAST, and .NET dependency audit.
 - Adds banking-grade gates for planning, verification, line review, docs updates, rollback, and sensitive-data handling.
 - Removes payment-specific and web-frontend-specific guidance because they are outside the current project scope.
+- Adds Azure DevOps MCP, internal knowledge, and deep research governance without storing connector secrets or enabling write operations by default.
 - Avoids shell scripts, generated assets, credentials, and tool-specific automation in skills.
 
 ## Remaining Risks
@@ -28,6 +29,7 @@ Score after this revision: 9.2/10 for a portable instruction package.
 - No CODEOWNERS or branch protection can be enforced from this package alone.
 - Secret scanning, SAST, dependency scanning, and policy checks are scaffolded as manual workflow checks, but must be enabled and enforced in the target repository.
 - Human accountable review remains mandatory for regulated banking code.
+- External connectors such as Azure DevOps, Slack, database schema readers, NotebookLM-style sources, and Deep Research require enterprise approval before use.
 
 ## Required Target-Repo Hardening
 
@@ -37,6 +39,7 @@ Score after this revision: 9.2/10 for a portable instruction package.
 - Add stack-specific path instructions once the real codebase is known.
 - Add project-specific business glossary, role matrix, API contracts, and system architecture docs in the target repository.
 - Add data-classification and logging standards specific to the bank.
+- Add project-specific MCP connector registry and knowledge source register after enterprise owners approve the tools.
 
 ## Retrieval Keywords
 

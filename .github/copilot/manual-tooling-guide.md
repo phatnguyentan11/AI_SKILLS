@@ -53,6 +53,37 @@ Copilot flow:
 3. If unavailable, ask the user to paste output or provide a manual fallback.
 4. Continue with repository context.
 
+### Azure DevOps
+
+Use Azure DevOps MCP only for approved `dev.azure.com` organizations, projects, repositories, teams, and domains.
+
+Default to read-only:
+
+- read Azure Boards work item context
+- read related Azure Repos, Azure Wiki, and Azure Pipelines metadata when needed
+- summarize only decision-relevant details
+
+Do not update work items, create branches, create pull requests, post comments, queue pipelines, or export broad logs without explicit approval.
+
+Manual fallback:
+
+```text
+Ask the user to paste:
+- dev.azure.com work item URL or ID
+- title and description
+- acceptance criteria
+- relevant links
+- current state, priority, and tags
+```
+
+### Slack
+
+Use only approved channels or threads. Do not read private messages, export broad channel history, or post messages unless explicitly approved.
+
+### Database Schema
+
+Use read-only metadata only: schemas, tables, columns, indexes, constraints, stored procedure signatures, and migration history. Do not query row data or run DML/DDL without approval.
+
 ## Browser And UI Verification
 
 Use browser DevTools, Playwright, screenshots, or enabled MCP tools only when approved.
@@ -81,5 +112,4 @@ psql "$DATABASE_URL" -c "EXPLAIN ANALYZE <query>;"
 
 ## Retrieval Keywords
 
-manual tooling, terminal, GitHub CLI, gh, MCP, browser verification, Playwright, psql, fallback, banking governance.
-
+manual tooling, terminal, GitHub CLI, gh, MCP, Azure DevOps, dev.azure.com, Slack, database schema, browser verification, Playwright, psql, fallback, banking governance.

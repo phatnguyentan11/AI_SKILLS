@@ -2,6 +2,257 @@
 
 Use this log after every feature, fix, migration, architecture change, security change, operational change, or setup change to this standalone `.github/` package.
 
+## 2026-05-13 - Remove Duplicate Docs Index
+
+### Plan
+- Remove `.github/docs/docs.html` because the Markdown developer guide and HTML presentation now cover the onboarding/documentation surface.
+- Update documentation inventory and counts after the removal.
+
+### Changed Files
+- `.github/docs/docs.html`
+- `.github/docs/project-docs-base.md`
+- `.github/docs/project-changelog.md`
+- `.github/docs/feature-delivery-log.md`
+- `.github/docs/ai-project-developer-guide.md`
+- `.github/docs/huong-dan-su-dung.md`
+
+### Verification
+- Commands run:
+  - `rg --files -uu .github | Measure-Object`
+  - `Test-Path .github\docs\docs.html`
+  - `Get-ChildItem .github\docs -File | Measure-Object`
+  - secret pattern scan
+- Results:
+  - `.github/docs/docs.html` is removed.
+  - `.github` file count: 82.
+  - Docs file count: 7.
+  - Secret pattern scan passed.
+
+### Line Review
+- Reviewer: Codex
+- Critical/high findings:
+  - None known at edit time.
+- Residual risk:
+  - Historical delivery-log entries may still mention files that existed at the time of those deliveries.
+
+### Security, Privacy, Data Impact
+- Sensitive data touched: none.
+- Auth/authz impact: none.
+- Logging impact: none.
+- Data integrity impact: none.
+
+### Docs Updated
+- `.github/docs/project-docs-base.md`
+- `.github/docs/project-changelog.md`
+- `.github/docs/feature-delivery-log.md`
+- `.github/docs/ai-project-developer-guide.md`
+- `.github/docs/huong-dan-su-dung.md`
+
+### Rollback
+- Restore `.github/docs/docs.html` and revert the inventory/count updates if a separate docs index is needed again.
+
+## 2026-05-13 - Developer Guide And Presentation Refresh
+
+### Plan
+- Read the current `.github` AI package and turn the architecture, workflows, prompts, agents, skills, MCP, internal knowledge, and Deep Research governance into developer-facing documentation.
+- Add a Vietnamese Markdown guide with Mermaid architecture/data-flow diagrams and practical prompt examples.
+- Redesign the HTML presentation as a single-file guide with sidebar navigation, Tailwind layout, Prism code highlighting, Lucide icons, Inter font, Mermaid diagrams, callouts, and step-by-step execution sections.
+- Keep active documentation aligned with Azure DevOps as the work item source and avoid reintroducing removed payment or web-specific guidance.
+
+### Changed Files
+- `.github/docs/ai-project-developer-guide.md`
+- `.github/docs/ai-project-presentation.html`
+- `.github/docs/project-docs-base.md`
+- `.github/docs/project-changelog.md`
+- `.github/docs/feature-delivery-log.md`
+- `.github/docs/docs.html`
+- `.github/docs/huong-dan-su-dung.md`
+
+### Verification
+- Commands run:
+  - `rg --files -uu .github | Measure-Object`
+  - prompt count check for `.github/prompts/*.prompt.md`
+  - agent count check for `.github/agents/*.agent.md`
+  - skill count check for `.github/skills/*`
+  - `SKILL.md` inventory check
+  - prompt/agent/instruction frontmatter inspection
+  - secret pattern scan
+  - active docs/surface scan for removed issue-tracker/payment/web-specific keywords
+- Results:
+  - `.github` file count: 83.
+  - Prompt count: 22.
+  - Agent count: 10.
+  - Skill count: 18.
+  - All skills contain `SKILL.md`.
+  - Frontmatter present for prompts, agents, and instructions.
+  - Secret pattern scan passed.
+  - Active scope keyword scan returned no matches.
+- Checks not run:
+  - GitHub Actions not run because this repository is package-only and workflow is manual-only.
+  - Browser screenshot review not run; HTML is static and can be opened directly from `.github/docs/ai-project-presentation.html`.
+
+### Line Review
+- Reviewer: Codex
+- Critical/high findings:
+  - None found.
+- Resolved findings:
+  - Removed an active guide reference to an out-of-scope issue tracker name so the docs consistently point to `dev.azure.com`.
+- Residual risk:
+  - The HTML uses CDN-hosted Tailwind, Prism, Lucide, Mermaid, and Inter assets; diagrams and styling require network access when opened offline.
+
+### Security, Privacy, Data Impact
+- Sensitive data touched: none.
+- Auth/authz impact: none.
+- Logging impact: none.
+- Data integrity impact: none.
+
+### Docs Updated
+- `.github/docs/ai-project-developer-guide.md`
+- `.github/docs/ai-project-presentation.html`
+- `.github/docs/project-docs-base.md`
+- `.github/docs/project-changelog.md`
+- `.github/docs/feature-delivery-log.md`
+- `.github/docs/docs.html`
+- `.github/docs/huong-dan-su-dung.md`
+
+### Rollback
+- Remove `.github/docs/ai-project-developer-guide.md` and revert the presentation/docs index/changelog/log updates to restore the prior documentation set.
+
+### Follow-Ups
+- Open `.github/docs/ai-project-presentation.html` in a browser and review visual rendering after CDN assets load.
+- Add real Azure DevOps MCP connector details only after enterprise owners approve scope and permissions.
+
+## 2026-05-13 - Azure DevOps MCP And R&D Governance
+
+### Plan
+- Add governed Azure DevOps MCP intake for `dev.azure.com`.
+- Add internal knowledge governance for NotebookLM-style source curation and private docs.
+- Add Deep Research governance for evidence-backed architecture and library research.
+- Keep all external context read-only by default and approval-gated for writes.
+
+### Changed Files
+- `.github/copilot-instructions.md`
+- `.github/copilot/README.md`
+- `.github/copilot/workflow-playbook.md`
+- `.github/copilot/manual-tooling-guide.md`
+- `.github/copilot/azure-devops-mcp-playbook.md`
+- `.github/copilot/mcp-tool-registry.template.md`
+- `.github/copilot/internal-knowledge-playbook.md`
+- `.github/copilot/knowledge-source-register.template.md`
+- `.github/copilot/deep-research-playbook.md`
+- `.github/copilot/skills-index.md`
+- `.github/copilot/prompt-catalog.md`
+- `.github/copilot/agent-catalog.md`
+- `.github/copilot/copilot-architecture.md`
+- `.github/copilot/copilot-project-assessment.md`
+- `.github/copilot/official-docs-snapshot.md`
+- `.github/prompts/mcp.prompt.md`
+- `.github/prompts/azure-devops-intake.prompt.md`
+- `.github/prompts/db-schema-context.prompt.md`
+- `.github/prompts/internal-knowledge.prompt.md`
+- `.github/prompts/deep-research.prompt.md`
+- `.github/prompts/architecture-research.prompt.md`
+- `.github/skills/mcp-integration-governance/SKILL.md`
+- `.github/skills/internal-knowledge-governance/SKILL.md`
+- `.github/skills/deep-research-governance/SKILL.md`
+- `.github/agents/knowledge-curator.agent.md`
+- `.github/agents/research-architect.agent.md`
+- `.github/workflows/manual-governance-checks.yml`
+- `.github/docs/*`
+
+### Verification
+- Commands run:
+  - `rg --files -uu .github`
+  - frontmatter and `SKILL.md` inventory check
+  - `rg -n -i "payment|payments|PaymentService|frontend|front-end|ui ux|ui/ux|web frontend" ...`
+  - package count check for files, prompts, agents, and skills
+  - secret pattern scan
+- Results:
+  - `.github` file count: 82.
+  - Prompt count: 22.
+  - Agent count: 10.
+  - Skill count: 18.
+  - Frontmatter and skill inventory passed.
+  - No active out-of-scope issue-tracker/payment/frontend references in instructions, prompts, agents, skills, presentation, or user guide.
+  - Secret pattern scan passed.
+- Checks not run:
+  - GitHub Actions not run because this repository is package-only and workflow is manual-only.
+
+### Line Review
+- Reviewer: Codex
+- Critical/high findings:
+  - None known at plan time.
+- Resolved findings:
+  - Replaced the earlier issue-tracker intake assumption with Azure DevOps intake.
+- Residual risk:
+  - Actual MCP connectors still require enterprise approval and runtime setup outside this package.
+
+### Security, Privacy, Data Impact
+- Sensitive data touched: none.
+- Auth/authz impact: positive governance impact through allowlist and read-only defaults.
+- Logging impact: pipeline logs and chat exports are explicitly caution-gated.
+- Data integrity impact: database schema context is metadata-only by default.
+
+### Docs Updated
+- `.github/docs/project-docs-base.md`
+- `.github/docs/project-changelog.md`
+- `.github/docs/feature-delivery-log.md`
+- `.github/docs/docs.html`
+- `.github/docs/ai-project-presentation.html`
+- `.github/docs/huong-dan-su-dung.md`
+
+### Rollback
+- Remove the new MCP, knowledge, and deep research files and revert the catalog/docs updates if the target repository does not want external context governance.
+
+### Follow-Ups
+- Add real project MCP connector entries after Azure DevOps, Slack, database schema, and internal knowledge owners approve scope.
+- Decide whether Deep Research uses ChatGPT, OpenAI API, or another enterprise-approved research tool.
+
+## 2026-05-13 - AI Project Presentation & Vietnamese User Guide
+
+### Plan
+- Đọc toàn bộ project, phân tích kiến trúc, agents, skills, prompts, instructions.
+- Viết tài liệu hướng dẫn sử dụng bằng tiếng Việt, có sơ đồ Mermaid, dành cho team dev chưa nắm về AI.
+- Tập trung: (1) sức mạnh AI vs project; (2) 7 luồng sử dụng chính.
+- Tổng hợp thành HTML file hoàn chỉnh với Mermaid.js diagrams.
+
+### Changed Files
+- `.github/docs/ai-project-presentation.html` — **NEW**: HTML presentation tiếng Việt, 6 phần, 10+ Mermaid diagrams
+- `.github/docs/feature-delivery-log.md` — entry này
+
+### Verification
+- File created: `.github/docs/ai-project-presentation.html` ✓
+- Nội dung bao gồm:
+  - Phần 1: Sức mạnh AI (evolution diagram, comparison table, stats)
+  - Phần 2: Kiến trúc project (architecture diagram, 3-layer model, component table)
+  - Phần 3: 7 luồng chính với flowchart riêng cho mỗi luồng
+  - Phần 4: Quy trình 10 bước chuẩn (workflow diagram)
+  - Phần 5: Quick start guide, scenario table, do/don't
+  - Phần 6: Target model diagram, summary cards
+
+### Line Review
+- Reviewer: Copilot
+- Critical/high findings: none
+- Security: không có PII, credentials, production data trong HTML
+- Residual risk: Mermaid.js load từ CDN — cần internet để render diagrams
+
+### Security, Privacy, Data Impact
+- Sensitive data: none — tài liệu nội bộ, không có production data
+- Auth/authz: none
+- Data integrity: none
+
+### Docs Updated
+- `.github/docs/feature-delivery-log.md` — entry này
+
+### Rollback
+- Xóa file `.github/docs/ai-project-presentation.html` để revert.
+
+### Follow-Ups
+- Mở file HTML trong browser để xem presentation hoàn chỉnh.
+- Khi cần update: chỉnh sửa file `.github/docs/ai-project-presentation.html` trực tiếp.
+
+---
+
 ## 2026-05-13 - Post-Generate Format Rule And User Guide
 
 ### Plan

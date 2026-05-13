@@ -11,6 +11,9 @@ Reviewed on 2026-05-13.
 - Project agent skills can live in `.github/skills/<skill-name>/SKILL.md`.
 - Agent skills also work with Copilot cloud agent, GitHub Copilot CLI, and VS Code agent mode.
 - Copilot can use MCP for external tools and data. If MCP is unavailable, provide manual fallback steps.
+- Azure DevOps has a Microsoft MCP server for `dev.azure.com` context; use narrow domains such as `core`, `work`, `work-items`, `repositories`, `wiki`, and `pipelines` when approved.
+- NotebookLM-style source use must respect source limits, enterprise account policy, and data handling rules.
+- Deep Research can use web search, remote MCP servers, and file search over internal vector stores when those sources are approved.
 - Custom instructions can stack. Avoid conflicts because all relevant instructions can be provided together.
 - Copilot code review can use repository custom instructions, but review contexts have a custom-instruction size limit; place the most important review rules near the start of `.github/copilot-instructions.md`.
 - GitHub's official Copilot homepage positions Copilot as an enterprise workflow assistant across IDEs, GitHub, terminal, project tools, chat apps, and MCP servers, with governance controls for organizations.
@@ -32,6 +35,11 @@ Reviewed on 2026-05-13.
 - Copilot code review: https://docs.github.com/en/copilot/how-tos/use-copilot-agents/request-a-code-review/use-code-review
 - GitHub Copilot homepage: https://github.com/features/copilot
 - Awesome GitHub Copilot: https://github.com/github/awesome-copilot
+- Azure DevOps MCP Server: https://github.com/microsoft/azure-devops-mcp
+- MCP Architecture: https://modelcontextprotocol.io/docs/learn/architecture
+- NotebookLM sources: https://support.google.com/notebooklm/answer/16215270
+- NotebookLM work/school accounts: https://support.google.com/notebooklm/answer/16337734
+- OpenAI Deep Research: https://platform.openai.com/docs/guides/deep-research
 
 ## Architecture Decision
 
@@ -40,4 +48,3 @@ Use `.github/` as the complete standalone package. Keep safety gates at the top 
 ## Retrieval Keywords
 
 official docs, custom instructions, prompt files, custom agents, agent skills, Copilot CLI, VS Code Copilot, MCP, repository instructions, standalone `.github`.
-

@@ -32,6 +32,9 @@ A skill is promoted only when it is:
 | Release DevOps Governance | `.github/skills/release-devops-governance/SKILL.md` | CI, release, environment, deployment safety |
 | ASP.NET Core Governance | `.github/skills/aspnet-core-governance/SKILL.md` | Controller-service-repository, DI, auth, logging, async, repository rules |
 | Dotnet Testing | `.github/skills/dotnet-testing/SKILL.md` | .NET test discovery, xUnit-style regression coverage, dotnet verification |
+| MCP Integration Governance | `.github/skills/mcp-integration-governance/SKILL.md` | Azure DevOps, Slack, database schema, and enterprise MCP connector controls |
+| Internal Knowledge Governance | `.github/skills/internal-knowledge-governance/SKILL.md` | NotebookLM-style docs, old project references, source register, private knowledge safety |
+| Deep Research Governance | `.github/skills/deep-research-governance/SKILL.md` | Source-backed research, architecture comparison, and ADR-ready reports |
 
 ## Excluded Categories
 
@@ -59,4 +62,4 @@ This keeps skills safe to trigger while preserving enough deep context for Copil
 
 ## Retrieval Keywords
 
-curated skills, promoted skills, system analysis, codebase reading, business logic, code solution fit, ASP.NET Core, dotnet testing, banking governance, safe Copilot skills, no scripts, no secrets, secure review, testing, docs base, backend, database, release.
+curated skills, promoted skills, system analysis, codebase reading, business logic, code solution fit, ASP.NET Core, dotnet testing, banking governance, safe Copilot skills, no scripts, no secrets, secure review, testing, docs base, backend, database, release, MCP, Azure DevOps, internal knowledge, deep research.

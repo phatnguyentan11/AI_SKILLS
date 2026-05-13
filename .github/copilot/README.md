@@ -16,6 +16,9 @@ This directory belongs inside the standalone `.github/` Copilot package. It cont
 - [Banking Grade Engineering](banking-grade-engineering.md): regulated financial-services delivery policy.
 - [Workflow Playbook](workflow-playbook.md): planning, implementation, verification, review, docs, and release flow.
 - [Codebase Analysis Playbook](codebase-analysis-playbook.md): system analysis, code explanation, business logic, and blast-radius workflow.
+- [Azure DevOps MCP Playbook](azure-devops-mcp-playbook.md): approved `dev.azure.com` work item, repo, wiki, and pipeline context.
+- [Internal Knowledge Playbook](internal-knowledge-playbook.md): NotebookLM-style and private knowledge governance.
+- [Deep Research Playbook](deep-research-playbook.md): evidence-backed architecture and library research.
 - [Reference Knowledge](references/README.md): sanitized deeper references migrated from the old package.
 - [Curated Skills Index](skills-index.md): promoted safe Copilot skills and excluded categories.
 - [Manual Tooling Guide](manual-tooling-guide.md): terminal, MCP, browser, database, GitHub CLI, and fallback rules.
@@ -30,4 +33,4 @@ This `.github/` folder must be movable into another repository without requiring
 
 ## Retrieval Keywords
 
-GitHub Copilot package, standalone `.github`, custom instructions, prompt files, custom agents, agent skills, reference knowledge, system analysis, codebase reading, business logic, banking-grade engineering, regulated finance, docs base, governance, MCP, `#codebase`.
+GitHub Copilot package, standalone `.github`, custom instructions, prompt files, custom agents, agent skills, reference knowledge, system analysis, codebase reading, business logic, banking-grade engineering, regulated finance, docs base, governance, MCP, Azure DevOps, internal knowledge, deep research, `#codebase`.

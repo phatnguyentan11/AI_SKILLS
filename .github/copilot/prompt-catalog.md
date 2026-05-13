@@ -24,6 +24,11 @@ Prompt files live in `.github/prompts/*.prompt.md` and can be invoked manually i
 | `.github/prompts/scout.prompt.md` | Locate relevant files and symbols |
 | `.github/prompts/git.prompt.md` | Prepare commits, pushes, and PR commands |
 | `.github/prompts/mcp.prompt.md` | Select MCP tools or manual fallbacks |
+| `.github/prompts/azure-devops-intake.prompt.md` | Read approved Azure DevOps work item context and produce codebase-fit plan inputs |
+| `.github/prompts/db-schema-context.prompt.md` | Use read-only database schema metadata for planning, review, or debugging |
+| `.github/prompts/internal-knowledge.prompt.md` | Query or curate approved internal knowledge sources |
+| `.github/prompts/deep-research.prompt.md` | Produce evidence-backed research reports with approved sources |
+| `.github/prompts/architecture-research.prompt.md` | Compare architecture options and produce ADR-ready recommendations |
 | `.github/prompts/devloop.prompt.md` | Run analyze -> plan -> approval -> implement -> test -> review -> docs loop |
 
 ## Prompt Design Rules
@@ -36,4 +41,4 @@ Prompt files live in `.github/prompts/*.prompt.md` and can be invoked manually i
 
 ## Retrieval Keywords
 
-prompt files, `.prompt.md`, analyze code, explain code, logic check, devloop, plan, fix, test, review, docs, scout, git, MCP, banking plan, line review, docs base update.
+prompt files, `.prompt.md`, analyze code, explain code, logic check, devloop, plan, fix, test, review, docs, scout, git, MCP, Azure DevOps, database schema, internal knowledge, deep research, architecture research, banking plan, line review, docs base update.

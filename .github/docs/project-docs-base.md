@@ -18,6 +18,16 @@ This package contains banking-grade GitHub Copilot customization assets:
 - `.github/workflows/*.yml`
 - `.github/copilot/**/*.md`
 - `.github/docs/*.md`
+- `.github/docs/ai-project-presentation.html`
+
+## Developer-Facing Documentation
+
+The current package includes two primary onboarding outputs for developers new to this AI layer:
+
+- `.github/docs/ai-project-developer-guide.md` - Markdown guide in Vietnamese with the project vision, architecture diagrams, data flow, workflow guidance, command cheat sheet, Azure DevOps MCP, internal knowledge, and Deep Research usage.
+- `.github/docs/ai-project-presentation.html` - single-file HTML guide/presentation with Tailwind-based layout, Prism code highlighting, Lucide icons, Mermaid diagrams, responsive sidebar navigation, callouts, and step-by-step execution sections.
+
+The older `.github/docs/docs.html` index was removed because it duplicated these docs and added maintenance overhead.
 
 ## Analysis-First Focus
 
@@ -26,6 +36,7 @@ This package prioritizes system analysis before solutioning:
 - when a reference/old project is provided, read it first and compare it with the current package/codebase
 - use `.github/copilot/references/` for sanitized deep reference knowledge when skills are too short
 - read existing code and docs before proposing changes
+- use approved Azure DevOps MCP, internal knowledge, or deep research sources only when they are in scope and read-only by default
 - explain current flow and business logic before editing
 - map blast radius across code, tests, configs, data, APIs, jobs, queues, and docs
 - create a plan and wait for developer/user review before implementation
@@ -50,6 +61,21 @@ The package includes curated Markdown-only skills for:
 - release/devops governance
 - ASP.NET Core governance
 - dotnet testing
+- MCP integration governance
+- internal knowledge governance
+- deep research governance
+
+## External Context And R&D Governance
+
+The package now supports governed external context and research workflows:
+
+- Azure DevOps MCP for approved `dev.azure.com` work item, repo, wiki, and pipeline context
+- Slack MCP as an optional approved read-only source for engineering thread context
+- database schema MCP for metadata only, never production rows
+- NotebookLM-style internal knowledge workflows for onboarding, coding conventions, and sanitized old project knowledge
+- Deep Research workflows for architecture and library research with citations and ADR-ready outputs
+
+All external sources are read-only by default, least-privilege, approval-gated for writes, and forbidden from exposing secrets, customer data, account data, card data, PII, raw production logs, or unrestricted attachments.
 
 ## Banking Grade Delivery Rules
 
@@ -85,3 +111,4 @@ The `.github/workflows/manual-governance-checks.yml` workflow is manual-only bec
 - Copilot is an assistant, not the final approver.
 - Human review remains mandatory for regulated banking code.
 - MCP and terminal execution depend on local/enterprise policy.
+- Azure DevOps, Slack, database schema, NotebookLM-style, and Deep Research sources must be approved and registered before use.

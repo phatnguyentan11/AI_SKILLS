@@ -7,14 +7,15 @@ Purpose: define the default delivery workflow for this standalone Copilot packag
 1. Read `.github/copilot-instructions.md`.
 2. If a reference/old project is provided, read it first and compare it with the current package/codebase.
 3. Search repository context with workspace search or `#codebase`.
-4. Identify affected files, tests, configs, docs, business logic, and existing patterns.
-5. Create or update a plan before editing and wait for review/approval.
-6. Implement the smallest durable change in existing files when practical.
-7. Run or request compile/typecheck/lint/tests and targeted security checks.
-8. Fix root-cause failures.
-9. Review every changed line for correctness, security, privacy, data integrity, docs, and backwards compatibility.
-10. Update `.github/docs/` after every feature or behavior change.
-11. Summarize changed files, verification evidence, residual risk, and unrun checks.
+4. If external context is needed, use approved read-only MCP/internal knowledge/deep research sources with least privilege.
+5. Identify affected files, tests, configs, docs, business logic, and existing patterns.
+6. Create or update a plan before editing and wait for review/approval.
+7. Implement the smallest durable change in existing files when practical.
+8. Run or request compile/typecheck/lint/tests and targeted security checks.
+9. Fix root-cause failures.
+10. Review every changed line for correctness, security, privacy, data integrity, docs, and backwards compatibility.
+11. Update `.github/docs/` after every feature or behavior change.
+12. Summarize changed files, verification evidence, residual risk, and unrun checks.
 
 ## Planning Output
 
@@ -23,6 +24,7 @@ Purpose: define the default delivery workflow for this standalone Copilot packag
 - Constraints
 - Affected files
 - Data, security, privacy, and operational impact
+- External context sources used, if any
 - Proposed phases
 - Risks and mitigations
 - Rollback or recovery notes

@@ -15,6 +15,7 @@ Mandatory high-compliance rules:
 - Update docs after every feature: update `.github/docs/` when behavior, setup, architecture, API, data, security, operations, or troubleshooting changes.
 - Evidence required: never claim done without compile/typecheck/lint/test or an explicit note that the check could not be run.
 - Banking data safety: never expose secrets, tokens, account/card data, PII, production data, or internal bank identifiers in code, logs, prompts, tests, docs, or commits.
+- External context safety: MCP, Azure DevOps, Slack, database schema, internal knowledge, and deep research sources must be approved, least-privilege, and read-only by default.
 - Production caution: destructive DB, migration, deployment, permission, auth, encryption, or config changes need rollback notes and explicit approval.
 
 ## Package Map
@@ -56,4 +57,4 @@ Active: `.github/copilot-instructions.md`, `.github/instructions`, `.github/prom
 
 - Do not assume direct MCP calls or autonomous shell execution exist in Copilot. If tools are unavailable, provide manual steps and expected output.
 
-Use `.github/copilot/banking-grade-engineering.md`, `.github/copilot/workflow-playbook.md`, and `.github/copilot/manual-tooling-guide.md`.
+Use `.github/copilot/banking-grade-engineering.md`, `.github/copilot/workflow-playbook.md`, `.github/copilot/manual-tooling-guide.md`, `.github/copilot/azure-devops-mcp-playbook.md`, and `.github/copilot/deep-research-playbook.md`.
