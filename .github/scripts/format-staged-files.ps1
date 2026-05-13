@@ -232,7 +232,11 @@ if ($Mode -eq "PrePush") {
     if ($repoRoot) { Set-Location $repoRoot }
 
     # Files ahead of upstream; fall back to last commit if no upstream set
-    $pushedFiles = @(git diff --name-only "@{u}" HEAD 2>$null)
+    $pushedFiles = @()
+    $upstreamCheck = git rev-parse "@{u}" 2>$null
+    if ($LASTEXITCODE -eq 0) {
+        $pushedFiles = @(git diff --name-only "@{u}" HEAD 2>$null)
+    }
     if (-not $pushedFiles -or $pushedFiles.Count -eq 0) {
         $pushedFiles = @(git diff --name-only HEAD~1 HEAD 2>$null)
     }
