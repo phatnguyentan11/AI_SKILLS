@@ -21,7 +21,10 @@ Set-Location $repoRoot
 
 # ── Determine changed files in this push ─────────────────────────────────────
 $pushedFiles = @()
+$savedPref = $ErrorActionPreference
+$ErrorActionPreference = "SilentlyContinue"
 $null = git rev-parse "@{u}" 2>$null
+$ErrorActionPreference = $savedPref
 if ($LASTEXITCODE -eq 0) {
     $pushedFiles = @(git diff --name-only "@{u}" HEAD 2>$null)
 }
