@@ -1,28 +1,20 @@
 <#
 .SYNOPSIS
-    Format staged (pre-commit) or pushed (pre-push) files and warn if reformatted.
+    Format staged (pre-commit) files and warn if reformatted.
 
 .DESCRIPTION
-    PreCommit mode: formats staged files using available tools, re-stages changed files, warns.
-    PrePush mode  : checks format of pushed files on a temp copy, warns if issues found (no auto-fix).
-
-.PARAMETER Mode
-    PreCommit (default) | PrePush
+    Formats staged files using available tools, re-stages changed files, and warns if any were reformatted.
+    Also scans staged files for secrets and sensitive data.
 
 .EXAMPLE
-    pwsh -File .github\scripts\format-staged-files.ps1 -Mode PreCommit
-    pwsh -File .github\scripts\format-staged-files.ps1 -Mode PrePush
+    pwsh -File .github\scripts\format-staged-files.ps1
 #>
 
 [CmdletBinding()]
-param(
-    [ValidateSet("PreCommit", "PrePush")]
-    [string]$Mode = "PreCommit"
-)
+param()
 
 $ErrorActionPreference = "Stop"
 $reformattedFiles = [System.Collections.Generic.List[string]]::new()
-$warningFiles     = [System.Collections.Generic.List[string]]::new()
 
 function Write-Info  { param([string]$m) Write-Host "[format] $m" }
 function Write-Warn  { param([string]$m) Write-Warning "[format] $m" }
@@ -80,9 +72,8 @@ function Get-FormatterType {
     return $null
 }
 
-# ── PRE-COMMIT mode ──────────────────────────────────────────────────────────
-if ($Mode -eq "PreCommit") {
-    $repoRoot = git rev-parse --show-toplevel 2>$null
+# ── Format staged files ─────────────────────────────────────────────────────
+$repoRoot = git rev-parse --show-toplevel 2>$null
     if ($repoRoot) { Set-Location $repoRoot }
 
     $stagedFiles = @(
@@ -224,73 +215,3 @@ if ($Mode -eq "PreCommit") {
     }
 
     exit 0
-}
-
-# ── PRE-PUSH mode ─────────────────────────────────────────────────────────────
-if ($Mode -eq "PrePush") {
-    $repoRoot = git rev-parse --show-toplevel 2>$null
-    if ($repoRoot) { Set-Location $repoRoot }
-
-    # Files ahead of upstream; fall back to last commit if no upstream set
-    $pushedFiles = @()
-    $upstreamCheck = git rev-parse "@{u}" 2>$null
-    if ($LASTEXITCODE -eq 0) {
-        $pushedFiles = @(git diff --name-only "@{u}" HEAD 2>$null)
-    }
-    if (-not $pushedFiles -or $pushedFiles.Count -eq 0) {
-        $pushedFiles = @(git diff --name-only HEAD~1 HEAD 2>$null)
-    }
-    $pushedFiles = $pushedFiles | Where-Object { $_ -and (Test-Path $_) }
-
-    if ($pushedFiles.Count -eq 0) {
-        Write-Info "No changed files to check in push."
-        exit 0
-    }
-
-    Write-Info "Checking format of $($pushedFiles.Count) file(s) in push..."
-
-    foreach ($file in $pushedFiles) {
-        $ext = [IO.Path]::GetExtension($file).ToLower()
-        $formatterType = Get-FormatterType $ext
-        if (-not $formatterType -or $formatterType -eq "dotnet") { continue }
-
-        $tempFile = [IO.Path]::GetTempFileName() + $ext
-        Copy-Item $file $tempFile -Force
-
-        try {
-            $originalHash = (Get-FileHash $tempFile -Algorithm SHA256).Hash
-
-            switch ($formatterType) {
-                "prettier"   { Invoke-PrettierOn $tempFile }
-                "psanalyzer" {
-                    $raw = Get-Content $tempFile -Raw -Encoding UTF8
-                    $formatted = Invoke-Formatter -ScriptDefinition $raw -ErrorAction SilentlyContinue
-                    if ($formatted -and $formatted -ne $raw) {
-                        Set-Content $tempFile -Value $formatted -Encoding UTF8 -NoNewline
-                    }
-                }
-            }
-
-            $newHash = (Get-FileHash $tempFile -Algorithm SHA256).Hash
-            if ($originalHash -ne $newHash) {
-                $warningFiles.Add($file)
-                Write-Warn "Format issue: $file"
-            }
-        } catch {
-            Write-Warn "Formatter error on $file : $($_.Exception.Message)"
-        } finally {
-            Remove-Item $tempFile -ErrorAction SilentlyContinue
-        }
-    }
-
-    Write-Host ""
-    if ($warningFiles.Count -gt 0) {
-        Write-Warn "$($warningFiles.Count) file(s) in this push have formatting issues:"
-        $warningFiles | ForEach-Object { Write-Warn "  - $_" }
-        Write-Warn "Tip: run formatter locally, commit, then push again."
-    } else {
-        Write-Info "All pushed files are properly formatted."
-    }
-
-    exit 0
-}
