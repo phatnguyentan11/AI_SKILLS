@@ -1,20 +1,22 @@
 ---
 name: test
+description: Find, run, and analyze verification commands.
+argument-hint: "[scope]"
 agent: agent
-description: Run tests, analyze results, and report coverage for the current changes
-argument-hint: Specify test scope or module to test (e.g. 'auth module', 'all unit tests')
 ---
 
-## Workflow
+# Test
 
-Use the `@tester` agent to run the test suite and provide a comprehensive quality report:
+Use `#codebase` to find package scripts, CI config, README commands, and relevant test files.
 
-1. Run type checking and compile to detect syntax errors first.
-2. Execute all relevant test suites (unit, integration, e2e where applicable).
-3. Analyze test results — identify all failures with detailed error messages.
-4. Generate and review code coverage reports.
-5. Validate the build process completes successfully.
-6. Report findings clearly with severity levels.
+Output:
 
-**IMPORTANT**: **NEVER** use fake data, mocks, cheats, or temporary solutions just to pass the build.
-**IMPORTANT**: Fix all failing tests before marking the session complete.
+- recommended narrow command
+- recommended broader command if needed
+- expected success signal
+- analysis of failures
+- root-cause fix recommendations
+
+Prefer real tests. Do not suggest bypassing failures.
+
+Follow `.github/copilot-instructions.md` and `.github/copilot/workflow-playbook.md`.
