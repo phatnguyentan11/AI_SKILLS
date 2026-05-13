@@ -104,8 +104,8 @@ Package này là bộ cấu hình GitHub Copilot **cấp ngân hàng**, hoàn to
 | Prompt files | 22 | Workflow gọi bằng `/tên` |
 | Custom agents | 10 | Personas gọi bằng `@tên` |
 | Agent skills | 18 | Domain knowledge tự động |
-| Workflow | 1 | Governance checks thủ công |
-| Docs base | 7 | Tài liệu dự án cập nhật liên tục |
+| Local governance | 2 | Pre-push warning hook/script |
+| Docs base | 9 | Tài liệu dự án cập nhật liên tục |
 
 ---
 
@@ -134,19 +134,18 @@ echo "* @your-team/banking-devs" > .github/CODEOWNERS
 # ✓ Restrict pushes that create files
 ```
 
-**Bước 3 — Bật GitHub Actions auto-trigger:**
+**Bước 3 — Bật cảnh báo local trước khi push:**
 
-Mở [.github/workflows/manual-governance-checks.yml](.github/workflows/manual-governance-checks.yml) và thêm trigger trên PR:
+Package này không dùng build pipeline làm gate mặc định. Mỗi developer bật Git hook một lần trong clone local:
 
-```yaml
-on:
-  workflow_dispatch:   # giữ nguyên
-  pull_request:        # thêm dòng này
-    branches: [main]
+```bash
+git config core.hooksPath .github/hooks
 ```
 
+Sau đó mỗi lần `git push`, hook `.github/hooks/pre-push` sẽ chạy `.github/scripts/pre-push-governance-check.ps1` ở chế độ warning. Nếu có vấn đề, hook in cảnh báo nhưng vẫn cho push.
+
 <div class="callout callout-warn">
-<strong>Lưu ý:</strong> Workflow hiện tại chỉ chạy thủ công (<code>workflow_dispatch</code>) — phù hợp cho package-only repo. Khi deploy sang project thật có code, cần bật <code>pull_request</code> trigger.
+<strong>Lưu ý:</strong> Đây là warning cho developer trước khi push, không thay thế branch protection hoặc CI bắt buộc nếu target repository cần hard gate sau này.
 </div>
 
 ---
@@ -343,24 +342,34 @@ Mở VS Code Copilot Chat → Agent mode → chọn agent từ dropdown.
 
 <h2 id="governance">7. Chạy Governance Checks</h2>
 
-**Chạy thủ công trên GitHub:**
+**Chạy local trước khi push:**
 
+```bash
+git config core.hooksPath .github/hooks
+git push
 ```
-GitHub.com → repository → Actions tab
-→ "Manual Banking Governance Checks"
-→ Run workflow → chọn branch → Run
+
+Hoặc chạy trực tiếp:
+
+```powershell
+.github\scripts\pre-push-governance-check.ps1 -Mode Warn
 ```
 
-**Các job sẽ chạy:**
+**Các check sẽ chạy:**
 
-| Job | Nội dung kiểm tra | Kết quả |
+| Check | Nội dung kiểm tra | Kết quả |
 |---|---|---|
-| **Detect** | Phát hiện project shape (.NET có hay không) | Metadata cho jobs sau |
-| **Validate Copilot package** | Đủ required files, YAML frontmatter hợp lệ, removed assets không còn | Pass/Fail |
-| **Build + Test + Lint** | `dotnet build`, `dotnet test`, `dotnet format --verify-no-changes` | Pass/Fail (skip nếu không có .NET) |
-| **Secret Scan** | Tìm private keys, GitHub tokens, AWS keys, password patterns | Pass/Fail |
-| **Dependency Audit** | `dotnet list package --vulnerable --include-transitive` | CVE report |
-| **CodeQL SAST** | Static analysis C# — security vulnerabilities | Alerts |
+| **Detect** | Phát hiện project shape (.NET có hay không) | Metadata cho check sau |
+| **Validate Copilot package** | Đủ required files, YAML frontmatter hợp lệ, mỗi skill có `SKILL.md` | Warning |
+| **Secret Scan** | Tìm private keys, GitHub tokens, AWS keys, password patterns | Warning |
+| **Build + Test + Lint** | `dotnet restore`, `dotnet build`, `dotnet test`, `dotnet format --verify-no-changes` | Warning, skip nếu không có .NET |
+| **Dependency Audit** | `dotnet list package --vulnerable --include-transitive` | Warning/CVE report |
+
+Muốn chặn push ở máy local thì chạy strict mode:
+
+```powershell
+.github\scripts\pre-push-governance-check.ps1 -Mode Strict
+```
 
 **Xem kết quả failed job:**
 
@@ -464,7 +473,7 @@ Copilot sẽ đọc context và cập nhật cả 3 file đúng format.
 │   ├── architecture-research.prompt.md
 │   └── devloop.prompt.md               ← Full pipeline end-to-end
 │
-├── agents/                              ← 10 agents, chọn trong Agent mode
+├── agents/                              ← 11 agents, chọn trong Agent mode
 │   ├── system-analyst.agent.md
 │   ├── planner.agent.md
 │   ├── researcher.agent.md
@@ -474,6 +483,7 @@ Copilot sẽ đọc context và cập nhật cả 3 file đúng format.
 │   ├── security-reviewer.agent.md
 │   ├── docs-manager.agent.md
 │   ├── knowledge-curator.agent.md
+│   ├── notebook-task-analyst.agent.md
 │   └── research-architect.agent.md
 │
 ├── skills/                              ← 18 domain skills, tự động theo context
@@ -496,8 +506,11 @@ Copilot sẽ đọc context và cập nhật cả 3 file đúng format.
 │   ├── internal-knowledge-governance/
 │   └── deep-research-governance/
 │
-├── workflows/
-│   └── manual-governance-checks.yml    ← Chạy thủ công: build/lint/test/secret/SAST
+├── hooks/
+│   └── pre-push                        ← Warning local trước git push
+│
+├── scripts/
+│   └── pre-push-governance-check.ps1   ← Package/secret/.NET checks
 │
 ├── copilot/                             ← Knowledge base cho RAG retrieval
 │   ├── README.md
@@ -528,6 +541,8 @@ Copilot sẽ đọc context và cập nhật cả 3 file đúng format.
     ├── feature-delivery-log.md
     ├── huong-dan-su-dung.md             ← File này
     ├── ai-project-developer-guide.md
+    ├── ai-project-developer-guide.pdf
+    ├── huong-dan-su-dung.pdf
     └── ai-project-presentation.html
 ```
 
@@ -559,20 +574,20 @@ dotnet format MyProject.sln --include src/Services/AccountService.cs src/Control
 | File khác (`.json`, `.md`, `.yml`, ...) | Không format |
 | Toàn bộ project | **Không bao giờ** — chỉ format file đã chạm vào |
 
-<h3>Mối quan hệ với CI</h3>
+<h3>Mối quan hệ với pre-push warning</h3>
 
 | Lớp | Công cụ | Hành động |
 |---|---|---|
 | **Copilot (AI gen)** | `dotnet format --include <files>` | **Fix ngay** — format khi AI vừa viết xong |
-| **CI workflow** | `dotnet format --verify-no-changes` | **Verify** — fail build nếu code chưa format |
+| **Pre-push warning** | `dotnet format --verify-no-changes` | **Verify** — cảnh báo trước khi push nếu code chưa format |
 
-Nếu có file nào chưa format lọt qua: CI sẽ bắt và block merge.
+Nếu có file nào chưa format lọt qua: hook sẽ cảnh báo trước khi push. Hook mặc định không block push, trừ khi developer chạy strict mode.
 
 ---
 
 <div style="margin-top:2.5rem; padding:1rem 1.5rem; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; font-size:.9rem; color:#166534;">
 <strong>Package status:</strong> Production-ready &nbsp;|&nbsp;
-<strong>Files:</strong> 82 &nbsp;|&nbsp;
+<strong>Files:</strong> 85 &nbsp;|&nbsp;
 <strong>Broken references:</strong> 0 &nbsp;|&nbsp;
 <strong>Security issues:</strong> 0 &nbsp;|&nbsp;
 <strong>Last reviewed:</strong> 2026-05-13

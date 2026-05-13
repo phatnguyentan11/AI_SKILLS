@@ -3,7 +3,7 @@
 Tài liệu này dành cho Developer mới bắt đầu dùng Project AI trong repository. Mục tiêu là biến bộ `.github` khá nhiều file thành một cách làm việc rõ ràng: đọc code nhanh hơn, lên kế hoạch chắc hơn, triển khai ít lệch kiến trúc hơn và review có bằng chứng.
 
 > Phiên bản tài liệu: 2026-05-13  
-> Phạm vi: `.github/copilot-instructions.md`, `.github/copilot`, `.github/prompts`, `.github/agents`, `.github/skills`, `.github/instructions`, `.github/workflows`, `.github/docs`
+> Phạm vi: `.github/copilot-instructions.md`, `.github/copilot`, `.github/prompts`, `.github/agents`, `.github/skills`, `.github/instructions`, `.github/hooks`, `.github/scripts`, `.github/docs`
 
 ## Mục lục
 
@@ -34,10 +34,10 @@ Project AI này không phải là một ứng dụng runtime. Đây là một **
 | Repository instructions | 1 | Luật nền cho Copilot/AI khi làm việc trong repo |
 | Copilot playbooks/catalogs | 20 | Kiến trúc, quy trình, catalog prompt/agent/skill và governance |
 | Prompts | 22 | Lệnh thao tác nhanh cho phân tích, plan, implement, test, review, R&D |
-| Agents | 10 | Vai trò chuyên biệt như System Analyst, Planner, Tester, Security Reviewer |
+| Agents | 11 | Vai trò chuyên biệt như System Analyst, Planner, Notebook Task Analyst, Tester, Security Reviewer |
 | Skills | 18 | Bộ nguyên tắc chuyên sâu cho banking, testing, review, MCP, internal knowledge |
-| Workflow | 1 | Manual governance checks cho build/test/lint/security/dependency audit |
-| Docs | 7 | Tài liệu vận hành, changelog, presentation, hướng dẫn sử dụng |
+| Local governance | 2 | Pre-push warning hook/script cho package validation, secret scan và .NET checks khi có app code |
+| Docs | 9 | Tài liệu vận hành, changelog, presentation, PDF export, hướng dẫn sử dụng |
 
 Điểm quan trọng nhất: AI trong project này luôn đi theo hướng **reference-first, plan-first, evidence-first**. Nghĩa là AI phải đọc rule và code thật trước, lập kế hoạch trước khi sửa, rồi chứng minh bằng kiểm tra, review và tài liệu.
 
@@ -112,7 +112,7 @@ flowchart LR
 
     Chat --> Repo[Application Codebase]
     Chat --> Docs[Project Docs]
-    Chat --> ManualCI[Manual Governance Workflow]
+    Chat --> LocalHook[Local Pre-Push Governance]
 
     Chat -. approved read-only context .-> Azure[Azure DevOps MCP]
     Chat -. approved private corpus .-> Knowledge[Internal Knowledge / NotebookLM]
@@ -155,7 +155,7 @@ sequenceDiagram
     AI->>Dev: Trình bày plan, rủi ro, file bị ảnh hưởng
     Dev->>AI: Phê duyệt hướng làm
     AI->>Code: Implement thay đổi nhỏ nhất phù hợp codebase
-    AI->>Verify: Build, test, lint, scan, dependency audit
+    AI->>Verify: Local checks, build, test, lint, scan, dependency audit
     AI->>AI: Review từng dòng thay đổi
     AI->>Docs: Cập nhật docs/changelog/feature log
     AI->>Dev: Báo cáo kết quả kèm bằng chứng
@@ -170,11 +170,11 @@ sequenceDiagram
 | Lên kế hoạch | `/plan`, `/banking-plan`, `@Planner`, `planning-governance` | Trước khi sửa code |
 | Implement | `/implement`, `code-solution-fit`, `banking-grade-engineering` | Sau khi đã có plan |
 | Debug | `/fix`, `@Debugger`, `root-cause-debugging` | Khi có bug hoặc test fail |
-| Test/verification | `/test`, `@Tester`, `testing-verification`, `dotnet-testing` | Trước khi bàn giao |
+| Test/verification | `/test`, `@Tester`, `testing-verification`, `dotnet-testing`, local pre-push governance | Trước khi bàn giao hoặc trước khi push |
 | Review | `/review`, `/line-review`, `@Code Reviewer`, `@Security Reviewer` | Sau mỗi thay đổi |
 | Docs | `/docs-update`, `/docs-base-update`, `@Docs Manager` | Khi feature/flow thay đổi |
 | Azure DevOps MCP | `/azure-devops-intake`, `/mcp`, `mcp-integration-governance` | Khi cần đọc work item, wiki, pipeline, repo metadata |
-| Internal knowledge | `/internal-knowledge`, `@Knowledge Curator`, `internal-knowledge-governance` | Khi cần hỏi tài liệu nội bộ hoặc bug cũ |
+| Internal knowledge | `/internal-knowledge`, `@Knowledge Curator`, `@Notebook Task Analyst`, `internal-knowledge-governance` | Khi cần hỏi tài liệu nội bộ, bug cũ, hoặc chuyển NotebookLM brief thành phân tích task |
 | Deep Research | `/deep-research`, `/architecture-research`, `@Research Architect` | Khi cần so sánh thư viện/kiến trúc |
 
 ---
@@ -225,6 +225,20 @@ Giữ thay đổi nhỏ, bám pattern hiện có, không đổi public contract 
 /test Chạy verification thật của repo và giải thích kết quả.
 /line-review Review từng dòng thay đổi, tập trung vào banking safety, security, dữ liệu, logging và backward compatibility.
 /docs-base-update Cập nhật tài liệu dự án dựa trên thay đổi vừa thực hiện.
+```
+
+### Bật cảnh báo trước khi push
+
+Chạy một lần trong mỗi clone:
+
+```powershell
+git config core.hooksPath .github/hooks
+```
+
+Từ lúc đó, mỗi lần `git push`, hook `.github/hooks/pre-push` sẽ gọi `.github/scripts/pre-push-governance-check.ps1` ở chế độ warning. Nếu có lỗi, hook in cảnh báo nhưng vẫn cho push. Muốn chặn push ở máy local thì chạy strict mode:
+
+```powershell
+.github\scripts\pre-push-governance-check.ps1 -Mode Strict
 ```
 
 ## 2.2 Phân tích codebase
@@ -412,6 +426,29 @@ AI nên trả lời theo 3 phần:
 - **Nguồn nội bộ**: tài liệu, ADR hoặc guideline nào được dùng.
 - **Điểm chưa chắc**: phần nào cần human confirm.
 
+### Agent chuyên cho task nhiều tài liệu
+
+Khi task có nhiều file spec, AC, guideline, ADR hoặc bug history đã được gom trong NotebookLM, dùng `@Notebook Task Analyst` trước `@Planner`.
+
+Prompt mẫu:
+
+```text
+@Notebook Task Analyst
+Đây là Task Brief từ NotebookLM, có citation theo tài liệu nội bộ:
+[paste brief + source citations]
+
+Hãy kiểm tra source hygiene, tách fact/assumption, đọc codebase thật,
+map requirement vào file/function/test hiện có, nêu gap và tạo planner handoff.
+Chưa implement.
+```
+
+Sau đó dùng:
+
+```text
+/banking-plan
+Use the Notebook Task Analyst handoff and create a smallest-safe implementation plan.
+```
+
 ## 2.7 Deep Research cho R&D kiến trúc
 
 Deep Research dùng khi team cần một báo cáo có nguồn về thư viện, framework hoặc hướng kiến trúc.
@@ -453,7 +490,7 @@ Lưu ý: Deep Research chỉ tạo khuyến nghị. Quyết định kiến trúc
 | Lập kế hoạch banking | `/banking-plan` | Plan có compliance, data integrity, rollback |
 | Implement | `/implement` | Code change nhỏ, hợp pattern |
 | Debug | `/fix` | Root cause, patch, regression test |
-| Test | `/test` | Verification thật và kết quả |
+| Test | `/test` hoặc `.github\scripts\pre-push-governance-check.ps1 -Mode Warn` | Verification thật và kết quả |
 | Review | `/review` | Review cấp PR/change |
 | Review từng dòng | `/line-review` | Finding theo file/dòng, mức độ rủi ro |
 | Cập nhật docs | `/docs-update` | Tài liệu feature/flow |

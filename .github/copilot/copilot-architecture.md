@@ -11,7 +11,7 @@ Purpose: define the standalone `.github/` package layout for GitHub Copilot cust
 | Prompt files | `.github/prompts/**/*.prompt.md` | Reusable slash-command style workflows |
 | Custom agents | `.github/agents/**/*.agent.md` | Persistent personas such as planner, tester, reviewer, security reviewer |
 | Agent skills | `.github/skills/*/SKILL.md` | Curated domain capabilities, reviewed for governance |
-| Manual workflows | `.github/workflows/**/*.yml` | Manual-only governance checks for build, test, lint, secret scan, SAST, and dependency audit |
+| Local pre-push governance | `.github/hooks/pre-push`, `.github/scripts/pre-push-governance-check.ps1` | Developer warning checks before `git push`: package structure, secret scan, and conditional .NET restore/build/format/test/audit |
 
 ## Supporting Files
 
@@ -29,7 +29,7 @@ Purpose: define the standalone `.github/` package layout for GitHub Copilot cust
 - Put reusable workflows in `.github/prompts/*.prompt.md`.
 - Put persistent role/persona behavior in `.github/agents/*.agent.md`.
 - Put reviewed, safe, reusable capabilities in `.github/skills/<skill>/SKILL.md`.
-- Put manual-only GitHub Actions governance checks in `.github/workflows/*.yml`.
+- Put local developer warning hooks in `.github/hooks/` and their auditable implementation scripts in `.github/scripts/`.
 - Put explanatory docs, catalogs, and assessment in `.github/copilot/`.
 - Put long-form sanitized references in `.github/copilot/references/`, not inside skill folders.
 - Put package delivery documentation in `.github/docs/`.
@@ -50,7 +50,8 @@ Purpose: define the standalone `.github/` package layout for GitHub Copilot cust
   prompts/
   agents/
   skills/
-  workflows/
+  hooks/
+  scripts/
   copilot/
     references/
   docs/

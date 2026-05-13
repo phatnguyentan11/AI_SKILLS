@@ -2,6 +2,121 @@
 
 Use this log after every feature, fix, migration, architecture change, security change, operational change, or setup change to this standalone `.github/` package.
 
+## 2026-05-13 - Notebook Task Analyst Agent
+
+### Plan
+- Add a dedicated agent for document-heavy tasks that begin with NotebookLM task briefs and cited internal sources.
+- Keep the agent bounded: validate source hygiene, analyze the codebase, produce planner-ready output, and avoid implementation before approval.
+- Update agent catalog and developer docs so the team knows when to use this agent before `/banking-plan`.
+
+### Changed Files
+- `.github/agents/notebook-task-analyst.agent.md`
+- `.github/copilot/agent-catalog.md`
+- `.github/docs/ai-project-developer-guide.md`
+- `.github/docs/ai-project-presentation.html`
+- `.github/docs/huong-dan-su-dung.md`
+- `.github/docs/project-changelog.md`
+- `.github/docs/feature-delivery-log.md`
+
+### Verification
+- Commands run:
+  - `.github\scripts\pre-push-governance-check.ps1 -Mode Warn`
+  - agent count check for `.github/agents/*.agent.md`
+  - secret pattern scan
+- Results:
+  - Agent count: 11.
+  - New agent has YAML frontmatter.
+  - Local pre-push governance check passes.
+  - Secret pattern scan passed.
+
+### Line Review
+- Reviewer: Codex
+- Critical/high findings:
+  - None known at edit time.
+- Residual risk:
+  - The agent cannot directly access NotebookLM unless the client exposes an approved connector; it expects pasted NotebookLM brief/citations or approved internal knowledge summaries.
+
+### Security, Privacy, Data Impact
+- Sensitive data touched: none.
+- Auth/authz impact: none.
+- Logging impact: none.
+- Data integrity impact: none.
+
+### Docs Updated
+- `.github/docs/ai-project-developer-guide.md`
+- `.github/docs/ai-project-presentation.html`
+- `.github/docs/huong-dan-su-dung.md`
+- `.github/docs/project-changelog.md`
+- `.github/docs/feature-delivery-log.md`
+
+### Rollback
+- Remove `.github/agents/notebook-task-analyst.agent.md` and revert the catalog/docs updates.
+
+## 2026-05-13 - Local Pre-Push Governance Warning
+
+### Plan
+- Replace the manual GitHub Actions governance workflow with a local `git push` warning mechanism.
+- Keep the checks developer-friendly: warn before push by default, allow strict local enforcement when explicitly requested.
+- Preserve the same governance intent: package validation, frontmatter checks, skill inventory, secret scan, and conditional .NET restore/build/format/test/dependency audit.
+
+### Changed Files
+- `.github/workflows/manual-governance-checks.yml`
+- `.github/hooks/pre-push`
+- `.github/scripts/pre-push-governance-check.ps1`
+- `.github/copilot/README.md`
+- `.github/copilot/copilot-architecture.md`
+- `.github/copilot/copilot-project-assessment.md`
+- `.github/copilot/manual-tooling-guide.md`
+- `.github/docs/ai-project-developer-guide.md`
+- `.github/docs/ai-project-presentation.html`
+- `.github/docs/huong-dan-su-dung.md`
+- `.github/docs/project-docs-base.md`
+- `.github/docs/project-changelog.md`
+- `.github/docs/feature-delivery-log.md`
+
+### Verification
+- Commands run:
+  - `.github\scripts\pre-push-governance-check.ps1 -Mode Warn`
+  - `rg --files -uu .github | Measure-Object`
+  - `Test-Path .github\workflows\manual-governance-checks.yml`
+- Results:
+  - Local pre-push governance check passed.
+  - `.github` file count: 85.
+  - Manual workflow file removed.
+  - Package-only repository has no .NET application code, so .NET build/test/lint/audit checks were reported as not applicable.
+- Checks not run:
+  - No GitHub Actions pipeline was run because this change intentionally moves the check to local pre-push warning mode.
+  - The shell hook wrapper was not executed in this PowerShell environment because `sh` is not on PATH; Git for Windows normally runs hook files through its bundled shell when `core.hooksPath` is enabled.
+
+### Line Review
+- Reviewer: Codex
+- Critical/high findings:
+  - None found.
+- Residual risk:
+  - Git hooks are local clone configuration. Developers must run `git config core.hooksPath .github/hooks` once per clone.
+  - Warning mode does not block push. Use `AI_GOVERNANCE_STRICT=1` or `-Mode Strict` for local blocking behavior.
+
+### Security, Privacy, Data Impact
+- Sensitive data touched: none.
+- Auth/authz impact: reduced server-side workflow permissions by removing the GitHub Actions workflow.
+- Logging impact: governance warnings are printed locally before push.
+- Data integrity impact: none.
+
+### Docs Updated
+- `.github/docs/ai-project-developer-guide.md`
+- `.github/docs/ai-project-presentation.html`
+- `.github/docs/huong-dan-su-dung.md`
+- `.github/docs/project-docs-base.md`
+- `.github/docs/project-changelog.md`
+- `.github/docs/feature-delivery-log.md`
+- `.github/copilot/README.md`
+- `.github/copilot/copilot-architecture.md`
+- `.github/copilot/copilot-project-assessment.md`
+- `.github/copilot/manual-tooling-guide.md`
+
+### Rollback
+- Restore `.github/workflows/manual-governance-checks.yml` and remove `.github/hooks/pre-push` plus `.github/scripts/pre-push-governance-check.ps1`.
+
 ## 2026-05-13 - Remove Duplicate Docs Index
 
 ### Plan

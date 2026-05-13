@@ -17,6 +17,7 @@ Custom agents live in `.github/agents/*.agent.md`.
 | `.github/agents/security-reviewer.agent.md` | Review banking-grade security, privacy, data integrity, and audit risks |
 | `.github/agents/docs-manager.agent.md` | Update docs, changelog, delivery log, and standards |
 | `.github/agents/knowledge-curator.agent.md` | Curate approved internal knowledge and sanitized references |
+| `.github/agents/notebook-task-analyst.agent.md` | Convert NotebookLM task briefs and cited internal documents into codebase-aware implementation analysis |
 | `.github/agents/research-architect.agent.md` | Produce evidence-backed architecture research and ADR-ready recommendations |
 
 ## Agent Design Rules
@@ -29,4 +30,4 @@ Custom agents live in `.github/agents/*.agent.md`.
 
 ## Retrieval Keywords
 
-custom agents, `.agent.md`, system analyst, planner, researcher, tester, debugger, code reviewer, security reviewer, docs manager, knowledge curator, research architect, banking-grade review, business logic.
+custom agents, `.agent.md`, system analyst, planner, researcher, tester, debugger, code reviewer, security reviewer, docs manager, knowledge curator, notebook task analyst, research architect, banking-grade review, business logic.

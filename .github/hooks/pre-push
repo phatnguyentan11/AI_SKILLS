@@ -1,0 +1,35 @@
+#!/usr/bin/env sh
+
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
+if [ -z "$ROOT" ]; then
+  echo "[governance][warning] Cannot resolve repository root. Skipping local pre-push governance checks."
+  exit 0
+fi
+
+SCRIPT="$ROOT/.github/scripts/pre-push-governance-check.ps1"
+if [ ! -f "$SCRIPT" ]; then
+  echo "[governance][warning] Missing $SCRIPT. Skipping local pre-push governance checks."
+  exit 0
+fi
+
+STATUS=0
+
+if command -v pwsh >/dev/null 2>&1; then
+  pwsh -NoProfile -File "$SCRIPT" -Mode Warn
+  STATUS=$?
+elif command -v powershell >/dev/null 2>&1; then
+  powershell -NoProfile -ExecutionPolicy Bypass -File "$SCRIPT" -Mode Warn
+  STATUS=$?
+else
+  echo "[governance][warning] PowerShell is not available. Skipping local pre-push governance checks."
+fi
+
+# Warning hook by default: never blocks git push.
+# To enforce locally during push, set AI_GOVERNANCE_STRICT=1.
+case "$AI_GOVERNANCE_STRICT" in
+  1|true|TRUE|yes|YES)
+    exit "$STATUS"
+    ;;
+esac
+
+exit 0

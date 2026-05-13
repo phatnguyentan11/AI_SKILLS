@@ -7,8 +7,10 @@ This directory belongs inside the standalone `.github/` Copilot package. It cont
 - `.github/prompts/*.prompt.md`
 - `.github/agents/*.agent.md`
 - `.github/skills/*/SKILL.md`
-- `.github/workflows/*.yml`
+- `.github/hooks/pre-push`
+- `.github/scripts/pre-push-governance-check.ps1`
 - `.github/docs/*.md`
+- `.github/docs/ai-project-presentation.html`
 
 ## Start Here
 

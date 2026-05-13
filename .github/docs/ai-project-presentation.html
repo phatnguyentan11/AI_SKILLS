@@ -233,7 +233,7 @@
               <p class="mt-1 text-sm font-semibold text-stone-700">Prompts</p>
             </div>
             <div class="rounded-lg border border-stone-200 bg-white p-4">
-              <p class="text-3xl font-extrabold text-amber-700">10</p>
+              <p class="text-3xl font-extrabold text-amber-700">11</p>
               <p class="mt-1 text-sm font-semibold text-stone-700">Agents</p>
             </div>
             <div class="rounded-lg border border-stone-200 bg-white p-4">
@@ -242,12 +242,12 @@
             </div>
             <div class="rounded-lg border border-stone-200 bg-white p-4">
               <p class="text-3xl font-extrabold text-indigo-700">1</p>
-              <p class="mt-1 text-sm font-semibold text-stone-700">Manual workflow</p>
+              <p class="mt-1 text-sm font-semibold text-stone-700">Pre-push hook</p>
             </div>
           </div>
           <div class="mt-4 rounded-lg border border-stone-200 bg-white p-4">
             <p class="text-sm font-bold text-stone-900">Phạm vi đã đọc</p>
-            <p class="mt-2 text-sm leading-6 text-stone-600">Instructions, copilot playbooks, prompt catalog, agent catalog, skill index, governance workflow và tài liệu trong `.github/docs`.</p>
+            <p class="mt-2 text-sm leading-6 text-stone-600">Instructions, copilot playbooks, prompt catalog, agent catalog, skill index, local pre-push governance và tài liệu trong `.github/docs`.</p>
           </div>
         </div>
       </div>
@@ -261,7 +261,7 @@
           <h2 class="mt-1 text-2xl font-extrabold text-stone-950">Project AI là lớp vận hành cho AI Developer</h2>
         </div>
       </div>
-      <p class="text-base leading-8 text-stone-700">Đây không phải ứng dụng runtime. Đây là một bộ quy tắc, playbook, prompt, agent, skill và workflow để Developer dùng AI an toàn hơn trong repo. Điểm quan trọng nhất: AI không được đoán mò. AI phải đọc rule, đọc code thật, lập plan, chờ approval khi cần, implement nhỏ gọn, chạy verification, review từng dòng và cập nhật tài liệu.</p>
+      <p class="text-base leading-8 text-stone-700">Đây không phải ứng dụng runtime. Đây là một bộ quy tắc, playbook, prompt, agent, skill và local pre-push governance để Developer dùng AI an toàn hơn trong repo. Điểm quan trọng nhất: AI không được đoán mò. AI phải đọc rule, đọc code thật, lập plan, chờ approval khi cần, implement nhỏ gọn, chạy verification, review từng dòng và cập nhật tài liệu.</p>
       <div class="mt-6 grid gap-4 md:grid-cols-3">
         <div class="rounded-lg border border-stone-200 bg-white p-5">
           <i data-lucide="search-code" aria-hidden="true" class="mb-3 h-6 w-6 text-teal-700"></i>
@@ -535,7 +535,9 @@ flowchart LR
           <i data-lucide="book-open-check" aria-hidden="true" class="mb-3 h-6 w-6 text-amber-700"></i>
           <h3 class="font-bold text-stone-950">NotebookLM nội bộ</h3>
           <p class="mt-2 text-sm leading-6 text-stone-600">Tra cứu coding convention, ADR, tài liệu kỹ thuật, incident note và bài học từ dự án cũ.</p>
-          <pre class="mt-4"><code class="language-text">/internal-knowledge Tìm trong tài liệu nội bộ các convention liên quan đến transaction, audit log và exception handling.</code></pre>
+          <pre class="mt-4"><code class="language-text">@Notebook Task Analyst
+Paste NotebookLM Task Brief + citations.
+Map document facts to codebase evidence and create planner handoff.</code></pre>
         </article>
 
         <article class="rounded-lg border border-stone-200 bg-white p-5">

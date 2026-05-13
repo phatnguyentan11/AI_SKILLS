@@ -31,6 +31,32 @@ If it fails, paste:
 - first stack trace
 ```
 
+## Local Pre-Push Governance
+
+This package uses a local Git pre-push hook as a developer warning gate before `git push`, not a build pipeline.
+
+Enable once per clone:
+
+```bash
+git config core.hooksPath .github/hooks
+```
+
+The hook runs `.github/scripts/pre-push-governance-check.ps1` in warning mode. It checks package structure, `SKILL.md` inventory, YAML frontmatter, likely secrets, and conditional .NET restore/build/format/test/dependency audit when a target repository contains `.sln` or `.csproj` files.
+
+Default behavior:
+
+- warnings are printed before push
+- push is allowed
+- no remote pipeline is triggered
+
+Strict local enforcement:
+
+```powershell
+.github\scripts\pre-push-governance-check.ps1 -Mode Strict
+```
+
+or set `AI_GOVERNANCE_STRICT=1` before pushing.
+
 ## GitHub CLI
 
 Use for PRs, issues, CI, and workflow logs when authenticated.

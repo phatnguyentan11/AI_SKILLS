@@ -15,10 +15,12 @@ This package contains banking-grade GitHub Copilot customization assets:
 - `.github/prompts/*.prompt.md`
 - `.github/agents/*.agent.md`
 - `.github/skills/*/SKILL.md`
-- `.github/workflows/*.yml`
+- `.github/hooks/pre-push`
+- `.github/scripts/pre-push-governance-check.ps1`
 - `.github/copilot/**/*.md`
 - `.github/docs/*.md`
 - `.github/docs/ai-project-presentation.html`
+- `.github/docs/*.pdf`
 
 ## Developer-Facing Documentation
 
@@ -91,20 +93,27 @@ All external sources are read-only by default, least-privilege, approval-gated f
 
 ## Verification Commands
 
-This repository currently contains the `.github` Copilot package only. Verify with file inventory, Markdown/frontmatter inspection, package-scope scans, and manual workflow review.
+This repository currently contains the `.github` Copilot package only. Verify with file inventory, Markdown/frontmatter inspection, package-scope scans, and local pre-push governance checks.
 
 Run from the repository root:
 
 ```powershell
 rg --files -uu .github
 Get-ChildItem .github\skills -Directory | ForEach-Object { if (-not (Test-Path (Join-Path $_.FullName "SKILL.md"))) { throw "Missing SKILL.md: $($_.FullName)" } }
+.github\scripts\pre-push-governance-check.ps1 -Mode Warn
 $secretPattern = '(?i)(password|passwd|pwd|secret|token|api[_-]?key|client[_-]?secret)\s*[:=]\s*["''][^"''\s]{12,}["'']'
 Get-ChildItem .github -Recurse -File | Select-String -Pattern $secretPattern
 ```
 
 The secret-pattern command should return no matches.
 
-The `.github/workflows/manual-governance-checks.yml` workflow is manual-only because CI is not enabled for this package repository yet. When copied into a real application repository, enable branch protection and decide whether to trigger the workflow on pull requests.
+Enable the local warning hook with:
+
+```powershell
+git config core.hooksPath .github/hooks
+```
+
+The hook warns developers before `git push` but does not block by default. To enforce locally, run `.github\scripts\pre-push-governance-check.ps1 -Mode Strict` or set `AI_GOVERNANCE_STRICT=1` before pushing. Target repositories can still add server-side CI later if hard enforcement is required.
 
 ## Operational Notes
 
