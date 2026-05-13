@@ -2,6 +2,55 @@
 
 Use this log after every feature, fix, migration, architecture change, security change, operational change, or setup change to this standalone `.github/` package.
 
+## 2026-05-13 - Post-Generate Format Rule And User Guide
+
+### Plan
+- Add a rule requiring Copilot to format only the `.cs`/`.razor`/`.cshtml` files it just wrote, immediately after generation — not the whole project.
+- Add user guide (`huong-dan-su-dung.md`) to `.github/docs/`.
+
+### Changed Files
+- `.github/copilot-instructions.md` — step 6 now includes immediate post-gen format command
+- `.github/instructions/aspnet-core.instructions.md` — added Formatting Rules section
+- `.github/prompts/implement.prompt.md` — format rule embedded in implementation rules
+- `.github/prompts/fix.prompt.md` — format step added after file modification
+- `.github/prompts/devloop.prompt.md` — format step added inside implement phase
+- `.github/docs/project-docs-base.md` — format rule added to Banking Grade Delivery Rules
+- `.github/docs/project-changelog.md` — entry added
+- `.github/docs/feature-delivery-log.md` — this entry
+- `.github/docs/huong-dan-su-dung.md` — new user guide (HTML+Markdown)
+
+### Verification
+- Commands run:
+  - Grep scan: no references to removed hooks/ directory remain in any active file
+  - Grep scan: format rule present in all 5 target files (copilot-instructions.md, aspnet-core.instructions.md, implement/fix/devloop prompts)
+- Checks not run:
+  - Runtime dotnet format execution (package-only repo, no .NET application code present)
+
+### Line Review
+- Reviewer: Copilot
+- Critical/high findings: none
+- Resolved findings: removed pre-commit hook approach (wrong timing); replaced with post-gen inline rule
+- Residual risk: rule is instruction-level — actual execution depends on Copilot following the instruction at inference time
+
+### Security, Privacy, Data Impact
+- Sensitive data touched: none
+- Auth/authz impact: none
+- Logging impact: none
+- Data integrity impact: none
+
+### Docs Updated
+- `.github/docs/project-docs-base.md`
+- `.github/docs/project-changelog.md`
+- `.github/docs/feature-delivery-log.md`
+
+### Rollback
+- Remove the Formatting Rules sections from the five changed files to revert format behavior.
+
+### Follow-Ups
+- When this package is installed into a real .NET repository, validate that `dotnet format --include` works with the actual solution path.
+
+---
+
 ## 2026-05-13 - Manual Governance Workflows And Scope Trim
 
 ### Plan

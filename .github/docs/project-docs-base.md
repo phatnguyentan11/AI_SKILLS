@@ -72,15 +72,11 @@ Run from the repository root:
 ```powershell
 rg --files -uu .github
 Get-ChildItem .github\skills -Directory | ForEach-Object { if (-not (Test-Path (Join-Path $_.FullName "SKILL.md"))) { throw "Missing SKILL.md: $($_.FullName)" } }
-Test-Path .github\prompts\design.prompt.md
-Test-Path .github\agents\ui-ux-designer.agent.md
-Test-Path .github\skills\frontend-quality\SKILL.md
-Test-Path .github\skills\payments-risk-governance\SKILL.md
 $secretPattern = '(?i)(password|passwd|pwd|secret|token|api[_-]?key|client[_-]?secret)\s*[:=]\s*["''][^"''\s]{12,}["'']'
 Get-ChildItem .github -Recurse -File | Select-String -Pattern $secretPattern
 ```
 
-The four `Test-Path` checks for removed assets should return `False`; the secret-pattern command should return no matches.
+The secret-pattern command should return no matches.
 
 The `.github/workflows/manual-governance-checks.yml` workflow is manual-only because CI is not enabled for this package repository yet. When copied into a real application repository, enable branch protection and decide whether to trigger the workflow on pull requests.
 

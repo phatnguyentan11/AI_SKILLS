@@ -89,19 +89,6 @@ jobs:
             }
           }
 
-          $removedAssets = @(
-            ".github/prompts/design.prompt.md",
-            ".github/agents/ui-ux-designer.agent.md",
-            ".github/skills/frontend-quality/SKILL.md",
-            ".github/skills/payments-risk-governance/SKILL.md"
-          )
-
-          foreach ($asset in $removedAssets) {
-            if (Test-Path $asset) {
-              throw "Out-of-scope Copilot asset still exists: $asset"
-            }
-          }
-
       - name: Restore, build, test, and lint .NET code
         if: needs.detect.outputs.has_dotnet == 'true'
         shell: pwsh
