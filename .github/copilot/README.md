@@ -19,7 +19,6 @@ This directory belongs inside the standalone `.github/` Copilot package. It cont
 - [Workflow Playbook](workflow-playbook.md): planning, implementation, verification, review, docs, and release flow.
 - [Codebase Analysis Playbook](codebase-analysis-playbook.md): system analysis, code explanation, business logic, and blast-radius workflow.
 - [Azure DevOps MCP Playbook](azure-devops-mcp-playbook.md): approved `dev.azure.com` work item, repo, wiki, and pipeline context.
-- [Internal Knowledge Playbook](internal-knowledge-playbook.md): NotebookLM-style and private knowledge governance.
 - [Deep Research Playbook](deep-research-playbook.md): evidence-backed architecture and library research.
 - [Reference Knowledge](references/README.md): sanitized deeper references migrated from the old package.
 - [Curated Skills Index](skills-index.md): promoted safe Copilot skills and excluded categories.

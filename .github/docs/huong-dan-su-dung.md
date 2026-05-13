@@ -98,14 +98,14 @@ Package này là bộ cấu hình GitHub Copilot **cấp ngân hàng**, hoàn to
 
 **Thành phần chính:**
 
-| Loại | Số lượng | Mô tả |
-|------|----------|-------|
-| Instructions files | 3 | Quy tắc tự động theo loại file |
-| Prompt files | 22 | Workflow gọi bằng `/tên` |
-| Custom agents | 10 | Personas gọi bằng `@tên` |
-| Agent skills | 18 | Domain knowledge tự động |
-| Local governance | 2 | Pre-push warning hook/script |
-| Docs base | 9 | Tài liệu dự án cập nhật liên tục |
+| Loại               | Số lượng | Mô tả                            |
+| ------------------ | -------- | -------------------------------- |
+| Instructions files | 3        | Quy tắc tự động theo loại file   |
+| Prompt files       | 21       | Workflow gọi bằng `/tên`         |
+| Custom agents      | 9        | Personas gọi bằng `@tên`         |
+| Agent skills       | 15       | Domain knowledge tự động         |
+| Local governance   | 2        | Pre-push warning hook/script     |
+| Docs base          | 9        | Tài liệu dự án cập nhật liên tục |
 
 ---
 
@@ -154,38 +154,35 @@ Sau đó mỗi lần `git push`, hook `.github/hooks/pre-push` sẽ chạy `.git
 
 Không cần làm gì thêm — các rules tự động kích hoạt theo file đang mở:
 
-| Khi bạn làm việc với | Instructions tự động nhận |
-|---|---|
-| **Bất kỳ file nào** | Banking gates ([copilot-instructions.md](../copilot-instructions.md)) + banking-grade rules |
-| **`.cs`, `.csproj`, `.razor`, `.cshtml`** | ASP.NET Core patterns, DI, auth, Dapper/EF Core guidance |
-| **`.github/copilot/**`, `.github/docs/**`, `.github/skills/**`** | Package maintenance rules |
+| Khi bạn làm việc với                                               | Instructions tự động nhận                                                                   |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------- |
+| **Bất kỳ file nào**                                                | Banking gates ([copilot-instructions.md](../copilot-instructions.md)) + banking-grade rules |
+| **`.cs`, `.csproj`, `.razor`, `.cshtml`**                          | ASP.NET Core patterns, DI, auth, Dapper/EF Core guidance                                    |
+| **`.github/copilot/**`, `.github/docs/**`, `.github/skills/**`\*\* | Package maintenance rules                                                                   |
 
 **Skills tự động nhận theo context** (không cần gọi tay):
 
 <details>
-<summary>Xem danh sách 18 skills</summary>
+<summary>Xem danh sách 15 skills</summary>
 <div>
 
-| Skill | Khi nào active |
-|---|---|
-| `banking-grade-engineering` | Mọi lúc — core policy |
-| `system-analysis` | Trước khi plan/implement/review |
-| `codebase-reading` | Khi đọc/giải thích code hiện có |
-| `business-logic-analysis` | Kiểm tra business rules, invariants |
-| `code-solution-fit` | Trước khi viết/thay đổi code |
-| `planning-governance` | Trước bất kỳ thay đổi code/config |
-| `secure-code-review` | Sau implement, completion gates |
-| `testing-verification` | Sau thay đổi code, trước khi done |
-| `docs-base-maintenance` | Sau feature/fix/migration/security |
-| `root-cause-debugging` | Bug, failing tests, incidents |
-| `backend-api-governance` | Backend code, API, auth, validation |
-| `database-data-integrity` | Schema, migration, query, transaction |
-| `release-devops-governance` | CI/CD, deployment, infrastructure |
-| `aspnet-core-governance` | .NET/ASP.NET Core (conditional) |
-| `dotnet-testing` | .NET test planning & verification |
-| `mcp-integration-governance` | Azure DevOps, Slack, DB schema, enterprise MCP controls |
-| `internal-knowledge-governance` | NotebookLM-style docs, source register, sanitized old project knowledge |
-| `deep-research-governance` | Cited research, architecture comparison, ADR-ready reports |
+| Skill                        | Khi nào active                                             |
+| ---------------------------- | ---------------------------------------------------------- |
+| `banking-grade-engineering`  | Mọi lúc — core policy                                      |
+| `system-analysis`            | Trước khi plan/implement/review                            |
+| `business-logic-analysis`    | Kiểm tra business rules, invariants                        |
+| `planning-governance`        | Trước bất kỳ thay đổi code/config                          |
+| `secure-code-review`         | Sau implement, completion gates                            |
+| `testing-verification`       | Sau thay đổi code, trước khi done                          |
+| `docs-base-maintenance`      | Sau feature/fix/migration/security                         |
+| `root-cause-debugging`       | Bug, failing tests, incidents                              |
+| `backend-api-governance`     | Backend code, API, auth, validation                        |
+| `database-data-integrity`    | Schema, migration, query, transaction                      |
+| `release-devops-governance`  | CI/CD, deployment, infrastructure                          |
+| `aspnet-core-governance`     | .NET/ASP.NET Core (conditional)                            |
+| `dotnet-testing`             | .NET test planning & verification                          |
+| `mcp-integration-governance` | Azure DevOps, Slack, DB schema, enterprise MCP controls    |
+| `deep-research-governance`   | Cited research, architecture comparison, ADR-ready reports |
 
 </div>
 </details>
@@ -198,18 +195,18 @@ Gọi prompt trong VS Code Copilot Chat: gõ `/` rồi chọn tên prompt.
 
 <h3>Nhóm hỏi & khám phá</h3>
 
-| Prompt | Khi nào dùng | Ví dụ |
-|---|---|---|
-| `/ask` | Hỏi câu hỏi kỹ thuật có context repo | `/ask tại sao AccountService dùng Unit of Work?` |
-| `/scout` | Tìm file, symbol, pattern trong codebase | `/scout tất cả nơi gọi TransferFunds` |
-| `/explain-code` | Giải thích code hiện có và business flow | `/explain-code` + chọn đoạn code |
-| `/analyze-code` | Phân tích kiến trúc, blast radius | `/analyze-code module xác thực OTP` |
+| Prompt          | Khi nào dùng                             | Ví dụ                                            |
+| --------------- | ---------------------------------------- | ------------------------------------------------ |
+| `/ask`          | Hỏi câu hỏi kỹ thuật có context repo     | `/ask tại sao AccountService dùng Unit of Work?` |
+| `/scout`        | Tìm file, symbol, pattern trong codebase | `/scout tất cả nơi gọi TransferFunds`            |
+| `/explain-code` | Giải thích code hiện có và business flow | `/explain-code` + chọn đoạn code                 |
+| `/analyze-code` | Phân tích kiến trúc, blast radius        | `/analyze-code module xác thực OTP`              |
 
 <h3>Nhóm lên kế hoạch</h3>
 
-| Prompt | Output | Khi nào dùng |
-|---|---|---|
-| `/plan` | Scope, affected files, phases, risks | Feature/fix thông thường |
+| Prompt          | Output                                                         | Khi nào dùng                         |
+| --------------- | -------------------------------------------------------------- | ------------------------------------ |
+| `/plan`         | Scope, affected files, phases, risks                           | Feature/fix thông thường             |
 | `/banking-plan` | + Risk matrix, rollback, approval gates, verification commands | Mọi thay đổi ảnh hưởng DB, auth, PII |
 
 <div class="callout">
@@ -218,28 +215,27 @@ Gọi prompt trong VS Code Copilot Chat: gõ `/` rồi chọn tên prompt.
 
 <h3>Nhóm thực thi</h3>
 
-| Prompt | Khi nào dùng |
-|---|---|
-| `/implement` | Implement sau khi plan đã được duyệt |
-| `/fix` | Debug + trace root cause + fix minimal |
+| Prompt         | Khi nào dùng                                              |
+| -------------- | --------------------------------------------------------- |
+| `/implement`   | Implement sau khi plan đã được duyệt                      |
+| `/fix`         | Debug + trace root cause + fix minimal                    |
 | `/logic-check` | Kiểm tra business logic, edge cases, integration behavior |
-| `/test` | Tìm lệnh test phù hợp, chạy, phân tích failures |
+| `/test`        | Tìm lệnh test phù hợp, chạy, phân tích failures           |
 
 <h3>Nhóm review & tài liệu</h3>
 
-| Prompt | Khi nào dùng |
-|---|---|
-| `/review` | Review code changes với severity-ranked findings |
-| `/line-review` | Review từng dòng — **bắt buộc với banking-grade changes** |
-| `/docs-update` | Cập nhật project documentation |
-| `/docs-base-update` | Cập nhật `./github/docs/` sau feature/fix |
-| `/git` | Chuẩn bị commit message, PR description |
-| `/mcp` | Chọn MCP tool phù hợp hoặc fallback thủ công |
-| `/azure-devops-intake` | Đọc work item `dev.azure.com` đã approved và tạo plan inputs |
-| `/db-schema-context` | Lấy schema metadata read-only, không đọc production rows |
-| `/internal-knowledge` | Tra cứu coding convention, docs nội bộ, old project đã sanitize |
-| `/deep-research` | Nghiên cứu nhiều nguồn có citation |
-| `/architecture-research` | So sánh kiến trúc và tạo ADR-ready recommendation |
+| Prompt                   | Khi nào dùng                                                 |
+| ------------------------ | ------------------------------------------------------------ |
+| `/review`                | Review code changes với severity-ranked findings             |
+| `/line-review`           | Review từng dòng — **bắt buộc với banking-grade changes**    |
+| `/docs-update`           | Cập nhật project documentation                               |
+| `/docs-base-update`      | Cập nhật `./github/docs/` sau feature/fix                    |
+| `/git`                   | Chuẩn bị commit message, PR description                      |
+| `/mcp`                   | Chọn MCP tool phù hợp hoặc fallback thủ công                 |
+| `/azure-devops-intake`   | Đọc work item `dev.azure.com` đã approved và tạo plan inputs |
+| `/db-schema-context`     | Lấy schema metadata read-only, không đọc production rows     |
+| `/deep-research`         | Nghiên cứu nhiều nguồn có citation                           |
+| `/architecture-research` | So sánh kiến trúc và tạo ADR-ready recommendation            |
 
 <h3>Vòng lặp đầy đủ</h3>
 
@@ -259,18 +255,17 @@ Chạy toàn bộ pipeline: **phân tích → plan → chờ approval → implem
 
 Mở VS Code Copilot Chat → Agent mode → chọn agent từ dropdown.
 
-| Agent | Chuyên về | Gọi khi |
-|---|---|---|
-| **System Analyst** | Kiến trúc, luồng, dependencies, blast radius | Trước khi làm bất cứ thứ gì phức tạp |
-| **Planner** | Plans chi tiết: phases, risks, approvals, rollback | Cần plan có đủ thành phần để duyệt |
-| **Researcher** | Tìm và tổng hợp context trong repo/docs | Cần hiểu codebase trước khi plan |
-| **Debugger** | Reproduce → trace root cause → minimal fix | Bug, lỗi CI, behavior bất thường |
-| **Tester** | Tìm lệnh test, chạy, phân tích failures | Verify sau implement |
-| **Code Reviewer** | Severity-ranked findings: Critical / High / Medium / Low | Review PR, sau implement |
-| **Security Reviewer** | Banking security, privacy, data integrity, audit | Thay đổi auth, PII, DB |
-| **Docs Manager** | Cập nhật docs, changelog, delivery log | Sau mọi thay đổi có nghĩa |
-| **Knowledge Curator** | Curate docs nội bộ, source register, sanitized references | Khi thêm knowledge / NotebookLM-style source |
-| **Research Architect** | Research kiến trúc, thư viện, ADR-ready output | Khi cần so sánh kiến trúc hoặc R&D |
+| Agent                  | Chuyên về                                                | Gọi khi                              |
+| ---------------------- | -------------------------------------------------------- | ------------------------------------ |
+| **System Analyst**     | Kiến trúc, luồng, dependencies, blast radius             | Trước khi làm bất cứ thứ gì phức tạp |
+| **Planner**            | Plans chi tiết: phases, risks, approvals, rollback       | Cần plan có đủ thành phần để duyệt   |
+| **Researcher**         | Tìm và tổng hợp context trong repo/docs                  | Cần hiểu codebase trước khi plan     |
+| **Debugger**           | Reproduce → trace root cause → minimal fix               | Bug, lỗi CI, behavior bất thường     |
+| **Tester**             | Tìm lệnh test, chạy, phân tích failures                  | Verify sau implement                 |
+| **Code Reviewer**      | Severity-ranked findings: Critical / High / Medium / Low | Review PR, sau implement             |
+| **Security Reviewer**  | Banking security, privacy, data integrity, audit         | Thay đổi auth, PII, DB               |
+| **Docs Manager**       | Cập nhật docs, changelog, delivery log                   | Sau mọi thay đổi có nghĩa            |
+| **Research Architect** | Research kiến trúc, thư viện, ADR-ready output           | Khi cần so sánh kiến trúc hoặc R&D   |
 
 **Ví dụ kết hợp agents:**
 
@@ -357,13 +352,13 @@ Hoặc chạy trực tiếp:
 
 **Các check sẽ chạy:**
 
-| Check | Nội dung kiểm tra | Kết quả |
-|---|---|---|
-| **Detect** | Phát hiện project shape (.NET có hay không) | Metadata cho check sau |
-| **Validate Copilot package** | Đủ required files, YAML frontmatter hợp lệ, mỗi skill có `SKILL.md` | Warning |
-| **Secret Scan** | Tìm private keys, GitHub tokens, AWS keys, password patterns | Warning |
-| **Build + Test + Lint** | `dotnet restore`, `dotnet build`, `dotnet test`, `dotnet format --verify-no-changes` | Warning, skip nếu không có .NET |
-| **Dependency Audit** | `dotnet list package --vulnerable --include-transitive` | Warning/CVE report |
+| Check                        | Nội dung kiểm tra                                                                    | Kết quả                         |
+| ---------------------------- | ------------------------------------------------------------------------------------ | ------------------------------- |
+| **Detect**                   | Phát hiện project shape (.NET có hay không)                                          | Metadata cho check sau          |
+| **Validate Copilot package** | Đủ required files, YAML frontmatter hợp lệ, mỗi skill có `SKILL.md`                  | Warning                         |
+| **Secret Scan**              | Tìm private keys, GitHub tokens, AWS keys, password patterns                         | Warning                         |
+| **Build + Test + Lint**      | `dotnet restore`, `dotnet build`, `dotnet test`, `dotnet format --verify-no-changes` | Warning, skip nếu không có .NET |
+| **Dependency Audit**         | `dotnet list package --vulnerable --include-transitive`                              | Warning/CVE report              |
 
 Muốn chặn push ở máy local thì chạy strict mode:
 
@@ -384,11 +379,11 @@ gh run view <run-id> --log-failed
 
 Ba file phải cập nhật sau mỗi thay đổi quan trọng:
 
-| File | Mục đích | Cập nhật khi |
-|---|---|---|
-| [project-docs-base.md](project-docs-base.md) | Tài liệu sống: scope, kiến trúc, rules hiện tại | Thay đổi behavior, setup, architecture, API |
-| [project-changelog.md](project-changelog.md) | Lịch sử thay đổi có ngày tháng | Mỗi feature/fix/migration |
-| [feature-delivery-log.md](feature-delivery-log.md) | Delivery log chi tiết với evidence, risks, rollback | Mỗi delivery có ý nghĩa |
+| File                                               | Mục đích                                            | Cập nhật khi                                |
+| -------------------------------------------------- | --------------------------------------------------- | ------------------------------------------- |
+| [project-docs-base.md](project-docs-base.md)       | Tài liệu sống: scope, kiến trúc, rules hiện tại     | Thay đổi behavior, setup, architecture, API |
+| [project-changelog.md](project-changelog.md)       | Lịch sử thay đổi có ngày tháng                      | Mỗi feature/fix/migration                   |
+| [feature-delivery-log.md](feature-delivery-log.md) | Delivery log chi tiết với evidence, risks, rollback | Mỗi delivery có ý nghĩa                     |
 
 **Cập nhật tự động bằng Copilot:**
 
@@ -419,17 +414,18 @@ Copilot sẽ đọc context và cập nhật cả 3 file đúng format.
 <strong>Những điều KHÔNG BAO GIỜ được làm:</strong>
 </div>
 
-| Hành động cấm | Lý do |
-|---|---|
+| Hành động cấm                                       | Lý do                       |
+| --------------------------------------------------- | --------------------------- |
 | Đưa data thật của khách hàng vào code/test/log/docs | Vi phạm banking data safety |
-| Hardcode credentials, tokens, API keys bất kỳ đâu | Secret exposure risk |
-| Dùng production data làm test data | PII/regulatory violation |
-| Bỏ qua human review trước merge vào main | Banking control requirement |
-| Log secrets, OTP, session IDs, private keys | Audit/security violation |
-| Push force hoặc reset hard trên shared branches | Destructive action |
-| Deploy/migrate DB production không có rollback plan | Irreversible risk |
+| Hardcode credentials, tokens, API keys bất kỳ đâu   | Secret exposure risk        |
+| Dùng production data làm test data                  | PII/regulatory violation    |
+| Bỏ qua human review trước merge vào main            | Banking control requirement |
+| Log secrets, OTP, session IDs, private keys         | Audit/security violation    |
+| Push force hoặc reset hard trên shared branches     | Destructive action          |
+| Deploy/migrate DB production không có rollback plan | Irreversible risk           |
 
 **Copilot cũng sẽ từ chối:**
+
 - Tạo code giả lập / fake integration (simulate features)
 - Làm yếu test để pass
 - Bỏ qua validation tại trust boundaries
@@ -468,12 +464,11 @@ Copilot sẽ đọc context và cập nhật cả 3 file đúng format.
 │   ├── mcp.prompt.md
 │   ├── azure-devops-intake.prompt.md
 │   ├── db-schema-context.prompt.md
-│   ├── internal-knowledge.prompt.md
 │   ├── deep-research.prompt.md
 │   ├── architecture-research.prompt.md
 │   └── devloop.prompt.md               ← Full pipeline end-to-end
 │
-├── agents/                              ← 11 agents, chọn trong Agent mode
+├── agents/                              ← 9 agents, chọn trong Agent mode
 │   ├── system-analyst.agent.md
 │   ├── planner.agent.md
 │   ├── researcher.agent.md
@@ -482,16 +477,12 @@ Copilot sẽ đọc context và cập nhật cả 3 file đúng format.
 │   ├── code-reviewer.agent.md
 │   ├── security-reviewer.agent.md
 │   ├── docs-manager.agent.md
-│   ├── knowledge-curator.agent.md
-│   ├── notebook-task-analyst.agent.md
 │   └── research-architect.agent.md
 │
-├── skills/                              ← 18 domain skills, tự động theo context
+├── skills/                              ← 15 domain skills, tự động theo context
 │   ├── banking-grade-engineering/
 │   ├── system-analysis/
-│   ├── codebase-reading/
 │   ├── business-logic-analysis/
-│   ├── code-solution-fit/
 │   ├── planning-governance/
 │   ├── secure-code-review/
 │   ├── testing-verification/
@@ -503,7 +494,6 @@ Copilot sẽ đọc context và cập nhật cả 3 file đúng format.
 │   ├── aspnet-core-governance/
 │   ├── dotnet-testing/
 │   ├── mcp-integration-governance/
-│   ├── internal-knowledge-governance/
 │   └── deep-research-governance/
 │
 ├── hooks/
@@ -518,9 +508,6 @@ Copilot sẽ đọc context và cập nhật cả 3 file đúng format.
 │   ├── workflow-playbook.md
 │   ├── codebase-analysis-playbook.md
 │   ├── azure-devops-mcp-playbook.md
-│   ├── mcp-tool-registry.template.md
-│   ├── internal-knowledge-playbook.md
-│   ├── knowledge-source-register.template.md
 │   ├── deep-research-playbook.md
 │   ├── manual-tooling-guide.md
 │   ├── copilot-architecture.md
@@ -568,17 +555,17 @@ dotnet format MyProject.sln --include src/Services/AccountService.cs src/Control
 
 <h3>Quy tắc scope</h3>
 
-| Điều kiện | Hành động |
-|---|---|
-| AI vừa viết/sửa `*.cs`, `*.razor`, `*.cshtml` | **Format ngay** chỉ những file đó |
-| File khác (`.json`, `.md`, `.yml`, ...) | Không format |
-| Toàn bộ project | **Không bao giờ** — chỉ format file đã chạm vào |
+| Điều kiện                                     | Hành động                                       |
+| --------------------------------------------- | ----------------------------------------------- |
+| AI vừa viết/sửa `*.cs`, `*.razor`, `*.cshtml` | **Format ngay** chỉ những file đó               |
+| File khác (`.json`, `.md`, `.yml`, ...)       | Không format                                    |
+| Toàn bộ project                               | **Không bao giờ** — chỉ format file đã chạm vào |
 
 <h3>Mối quan hệ với pre-push warning</h3>
 
-| Lớp | Công cụ | Hành động |
-|---|---|---|
-| **Copilot (AI gen)** | `dotnet format --include <files>` | **Fix ngay** — format khi AI vừa viết xong |
+| Lớp                  | Công cụ                             | Hành động                                                 |
+| -------------------- | ----------------------------------- | --------------------------------------------------------- |
+| **Copilot (AI gen)** | `dotnet format --include <files>`   | **Fix ngay** — format khi AI vừa viết xong                |
 | **Pre-push warning** | `dotnet format --verify-no-changes` | **Verify** — cảnh báo trước khi push nếu code chưa format |
 
 Nếu có file nào chưa format lọt qua: hook sẽ cảnh báo trước khi push. Hook mặc định không block push, trừ khi developer chạy strict mode.

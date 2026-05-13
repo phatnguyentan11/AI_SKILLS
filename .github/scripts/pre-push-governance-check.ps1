@@ -49,8 +49,14 @@ function Invoke-External {
   }
 }
 
+# Strict mode: check shell env var OR git config key (set by setup.ps1 / install-hooks.ps1)
 if ($env:AI_GOVERNANCE_STRICT -match "^(1|true|yes)$") {
   $Mode = "Strict"
+} else {
+  $gitConfigStrict = git config --local --get "ai-governance.strict" 2>$null
+  if ($gitConfigStrict -match "^(1|true|yes)$") {
+    $Mode = "Strict"
+  }
 }
 
 $repoRoot = git rev-parse --show-toplevel 2>$null
@@ -77,7 +83,6 @@ if ($hasCopilotPackage) {
       ".github/copilot/banking-grade-engineering.md",
       ".github/copilot/codebase-analysis-playbook.md",
       ".github/copilot/azure-devops-mcp-playbook.md",
-      ".github/copilot/internal-knowledge-playbook.md",
       ".github/copilot/deep-research-playbook.md",
       ".github/docs/project-docs-base.md",
       ".github/docs/project-changelog.md",

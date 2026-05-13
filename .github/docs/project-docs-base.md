@@ -50,9 +50,7 @@ The package includes curated Markdown-only skills for:
 
 - banking-grade engineering
 - system analysis
-- codebase reading
 - business logic analysis
-- code solution fit
 - planning governance
 - secure code review
 - testing verification
@@ -64,7 +62,6 @@ The package includes curated Markdown-only skills for:
 - ASP.NET Core governance
 - dotnet testing
 - MCP integration governance
-- internal knowledge governance
 - deep research governance
 
 ## External Context And R&D Governance
@@ -74,7 +71,6 @@ The package now supports governed external context and research workflows:
 - Azure DevOps MCP for approved `dev.azure.com` work item, repo, wiki, and pipeline context
 - Slack MCP as an optional approved read-only source for engineering thread context
 - database schema MCP for metadata only, never production rows
-- NotebookLM-style internal knowledge workflows for onboarding, coding conventions, and sanitized old project knowledge
 - Deep Research workflows for architecture and library research with citations and ADR-ready outputs
 
 All external sources are read-only by default, least-privilege, approval-gated for writes, and forbidden from exposing secrets, customer data, account data, card data, PII, raw production logs, or unrestricted attachments.
@@ -120,4 +116,4 @@ The hook warns developers before `git push` but does not block by default. To en
 - Copilot is an assistant, not the final approver.
 - Human review remains mandatory for regulated banking code.
 - MCP and terminal execution depend on local/enterprise policy.
-- Azure DevOps, Slack, database schema, NotebookLM-style, and Deep Research sources must be approved and registered before use.
+- Azure DevOps, Slack, database schema, private knowledge, and Deep Research sources must be approved and registered before use.

@@ -1,636 +1,1087 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Project AI Copilot Package - Developer Guide</title>
-  <meta name="description" content="Tài liệu và presentation Project AI cho Developer mới: Why, How, workflow AI Agent, Azure DevOps MCP, internal knowledge và Deep Research." />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project AI Copilot Package - Developer Guide</title>
+    <meta
+      name="description"
+      content="Tài liệu và presentation Project AI cho Developer mới: Why, How, workflow AI Agent, Azure DevOps MCP, internal knowledge và Deep Research."
+    />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css"
+      rel="stylesheet"
+    />
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markdown.min.js"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markdown.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-  <style>
-    :root {
-      color-scheme: light;
-      --ink: #1f2933;
-      --muted: #5f6c7b;
-      --paper: #fbfaf7;
-      --line: #ddd6cc;
-      --teal: #0f766e;
-      --amber: #b7791f;
-      --rose: #be123c;
-      --indigo: #4f46e5;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        linear-gradient(180deg, rgba(251, 250, 247, 0.96), rgba(247, 244, 238, 0.98)),
-        #fbfaf7;
-      color: var(--ink);
-    }
-
-    .toc-link {
-      display: flex;
-      align-items: center;
-      gap: 0.625rem;
-      border-radius: 0.5rem;
-      padding: 0.625rem 0.75rem;
-      color: #4b5563;
-      font-size: 0.875rem;
-      line-height: 1.25rem;
-    }
-
-    .toc-link:hover {
-      background: #f1eee8;
-      color: #111827;
-    }
-
-    .toc-link svg {
-      width: 1rem;
-      height: 1rem;
-      flex: 0 0 auto;
-    }
-
-    .section-panel {
-      border: 1px solid var(--line);
-      border-radius: 0.5rem;
-      background: rgba(255, 255, 255, 0.78);
-      box-shadow: 0 16px 34px rgba(35, 31, 25, 0.06);
-    }
-
-    .callout {
-      border-radius: 0.5rem;
-      border: 1px solid;
-      padding: 1rem;
-    }
-
-    .callout strong {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.375rem;
-    }
-
-    .step-badge {
-      display: inline-flex;
-      width: 2rem;
-      height: 2rem;
-      align-items: center;
-      justify-content: center;
-      border-radius: 999px;
-      font-weight: 800;
-      background: #0f766e;
-      color: white;
-    }
-
-    pre[class*="language-"] {
-      border-radius: 0.5rem;
-      border: 1px solid #e7e1d8;
-      background: #fffefa;
-      margin: 0;
-    }
-
-    code[class*="language-"] {
-      font-size: 0.9rem;
-    }
-
-    .mermaid {
-      border: 1px solid #e2ddd4;
-      border-radius: 0.5rem;
-      background: #fffefa;
-      padding: 1rem;
-      overflow-x: auto;
-    }
-
-    .table-wrap {
-      overflow-x: auto;
-      border: 1px solid #e2ddd4;
-      border-radius: 0.5rem;
-      background: #fffefa;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 720px;
-    }
-
-    th,
-    td {
-      border-bottom: 1px solid #eee7dc;
-      padding: 0.875rem 1rem;
-      text-align: left;
-      vertical-align: top;
-    }
-
-    th {
-      background: #f7f2ea;
-      color: #1f2933;
-      font-weight: 700;
-    }
-
-    tr:last-child td {
-      border-bottom: 0;
-    }
-
-    @media print {
-      aside,
-      .mobile-header {
-        display: none !important;
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #1f2933;
+        --muted: #5f6c7b;
+        --paper: #fbfaf7;
+        --line: #ddd6cc;
+        --teal: #0f766e;
+        --amber: #b7791f;
+        --rose: #be123c;
+        --indigo: #4f46e5;
       }
 
-      main {
-        margin: 0 !important;
-        max-width: none !important;
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family:
+          "Inter",
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        background:
+          linear-gradient(
+            180deg,
+            rgba(251, 250, 247, 0.96),
+            rgba(247, 244, 238, 0.98)
+          ),
+          #fbfaf7;
+        color: var(--ink);
+      }
+
+      .toc-link {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        border-radius: 0.5rem;
+        padding: 0.625rem 0.75rem;
+        color: #4b5563;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+      }
+
+      .toc-link:hover {
+        background: #f1eee8;
+        color: #111827;
+      }
+
+      .toc-link svg {
+        width: 1rem;
+        height: 1rem;
+        flex: 0 0 auto;
       }
 
       .section-panel {
-        box-shadow: none;
-        break-inside: avoid;
+        border: 1px solid var(--line);
+        border-radius: 0.5rem;
+        background: rgba(255, 255, 255, 0.78);
+        box-shadow: 0 16px 34px rgba(35, 31, 25, 0.06);
       }
-    }
-  </style>
-</head>
 
-<body>
-  <div class="mobile-header sticky top-0 z-30 border-b border-stone-200 bg-white/92 px-4 py-3 backdrop-blur lg:hidden">
-    <div class="flex items-center justify-between gap-3">
-      <div class="min-w-0">
-        <p class="text-xs font-semibold uppercase text-teal-700">Project AI</p>
-        <h1 class="truncate text-base font-bold text-stone-900">Developer Guide</h1>
+      .callout {
+        border-radius: 0.5rem;
+        border: 1px solid;
+        padding: 1rem;
+      }
+
+      .callout strong {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.375rem;
+      }
+
+      .step-badge {
+        display: inline-flex;
+        width: 2rem;
+        height: 2rem;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        font-weight: 800;
+        background: #0f766e;
+        color: white;
+      }
+
+      pre[class*="language-"] {
+        border-radius: 0.5rem;
+        border: 1px solid #e7e1d8;
+        background: #fffefa;
+        margin: 0;
+      }
+
+      code[class*="language-"] {
+        font-size: 0.9rem;
+      }
+
+      .mermaid {
+        border: 1px solid #e2ddd4;
+        border-radius: 0.5rem;
+        background: #fffefa;
+        padding: 1rem;
+        overflow-x: auto;
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+        border: 1px solid #e2ddd4;
+        border-radius: 0.5rem;
+        background: #fffefa;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 720px;
+      }
+
+      th,
+      td {
+        border-bottom: 1px solid #eee7dc;
+        padding: 0.875rem 1rem;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        background: #f7f2ea;
+        color: #1f2933;
+        font-weight: 700;
+      }
+
+      tr:last-child td {
+        border-bottom: 0;
+      }
+
+      @media print {
+        aside,
+        .mobile-header {
+          display: none !important;
+        }
+
+        main {
+          margin: 0 !important;
+          max-width: none !important;
+        }
+
+        .section-panel {
+          box-shadow: none;
+          break-inside: avoid;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div
+      class="mobile-header sticky top-0 z-30 border-b border-stone-200 bg-white/92 px-4 py-3 backdrop-blur lg:hidden"
+    >
+      <div class="flex items-center justify-between gap-3">
+        <div class="min-w-0">
+          <p class="text-xs font-semibold uppercase text-teal-700">
+            Project AI
+          </p>
+          <h1 class="truncate text-base font-bold text-stone-900">
+            Developer Guide
+          </h1>
+        </div>
+        <a
+          href="#quick-start"
+          class="rounded-lg bg-teal-700 px-3 py-2 text-sm font-semibold text-white"
+          >Bắt đầu</a
+        >
       </div>
-      <a href="#quick-start" class="rounded-lg bg-teal-700 px-3 py-2 text-sm font-semibold text-white">Bắt đầu</a>
     </div>
-  </div>
 
-  <aside class="fixed inset-y-0 left-0 z-40 hidden w-80 border-r border-stone-200 bg-white/90 px-5 py-6 backdrop-blur lg:block">
-    <div class="mb-7">
-      <div class="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-lg bg-teal-700 text-white">
-        <i data-lucide="brain-circuit" aria-hidden="true"></i>
-      </div>
-      <p class="text-sm font-semibold uppercase text-teal-700">Project AI Copilot Package</p>
-      <h2 class="mt-1 text-2xl font-extrabold text-stone-950">Developer Guide</h2>
-      <p class="mt-3 text-sm leading-6 text-stone-600">Tài liệu cho Developer mới: hiểu Why, dùng How, làm việc với AI Agent theo chuẩn banking-grade.</p>
-    </div>
-
-    <nav aria-label="Mục lục" class="space-y-1">
-      <a class="toc-link" href="#overview"><i data-lucide="layout-dashboard" aria-hidden="true"></i><span>Tổng quan</span></a>
-      <a class="toc-link" href="#why"><i data-lucide="sparkles" aria-hidden="true"></i><span>Chương 1: Why</span></a>
-      <a class="toc-link" href="#architecture"><i data-lucide="network" aria-hidden="true"></i><span>Kiến trúc mục tiêu</span></a>
-      <a class="toc-link" href="#data-flow"><i data-lucide="route" aria-hidden="true"></i><span>Luồng dữ liệu</span></a>
-      <a class="toc-link" href="#how"><i data-lucide="square-terminal" aria-hidden="true"></i><span>Chương 2: How</span></a>
-      <a class="toc-link" href="#quick-start"><i data-lucide="rocket" aria-hidden="true"></i><span>Quick start</span></a>
-      <a class="toc-link" href="#main-flows"><i data-lucide="workflow" aria-hidden="true"></i><span>Luồng chính</span></a>
-      <a class="toc-link" href="#external-context"><i data-lucide="plug-zap" aria-hidden="true"></i><span>Azure DevOps & R&D</span></a>
-      <a class="toc-link" href="#cheatsheet"><i data-lucide="list-checks" aria-hidden="true"></i><span>Cheat sheet</span></a>
-    </nav>
-
-    <div class="mt-8 rounded-lg border border-amber-200 bg-amber-50 p-4">
-      <p class="text-sm font-bold text-amber-900">Nguyên tắc lõi</p>
-      <p class="mt-1 text-sm leading-6 text-amber-900">Reference-first, plan-first, evidence-first. AI phải đọc ngữ cảnh thật, lập plan rõ, rồi chứng minh bằng verification.</p>
-    </div>
-  </aside>
-
-  <main class="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:ml-80 lg:px-10 lg:py-12">
-    <section class="mb-10 overflow-hidden rounded-lg border border-stone-200 bg-white">
-      <div class="grid gap-0 lg:grid-cols-[1.2fr_0.8fr]">
-        <div class="px-6 py-10 sm:px-10 lg:py-14">
-          <div class="mb-6 inline-flex items-center gap-2 rounded-lg border border-teal-200 bg-teal-50 px-3 py-2 text-sm font-semibold text-teal-800">
-            <i data-lucide="shield-check" aria-hidden="true" class="h-4 w-4"></i>
-            Banking-grade AI development layer
-          </div>
-          <h1 class="max-w-3xl text-4xl font-extrabold leading-tight text-stone-950 sm:text-5xl">Biến Project AI thành cách làm việc rõ ràng cho Developer</h1>
-          <p class="mt-5 max-w-3xl text-lg leading-8 text-stone-700">Bộ `.github` này chuẩn hóa cách AI đọc repo, trace logic, lập kế hoạch, implement, test, review và cập nhật tài liệu trong một môi trường cần kiểm soát cao.</p>
-          <div class="mt-8 flex flex-wrap gap-3">
-            <a href="#quick-start" class="inline-flex items-center gap-2 rounded-lg bg-teal-700 px-4 py-3 text-sm font-bold text-white hover:bg-teal-800">
-              <i data-lucide="play" aria-hidden="true" class="h-4 w-4"></i>
-              Bắt đầu trong 10 phút
-            </a>
-            <a href="#architecture" class="inline-flex items-center gap-2 rounded-lg border border-stone-300 bg-white px-4 py-3 text-sm font-bold text-stone-800 hover:bg-stone-50">
-              <i data-lucide="map" aria-hidden="true" class="h-4 w-4"></i>
-              Xem kiến trúc
-            </a>
-          </div>
+    <aside
+      class="fixed inset-y-0 left-0 z-40 hidden w-80 border-r border-stone-200 bg-white/90 px-5 py-6 backdrop-blur lg:block"
+    >
+      <div class="mb-7">
+        <div
+          class="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-lg bg-teal-700 text-white"
+        >
+          <i data-lucide="brain-circuit" aria-hidden="true"></i>
         </div>
-        <div class="border-t border-stone-200 bg-stone-50 p-6 lg:border-l lg:border-t-0 lg:p-8">
-          <div class="grid grid-cols-2 gap-3">
-            <div class="rounded-lg border border-stone-200 bg-white p-4">
-              <p class="text-3xl font-extrabold text-teal-700">22</p>
-              <p class="mt-1 text-sm font-semibold text-stone-700">Prompts</p>
+        <p class="text-sm font-semibold uppercase text-teal-700">
+          Project AI Copilot Package
+        </p>
+        <h2 class="mt-1 text-2xl font-extrabold text-stone-950">
+          Developer Guide
+        </h2>
+        <p class="mt-3 text-sm leading-6 text-stone-600">
+          Tài liệu cho Developer mới: hiểu Why, dùng How, làm việc với AI Agent
+          theo chuẩn banking-grade.
+        </p>
+      </div>
+
+      <nav aria-label="Mục lục" class="space-y-1">
+        <a class="toc-link" href="#overview"
+          ><i data-lucide="layout-dashboard" aria-hidden="true"></i
+          ><span>Tổng quan</span></a
+        >
+        <a class="toc-link" href="#why"
+          ><i data-lucide="sparkles" aria-hidden="true"></i
+          ><span>Chương 1: Why</span></a
+        >
+        <a class="toc-link" href="#architecture"
+          ><i data-lucide="network" aria-hidden="true"></i
+          ><span>Kiến trúc mục tiêu</span></a
+        >
+        <a class="toc-link" href="#data-flow"
+          ><i data-lucide="route" aria-hidden="true"></i
+          ><span>Luồng dữ liệu</span></a
+        >
+        <a class="toc-link" href="#how"
+          ><i data-lucide="square-terminal" aria-hidden="true"></i
+          ><span>Chương 2: How</span></a
+        >
+        <a class="toc-link" href="#quick-start"
+          ><i data-lucide="rocket" aria-hidden="true"></i
+          ><span>Quick start</span></a
+        >
+        <a class="toc-link" href="#main-flows"
+          ><i data-lucide="workflow" aria-hidden="true"></i
+          ><span>Luồng chính</span></a
+        >
+        <a class="toc-link" href="#external-context"
+          ><i data-lucide="plug-zap" aria-hidden="true"></i
+          ><span>Azure DevOps & R&D</span></a
+        >
+        <a class="toc-link" href="#cheatsheet"
+          ><i data-lucide="list-checks" aria-hidden="true"></i
+          ><span>Cheat sheet</span></a
+        >
+      </nav>
+
+      <div class="mt-8 rounded-lg border border-amber-200 bg-amber-50 p-4">
+        <p class="text-sm font-bold text-amber-900">Nguyên tắc lõi</p>
+        <p class="mt-1 text-sm leading-6 text-amber-900">
+          Reference-first, plan-first, evidence-first. AI phải đọc ngữ cảnh
+          thật, lập plan rõ, rồi chứng minh bằng verification.
+        </p>
+      </div>
+    </aside>
+
+    <main
+      class="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:ml-80 lg:px-10 lg:py-12"
+    >
+      <section
+        class="mb-10 overflow-hidden rounded-lg border border-stone-200 bg-white"
+      >
+        <div class="grid gap-0 lg:grid-cols-[1.2fr_0.8fr]">
+          <div class="px-6 py-10 sm:px-10 lg:py-14">
+            <div
+              class="mb-6 inline-flex items-center gap-2 rounded-lg border border-teal-200 bg-teal-50 px-3 py-2 text-sm font-semibold text-teal-800"
+            >
+              <i
+                data-lucide="shield-check"
+                aria-hidden="true"
+                class="h-4 w-4"
+              ></i>
+              Banking-grade AI development layer
             </div>
-            <div class="rounded-lg border border-stone-200 bg-white p-4">
-              <p class="text-3xl font-extrabold text-amber-700">11</p>
-              <p class="mt-1 text-sm font-semibold text-stone-700">Agents</p>
+            <h1
+              class="max-w-3xl text-4xl font-extrabold leading-tight text-stone-950 sm:text-5xl"
+            >
+              Biến Project AI thành cách làm việc rõ ràng cho Developer
+            </h1>
+            <p class="mt-5 max-w-3xl text-lg leading-8 text-stone-700">
+              Bộ `.github` này chuẩn hóa cách AI đọc repo, trace logic, lập kế
+              hoạch, implement, test, review và cập nhật tài liệu trong một môi
+              trường cần kiểm soát cao.
+            </p>
+            <div class="mt-8 flex flex-wrap gap-3">
+              <a
+                href="#quick-start"
+                class="inline-flex items-center gap-2 rounded-lg bg-teal-700 px-4 py-3 text-sm font-bold text-white hover:bg-teal-800"
+              >
+                <i data-lucide="play" aria-hidden="true" class="h-4 w-4"></i>
+                Bắt đầu trong 10 phút
+              </a>
+              <a
+                href="#architecture"
+                class="inline-flex items-center gap-2 rounded-lg border border-stone-300 bg-white px-4 py-3 text-sm font-bold text-stone-800 hover:bg-stone-50"
+              >
+                <i data-lucide="map" aria-hidden="true" class="h-4 w-4"></i>
+                Xem kiến trúc
+              </a>
             </div>
-            <div class="rounded-lg border border-stone-200 bg-white p-4">
-              <p class="text-3xl font-extrabold text-rose-700">18</p>
-              <p class="mt-1 text-sm font-semibold text-stone-700">Skills</p>
+          </div>
+          <div
+            class="border-t border-stone-200 bg-stone-50 p-6 lg:border-l lg:border-t-0 lg:p-8"
+          >
+            <div class="grid grid-cols-2 gap-3">
+              <div class="rounded-lg border border-stone-200 bg-white p-4">
+                <p class="text-3xl font-extrabold text-teal-700">22</p>
+                <p class="mt-1 text-sm font-semibold text-stone-700">Prompts</p>
+              </div>
+              <div class="rounded-lg border border-stone-200 bg-white p-4">
+                <p class="text-3xl font-extrabold text-amber-700">11</p>
+                <p class="mt-1 text-sm font-semibold text-stone-700">Agents</p>
+              </div>
+              <div class="rounded-lg border border-stone-200 bg-white p-4">
+                <p class="text-3xl font-extrabold text-rose-700">18</p>
+                <p class="mt-1 text-sm font-semibold text-stone-700">Skills</p>
+              </div>
+              <div class="rounded-lg border border-stone-200 bg-white p-4">
+                <p class="text-3xl font-extrabold text-indigo-700">1</p>
+                <p class="mt-1 text-sm font-semibold text-stone-700">
+                  Pre-push hook
+                </p>
+              </div>
             </div>
-            <div class="rounded-lg border border-stone-200 bg-white p-4">
-              <p class="text-3xl font-extrabold text-indigo-700">1</p>
-              <p class="mt-1 text-sm font-semibold text-stone-700">Pre-push hook</p>
+            <div class="mt-4 rounded-lg border border-stone-200 bg-white p-4">
+              <p class="text-sm font-bold text-stone-900">Phạm vi đã đọc</p>
+              <p class="mt-2 text-sm leading-6 text-stone-600">
+                Instructions, copilot playbooks, prompt catalog, agent catalog,
+                skill index, local pre-push governance và tài liệu trong
+                `.github/docs`.
+              </p>
             </div>
           </div>
-          <div class="mt-4 rounded-lg border border-stone-200 bg-white p-4">
-            <p class="text-sm font-bold text-stone-900">Phạm vi đã đọc</p>
-            <p class="mt-2 text-sm leading-6 text-stone-600">Instructions, copilot playbooks, prompt catalog, agent catalog, skill index, local pre-push governance và tài liệu trong `.github/docs`.</p>
+        </div>
+      </section>
+
+      <section id="overview" class="section-panel mb-8 p-6 sm:p-8">
+        <div class="mb-6 flex items-start gap-3">
+          <div class="rounded-lg bg-teal-100 p-2 text-teal-800">
+            <i data-lucide="layout-dashboard" aria-hidden="true"></i>
+          </div>
+          <div>
+            <p class="text-sm font-bold uppercase text-teal-700">
+              Tổng quan nhanh
+            </p>
+            <h2 class="mt-1 text-2xl font-extrabold text-stone-950">
+              Project AI là lớp vận hành cho AI Developer
+            </h2>
           </div>
         </div>
-      </div>
-    </section>
-
-    <section id="overview" class="section-panel mb-8 p-6 sm:p-8">
-      <div class="mb-6 flex items-start gap-3">
-        <div class="rounded-lg bg-teal-100 p-2 text-teal-800"><i data-lucide="layout-dashboard" aria-hidden="true"></i></div>
-        <div>
-          <p class="text-sm font-bold uppercase text-teal-700">Tổng quan nhanh</p>
-          <h2 class="mt-1 text-2xl font-extrabold text-stone-950">Project AI là lớp vận hành cho AI Developer</h2>
-        </div>
-      </div>
-      <p class="text-base leading-8 text-stone-700">Đây không phải ứng dụng runtime. Đây là một bộ quy tắc, playbook, prompt, agent, skill và local pre-push governance để Developer dùng AI an toàn hơn trong repo. Điểm quan trọng nhất: AI không được đoán mò. AI phải đọc rule, đọc code thật, lập plan, chờ approval khi cần, implement nhỏ gọn, chạy verification, review từng dòng và cập nhật tài liệu.</p>
-      <div class="mt-6 grid gap-4 md:grid-cols-3">
-        <div class="rounded-lg border border-stone-200 bg-white p-5">
-          <i data-lucide="search-code" aria-hidden="true" class="mb-3 h-6 w-6 text-teal-700"></i>
-          <h3 class="font-bold text-stone-950">Đọc code nhanh hơn</h3>
-          <p class="mt-2 text-sm leading-6 text-stone-600">Dùng AI để dựng folder map, entry point, layer path, business rule và test gap.</p>
-        </div>
-        <div class="rounded-lg border border-stone-200 bg-white p-5">
-          <i data-lucide="clipboard-check" aria-hidden="true" class="mb-3 h-6 w-6 text-amber-700"></i>
-          <h3 class="font-bold text-stone-950">Plan chắc hơn</h3>
-          <p class="mt-2 text-sm leading-6 text-stone-600">Luôn có scope, affected files, risk, test strategy và rollback trước khi sửa.</p>
-        </div>
-        <div class="rounded-lg border border-stone-200 bg-white p-5">
-          <i data-lucide="scan-line" aria-hidden="true" class="mb-3 h-6 w-6 text-rose-700"></i>
-          <h3 class="font-bold text-stone-950">Review có bằng chứng</h3>
-          <p class="mt-2 text-sm leading-6 text-stone-600">Kết quả phải đi kèm build/test/lint/scan, diff review và docs update.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="why" class="section-panel mb-8 p-6 sm:p-8">
-      <div class="mb-6 flex items-start gap-3">
-        <div class="rounded-lg bg-amber-100 p-2 text-amber-800"><i data-lucide="sparkles" aria-hidden="true"></i></div>
-        <div>
-          <p class="text-sm font-bold uppercase text-amber-700">Chương 1</p>
-          <h2 class="mt-1 text-2xl font-extrabold text-stone-950">Tầm nhìn và sức mạnh</h2>
-        </div>
-      </div>
-
-      <div class="grid gap-5 lg:grid-cols-2">
-        <div>
-          <h3 class="text-xl font-bold text-stone-950">Vì sao AI Agent/LLM quan trọng?</h3>
-          <p class="mt-3 leading-8 text-stone-700">LLM mạnh nhất khi xử lý ngữ cảnh lớn: đọc nhiều file, gom business rule, trace flow runtime, so sánh với pattern cũ và phát hiện lỗ hổng test. Với dự án banking, năng lực đó chỉ hữu ích khi được ràng buộc bằng quy trình rõ.</p>
-          <div class="callout mt-5 border-teal-200 bg-teal-50 text-teal-950">
-            <strong><i data-lucide="lightbulb" aria-hidden="true" class="h-4 w-4"></i> Tip</strong>
-            <p class="text-sm leading-6">Hãy xem AI như một đồng đội đọc repo rất nhanh. Việc của Developer là yêu cầu đúng flow, kiểm tra bằng chứng và quyết định nghiệp vụ.</p>
+        <p class="text-base leading-8 text-stone-700">
+          Đây không phải ứng dụng runtime. Đây là một bộ quy tắc, playbook,
+          prompt, agent, skill và local pre-push governance để Developer dùng AI
+          an toàn hơn trong repo. Điểm quan trọng nhất: AI không được đoán mò.
+          AI phải đọc rule, đọc code thật, lập plan, chờ approval khi cần,
+          implement nhỏ gọn, chạy verification, review từng dòng và cập nhật tài
+          liệu.
+        </p>
+        <div class="mt-6 grid gap-4 md:grid-cols-3">
+          <div class="rounded-lg border border-stone-200 bg-white p-5">
+            <i
+              data-lucide="search-code"
+              aria-hidden="true"
+              class="mb-3 h-6 w-6 text-teal-700"
+            ></i>
+            <h3 class="font-bold text-stone-950">Đọc code nhanh hơn</h3>
+            <p class="mt-2 text-sm leading-6 text-stone-600">
+              Dùng AI để dựng folder map, entry point, layer path, business rule
+              và test gap.
+            </p>
+          </div>
+          <div class="rounded-lg border border-stone-200 bg-white p-5">
+            <i
+              data-lucide="clipboard-check"
+              aria-hidden="true"
+              class="mb-3 h-6 w-6 text-amber-700"
+            ></i>
+            <h3 class="font-bold text-stone-950">Plan chắc hơn</h3>
+            <p class="mt-2 text-sm leading-6 text-stone-600">
+              Luôn có scope, affected files, risk, test strategy và rollback
+              trước khi sửa.
+            </p>
+          </div>
+          <div class="rounded-lg border border-stone-200 bg-white p-5">
+            <i
+              data-lucide="scan-line"
+              aria-hidden="true"
+              class="mb-3 h-6 w-6 text-rose-700"
+            ></i>
+            <h3 class="font-bold text-stone-950">Review có bằng chứng</h3>
+            <p class="mt-2 text-sm leading-6 text-stone-600">
+              Kết quả phải đi kèm build/test/lint/scan, diff review và docs
+              update.
+            </p>
           </div>
         </div>
-        <div>
-          <h3 class="text-xl font-bold text-stone-950">Project này giúp gì?</h3>
-          <ul class="mt-3 space-y-3 text-stone-700">
-            <li class="flex gap-3"><i data-lucide="check-circle-2" aria-hidden="true" class="mt-1 h-5 w-5 flex-none text-teal-700"></i><span>Tăng tốc đọc code cũ bằng `/scout`, `/analyze-code`, `/explain-code`.</span></li>
-            <li class="flex gap-3"><i data-lucide="check-circle-2" aria-hidden="true" class="mt-1 h-5 w-5 flex-none text-teal-700"></i><span>Giảm lệch kiến trúc bằng `code-solution-fit`, `system-analysis`, `banking-grade-engineering`.</span></li>
-            <li class="flex gap-3"><i data-lucide="check-circle-2" aria-hidden="true" class="mt-1 h-5 w-5 flex-none text-teal-700"></i><span>Đưa Azure DevOps, tài liệu nội bộ và Deep Research vào workflow có kiểm soát.</span></li>
-            <li class="flex gap-3"><i data-lucide="check-circle-2" aria-hidden="true" class="mt-1 h-5 w-5 flex-none text-teal-700"></i><span>Buộc kết quả cuối có verification, line review và docs update.</span></li>
-          </ul>
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <section id="architecture" class="section-panel mb-8 p-6 sm:p-8">
-      <div class="mb-6 flex items-start gap-3">
-        <div class="rounded-lg bg-rose-100 p-2 text-rose-800"><i data-lucide="network" aria-hidden="true"></i></div>
-        <div>
-          <p class="text-sm font-bold uppercase text-rose-700">Architecture Diagram</p>
-          <h2 class="mt-1 text-2xl font-extrabold text-stone-950">Mô hình mục tiêu</h2>
-        </div>
-      </div>
-      <div class="mermaid">
-flowchart LR
-    Dev[Developer] --> Chat[Copilot Chat / AI Agent]
-    Chat --> Rules[Repository Instructions]
-    Chat --> Prompts[Prompt Files]
-    Chat --> Agents[Custom Agents]
-    Chat --> Skills[Agent Skills]
-    Chat --> Playbooks[Copilot Playbooks]
-
-    Rules --> Guardrails[Banking-grade Guardrails]
-    Prompts --> Workflows[Reusable Workflows]
-    Agents --> Roles[Specialized Roles]
-    Skills --> Expertise[Domain Expertise]
-    Playbooks --> Governance[Architecture and Governance]
-
-    Chat --> Repo[Application Codebase]
-    Chat --> Docs[Project Docs]
-    Chat --> ManualCI[Manual Governance Workflow]
-
-    Chat -. approved read-only context .-> Azure[Azure DevOps MCP]
-    Chat -. approved private corpus .-> Knowledge[Internal Knowledge / NotebookLM]
-    Chat -. approved research .-> Research[Deep Research]
-    Chat -. schema only .-> Schema[Database Schema Context]
-
-    Guardrails --> Output[Plan, Code, Tests, Review, Docs]
-    Workflows --> Output
-    Roles --> Output
-    Expertise --> Output
-    Governance --> Output
-      </div>
-      <div class="mt-5 grid gap-4 md:grid-cols-2">
-        <div class="callout border-teal-200 bg-teal-50 text-teal-950">
-          <strong><i data-lucide="shield" aria-hidden="true" class="h-4 w-4"></i> Guardrail</strong>
-          <p class="text-sm leading-6">Repository instructions là luật nền. Prompt, agent và skill chỉ được dùng trong phạm vi luật này.</p>
-        </div>
-        <div class="callout border-amber-200 bg-amber-50 text-amber-950">
-          <strong><i data-lucide="lock-keyhole" aria-hidden="true" class="h-4 w-4"></i> External context</strong>
-          <p class="text-sm leading-6">Azure DevOps, internal knowledge, database schema và research context phải theo quyền tối thiểu, ưu tiên read-only.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="data-flow" class="section-panel mb-8 p-6 sm:p-8">
-      <div class="mb-6 flex items-start gap-3">
-        <div class="rounded-lg bg-indigo-100 p-2 text-indigo-800"><i data-lucide="route" aria-hidden="true"></i></div>
-        <div>
-          <p class="text-sm font-bold uppercase text-indigo-700">Data Flow</p>
-          <h2 class="mt-1 text-2xl font-extrabold text-stone-950">Luồng dữ liệu cấp cao</h2>
-        </div>
-      </div>
-      <div class="mermaid">
-sequenceDiagram
-    autonumber
-    participant Dev as Developer
-    participant AI as AI Agent
-    participant GH as .github AI Layer
-    participant Code as Codebase
-    participant Ext as Approved Context
-    participant Verify as Verification
-    participant Docs as Documentation
-
-    Dev->>AI: Yêu cầu phân tích / plan / implement / review
-    AI->>GH: Đọc instructions, prompt, agent, skill, playbook
-    AI->>Code: Tìm entry point, dependency, test, config
-    AI-->>Ext: Đọc Azure DevOps / internal docs / research nếu được phép
-    AI->>Dev: Trình bày plan, rủi ro, file bị ảnh hưởng
-    Dev->>AI: Phê duyệt hướng làm
-    AI->>Code: Implement thay đổi nhỏ nhất phù hợp codebase
-    AI->>Verify: Build, test, lint, scan, dependency audit
-    AI->>AI: Review từng dòng thay đổi
-    AI->>Docs: Cập nhật docs/changelog/feature log
-    AI->>Dev: Báo cáo kết quả kèm bằng chứng
-      </div>
-    </section>
-
-    <section id="how" class="section-panel mb-8 p-6 sm:p-8">
-      <div class="mb-6 flex items-start gap-3">
-        <div class="rounded-lg bg-teal-100 p-2 text-teal-800"><i data-lucide="square-terminal" aria-hidden="true"></i></div>
-        <div>
-          <p class="text-sm font-bold uppercase text-teal-700">Chương 2</p>
-          <h2 class="mt-1 text-2xl font-extrabold text-stone-950">Hướng dẫn sử dụng chi tiết</h2>
-        </div>
-      </div>
-      <p class="leading-8 text-stone-700">Phần này tập trung vào các thao tác Developer dùng hằng ngày: đọc codebase, trace logic, lập plan, implement, test, review và cập nhật tài liệu. Hãy bắt đầu bằng câu hỏi rõ, yêu cầu AI nêu file thật, function thật và verification thật.</p>
-    </section>
-
-    <section id="quick-start" class="section-panel mb-8 p-6 sm:p-8">
-      <div class="mb-6 flex items-start gap-3">
-        <div class="rounded-lg bg-amber-100 p-2 text-amber-800"><i data-lucide="rocket" aria-hidden="true"></i></div>
-        <div>
-          <p class="text-sm font-bold uppercase text-amber-700">Quick Start</p>
-          <h2 class="mt-1 text-2xl font-extrabold text-stone-950">Vào repo mới trong 10-15 phút</h2>
-        </div>
-      </div>
-
-      <div class="space-y-5">
-        <div class="flex gap-4 rounded-lg border border-stone-200 bg-white p-5">
-          <span class="step-badge">1</span>
-          <div class="min-w-0 flex-1">
-            <h3 class="font-bold text-stone-950">Đọc bản đồ project</h3>
-            <p class="mt-1 text-sm leading-6 text-stone-600">Yêu cầu AI tóm tắt folder, entry point, test project, config và tài liệu cần đọc.</p>
-            <pre class="mt-3"><code class="language-text">/scout Hãy tóm tắt cấu trúc repo, entry point chính, test project, config quan trọng và các tài liệu cần đọc trước.</code></pre>
+      <section id="why" class="section-panel mb-8 p-6 sm:p-8">
+        <div class="mb-6 flex items-start gap-3">
+          <div class="rounded-lg bg-amber-100 p-2 text-amber-800">
+            <i data-lucide="sparkles" aria-hidden="true"></i>
+          </div>
+          <div>
+            <p class="text-sm font-bold uppercase text-amber-700">Chương 1</p>
+            <h2 class="mt-1 text-2xl font-extrabold text-stone-950">
+              Tầm nhìn và sức mạnh
+            </h2>
           </div>
         </div>
 
-        <div class="flex gap-4 rounded-lg border border-stone-200 bg-white p-5">
-          <span class="step-badge">2</span>
-          <div class="min-w-0 flex-1">
-            <h3 class="font-bold text-stone-950">Phân tích flow được giao</h3>
-            <p class="mt-1 text-sm leading-6 text-stone-600">Đi theo entry point, data contract, service, repository, business rule và test gap.</p>
-            <pre class="mt-3"><code class="language-text">/analyze-code Hãy phân tích flow &lt;tên flow&gt;.
+        <div class="grid gap-5 lg:grid-cols-2">
+          <div>
+            <h3 class="text-xl font-bold text-stone-950">
+              Vì sao AI Agent/LLM quan trọng?
+            </h3>
+            <p class="mt-3 leading-8 text-stone-700">
+              LLM mạnh nhất khi xử lý ngữ cảnh lớn: đọc nhiều file, gom business
+              rule, trace flow runtime, so sánh với pattern cũ và phát hiện lỗ
+              hổng test. Với dự án banking, năng lực đó chỉ hữu ích khi được
+              ràng buộc bằng quy trình rõ.
+            </p>
+            <div class="callout mt-5 border-teal-200 bg-teal-50 text-teal-950">
+              <strong
+                ><i
+                  data-lucide="lightbulb"
+                  aria-hidden="true"
+                  class="h-4 w-4"
+                ></i>
+                Tip</strong
+              >
+              <p class="text-sm leading-6">
+                Hãy xem AI như một đồng đội đọc repo rất nhanh. Việc của
+                Developer là yêu cầu đúng flow, kiểm tra bằng chứng và quyết
+                định nghiệp vụ.
+              </p>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-xl font-bold text-stone-950">
+              Project này giúp gì?
+            </h3>
+            <ul class="mt-3 space-y-3 text-stone-700">
+              <li class="flex gap-3">
+                <i
+                  data-lucide="check-circle-2"
+                  aria-hidden="true"
+                  class="mt-1 h-5 w-5 flex-none text-teal-700"
+                ></i
+                ><span
+                  >Tăng tốc đọc code cũ bằng `/scout`, `/analyze-code`,
+                  `/explain-code`.</span
+                >
+              </li>
+              <li class="flex gap-3">
+                <i
+                  data-lucide="check-circle-2"
+                  aria-hidden="true"
+                  class="mt-1 h-5 w-5 flex-none text-teal-700"
+                ></i
+                ><span
+                  >Giảm lệch kiến trúc bằng `system-analysis`,
+                  `banking-grade-engineering`.</span
+                >
+              </li>
+              <li class="flex gap-3">
+                <i
+                  data-lucide="check-circle-2"
+                  aria-hidden="true"
+                  class="mt-1 h-5 w-5 flex-none text-teal-700"
+                ></i
+                ><span
+                  >Đưa Azure DevOps, tài liệu nội bộ và Deep Research vào
+                  workflow có kiểm soát.</span
+                >
+              </li>
+              <li class="flex gap-3">
+                <i
+                  data-lucide="check-circle-2"
+                  aria-hidden="true"
+                  class="mt-1 h-5 w-5 flex-none text-teal-700"
+                ></i
+                ><span
+                  >Buộc kết quả cuối có verification, line review và docs
+                  update.</span
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="architecture" class="section-panel mb-8 p-6 sm:p-8">
+        <div class="mb-6 flex items-start gap-3">
+          <div class="rounded-lg bg-rose-100 p-2 text-rose-800">
+            <i data-lucide="network" aria-hidden="true"></i>
+          </div>
+          <div>
+            <p class="text-sm font-bold uppercase text-rose-700">
+              Architecture Diagram
+            </p>
+            <h2 class="mt-1 text-2xl font-extrabold text-stone-950">
+              Mô hình mục tiêu
+            </h2>
+          </div>
+        </div>
+        <div class="mermaid">
+          flowchart LR Dev[Developer] --> Chat[Copilot Chat / AI Agent] Chat -->
+          Rules[Repository Instructions] Chat --> Prompts[Prompt Files] Chat -->
+          Agents[Custom Agents] Chat --> Skills[Agent Skills] Chat -->
+          Playbooks[Copilot Playbooks] Rules --> Guardrails[Banking-grade
+          Guardrails] Prompts --> Workflows[Reusable Workflows] Agents -->
+          Roles[Specialized Roles] Skills --> Expertise[Domain Expertise]
+          Playbooks --> Governance[Architecture and Governance] Chat -->
+          Repo[Application Codebase] Chat --> Docs[Project Docs] Chat -->
+          ManualCI[Manual Governance Workflow] Chat -. approved read-only
+          context .-> Azure[Azure DevOps MCP] Chat -. approved research .->
+          Research[Deep Research] Chat -. schema only .-> Schema[Database Schema
+          Context] Guardrails --> Output[Plan, Code, Tests, Review, Docs]
+          Workflows --> Output Roles --> Output Expertise --> Output Governance
+          --> Output
+        </div>
+        <div class="mt-5 grid gap-4 md:grid-cols-2">
+          <div class="callout border-teal-200 bg-teal-50 text-teal-950">
+            <strong
+              ><i data-lucide="shield" aria-hidden="true" class="h-4 w-4"></i>
+              Guardrail</strong
+            >
+            <p class="text-sm leading-6">
+              Repository instructions là luật nền. Prompt, agent và skill chỉ
+              được dùng trong phạm vi luật này.
+            </p>
+          </div>
+          <div class="callout border-amber-200 bg-amber-50 text-amber-950">
+            <strong
+              ><i
+                data-lucide="lock-keyhole"
+                aria-hidden="true"
+                class="h-4 w-4"
+              ></i>
+              External context</strong
+            >
+            <p class="text-sm leading-6">
+              Azure DevOps, internal knowledge, database schema và research
+              context phải theo quyền tối thiểu, ưu tiên read-only.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="data-flow" class="section-panel mb-8 p-6 sm:p-8">
+        <div class="mb-6 flex items-start gap-3">
+          <div class="rounded-lg bg-indigo-100 p-2 text-indigo-800">
+            <i data-lucide="route" aria-hidden="true"></i>
+          </div>
+          <div>
+            <p class="text-sm font-bold uppercase text-indigo-700">Data Flow</p>
+            <h2 class="mt-1 text-2xl font-extrabold text-stone-950">
+              Luồng dữ liệu cấp cao
+            </h2>
+          </div>
+        </div>
+        <div class="mermaid">
+          sequenceDiagram autonumber participant Dev as Developer participant AI
+          as AI Agent participant GH as .github AI Layer participant Code as
+          Codebase participant Ext as Approved Context participant Verify as
+          Verification participant Docs as Documentation Dev->>AI: Yêu cầu phân
+          tích / plan / implement / review AI->>GH: Đọc instructions, prompt,
+          agent, skill, playbook AI->>Code: Tìm entry point, dependency, test,
+          config AI-->>Ext: Đọc Azure DevOps / internal docs / research nếu được
+          phép AI->>Dev: Trình bày plan, rủi ro, file bị ảnh hưởng Dev->>AI: Phê
+          duyệt hướng làm AI->>Code: Implement thay đổi nhỏ nhất phù hợp
+          codebase AI->>Verify: Build, test, lint, scan, dependency audit
+          AI->>AI: Review từng dòng thay đổi AI->>Docs: Cập nhật
+          docs/changelog/feature log AI->>Dev: Báo cáo kết quả kèm bằng chứng
+        </div>
+      </section>
+
+      <section id="how" class="section-panel mb-8 p-6 sm:p-8">
+        <div class="mb-6 flex items-start gap-3">
+          <div class="rounded-lg bg-teal-100 p-2 text-teal-800">
+            <i data-lucide="square-terminal" aria-hidden="true"></i>
+          </div>
+          <div>
+            <p class="text-sm font-bold uppercase text-teal-700">Chương 2</p>
+            <h2 class="mt-1 text-2xl font-extrabold text-stone-950">
+              Hướng dẫn sử dụng chi tiết
+            </h2>
+          </div>
+        </div>
+        <p class="leading-8 text-stone-700">
+          Phần này tập trung vào các thao tác Developer dùng hằng ngày: đọc
+          codebase, trace logic, lập plan, implement, test, review và cập nhật
+          tài liệu. Hãy bắt đầu bằng câu hỏi rõ, yêu cầu AI nêu file thật,
+          function thật và verification thật.
+        </p>
+      </section>
+
+      <section id="quick-start" class="section-panel mb-8 p-6 sm:p-8">
+        <div class="mb-6 flex items-start gap-3">
+          <div class="rounded-lg bg-amber-100 p-2 text-amber-800">
+            <i data-lucide="rocket" aria-hidden="true"></i>
+          </div>
+          <div>
+            <p class="text-sm font-bold uppercase text-amber-700">
+              Quick Start
+            </p>
+            <h2 class="mt-1 text-2xl font-extrabold text-stone-950">
+              Vào repo mới trong 10-15 phút
+            </h2>
+          </div>
+        </div>
+
+        <div class="space-y-5">
+          <div
+            class="flex gap-4 rounded-lg border border-stone-200 bg-white p-5"
+          >
+            <span class="step-badge">1</span>
+            <div class="min-w-0 flex-1">
+              <h3 class="font-bold text-stone-950">Đọc bản đồ project</h3>
+              <p class="mt-1 text-sm leading-6 text-stone-600">
+                Yêu cầu AI tóm tắt folder, entry point, test project, config và
+                tài liệu cần đọc.
+              </p>
+              <pre
+                class="mt-3"
+              ><code class="language-text">/scout Hãy tóm tắt cấu trúc repo, entry point chính, test project, config quan trọng và các tài liệu cần đọc trước.</code></pre>
+            </div>
+          </div>
+
+          <div
+            class="flex gap-4 rounded-lg border border-stone-200 bg-white p-5"
+          >
+            <span class="step-badge">2</span>
+            <div class="min-w-0 flex-1">
+              <h3 class="font-bold text-stone-950">Phân tích flow được giao</h3>
+              <p class="mt-1 text-sm leading-6 text-stone-600">
+                Đi theo entry point, data contract, service, repository,
+                business rule và test gap.
+              </p>
+              <pre
+                class="mt-3"
+              ><code class="language-text">/analyze-code Hãy phân tích flow &lt;tên flow&gt;.
 Liệt kê entry point, lớp xử lý chính, data contract, validation, side effect, test hiện có và điểm cần cẩn thận.</code></pre>
+            </div>
           </div>
-        </div>
 
-        <div class="flex gap-4 rounded-lg border border-stone-200 bg-white p-5">
-          <span class="step-badge">3</span>
-          <div class="min-w-0 flex-1">
-            <h3 class="font-bold text-stone-950">Lên plan trước khi sửa</h3>
-            <p class="mt-1 text-sm leading-6 text-stone-600">Plan phải có scope, affected files, rủi ro dữ liệu, test strategy và rollback.</p>
-            <pre class="mt-3"><code class="language-text">/banking-plan Tôi cần thay đổi &lt;mô tả yêu cầu&gt;.
+          <div
+            class="flex gap-4 rounded-lg border border-stone-200 bg-white p-5"
+          >
+            <span class="step-badge">3</span>
+            <div class="min-w-0 flex-1">
+              <h3 class="font-bold text-stone-950">Lên plan trước khi sửa</h3>
+              <p class="mt-1 text-sm leading-6 text-stone-600">
+                Plan phải có scope, affected files, rủi ro dữ liệu, test
+                strategy và rollback.
+              </p>
+              <pre
+                class="mt-3"
+              ><code class="language-text">/banking-plan Tôi cần thay đổi &lt;mô tả yêu cầu&gt;.
 Hãy đề xuất plan nhỏ nhất, file bị ảnh hưởng, test cần chạy, rủi ro dữ liệu và điều kiện rollback.</code></pre>
+            </div>
           </div>
-        </div>
 
-        <div class="flex gap-4 rounded-lg border border-stone-200 bg-white p-5">
-          <span class="step-badge">4</span>
-          <div class="min-w-0 flex-1">
-            <h3 class="font-bold text-stone-950">Implement, verify, review, docs</h3>
-            <p class="mt-1 text-sm leading-6 text-stone-600">Sau khi plan rõ, yêu cầu AI sửa nhỏ, chạy kiểm tra thật, review diff và cập nhật tài liệu.</p>
-            <pre class="mt-3"><code class="language-text">/implement Thực hiện theo plan đã thống nhất.
+          <div
+            class="flex gap-4 rounded-lg border border-stone-200 bg-white p-5"
+          >
+            <span class="step-badge">4</span>
+            <div class="min-w-0 flex-1">
+              <h3 class="font-bold text-stone-950">
+                Implement, verify, review, docs
+              </h3>
+              <p class="mt-1 text-sm leading-6 text-stone-600">
+                Sau khi plan rõ, yêu cầu AI sửa nhỏ, chạy kiểm tra thật, review
+                diff và cập nhật tài liệu.
+              </p>
+              <pre
+                class="mt-3"
+              ><code class="language-text">/implement Thực hiện theo plan đã thống nhất.
 /test Chạy verification thật của repo và giải thích kết quả.
 /line-review Review từng dòng thay đổi.
 /docs-base-update Cập nhật tài liệu dự án.</code></pre>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section id="main-flows" class="section-panel mb-8 p-6 sm:p-8">
-      <div class="mb-6 flex items-start gap-3">
-        <div class="rounded-lg bg-rose-100 p-2 text-rose-800"><i data-lucide="workflow" aria-hidden="true"></i></div>
-        <div>
-          <p class="text-sm font-bold uppercase text-rose-700">Main Flows</p>
-          <h2 class="mt-1 text-2xl font-extrabold text-stone-950">Đọc code, trace logic, thực thi workflow</h2>
+      <section id="main-flows" class="section-panel mb-8 p-6 sm:p-8">
+        <div class="mb-6 flex items-start gap-3">
+          <div class="rounded-lg bg-rose-100 p-2 text-rose-800">
+            <i data-lucide="workflow" aria-hidden="true"></i>
+          </div>
+          <div>
+            <p class="text-sm font-bold uppercase text-rose-700">Main Flows</p>
+            <h2 class="mt-1 text-2xl font-extrabold text-stone-950">
+              Đọc code, trace logic, thực thi workflow
+            </h2>
+          </div>
         </div>
-      </div>
 
-      <div class="grid gap-5 lg:grid-cols-2">
-        <article class="rounded-lg border border-stone-200 bg-white p-5">
-          <h3 class="flex items-center gap-2 font-bold text-stone-950"><i data-lucide="search-code" aria-hidden="true" class="h-5 w-5 text-teal-700"></i> Phân tích codebase</h3>
-          <p class="mt-2 text-sm leading-6 text-stone-600">Yêu cầu AI đi từ entry point tới business rule, không chỉ giải thích từng dòng.</p>
-          <pre class="mt-4"><code class="language-text">/analyze-code Phân tích module quản lý hồ sơ khách hàng.
+        <div class="grid gap-5 lg:grid-cols-2">
+          <article class="rounded-lg border border-stone-200 bg-white p-5">
+            <h3 class="flex items-center gap-2 font-bold text-stone-950">
+              <i
+                data-lucide="search-code"
+                aria-hidden="true"
+                class="h-5 w-5 text-teal-700"
+              ></i>
+              Phân tích codebase
+            </h3>
+            <p class="mt-2 text-sm leading-6 text-stone-600">
+              Yêu cầu AI đi từ entry point tới business rule, không chỉ giải
+              thích từng dòng.
+            </p>
+            <pre
+              class="mt-4"
+            ><code class="language-text">/analyze-code Phân tích module quản lý hồ sơ khách hàng.
 Đi theo entry point, request/response, service orchestration, repository, business rules, error handling và tests.</code></pre>
-        </article>
+          </article>
 
-        <article class="rounded-lg border border-stone-200 bg-white p-5">
-          <h3 class="flex items-center gap-2 font-bold text-stone-950"><i data-lucide="waypoints" aria-hidden="true" class="h-5 w-5 text-amber-700"></i> Trace logic phức tạp</h3>
-          <p class="mt-2 text-sm leading-6 text-stone-600">Trace theo runtime: input, state, validation, transaction, audit/log và output.</p>
-          <pre class="mt-4"><code class="language-text">/explain-code Trace flow &lt;tên flow hoặc endpoint&gt;.
+          <article class="rounded-lg border border-stone-200 bg-white p-5">
+            <h3 class="flex items-center gap-2 font-bold text-stone-950">
+              <i
+                data-lucide="waypoints"
+                aria-hidden="true"
+                class="h-5 w-5 text-amber-700"
+              ></i>
+              Trace logic phức tạp
+            </h3>
+            <p class="mt-2 text-sm leading-6 text-stone-600">
+              Trace theo runtime: input, state, validation, transaction,
+              audit/log và output.
+            </p>
+            <pre
+              class="mt-4"
+            ><code class="language-text">/explain-code Trace flow &lt;tên flow hoặc endpoint&gt;.
 Mô tả từng bước theo thứ tự runtime, kèm file/function, dữ liệu đi qua, validation, exception, transaction và audit/log.</code></pre>
-        </article>
+          </article>
 
-        <article class="rounded-lg border border-stone-200 bg-white p-5">
-          <h3 class="flex items-center gap-2 font-bold text-stone-950"><i data-lucide="clipboard-list" aria-hidden="true" class="h-5 w-5 text-rose-700"></i> Lên plan</h3>
-          <p class="mt-2 text-sm leading-6 text-stone-600">Plan cần ghi rõ phần sẽ làm, phần không làm, rủi ro, test và điểm cần approval.</p>
-          <pre class="mt-4"><code class="language-text">/banking-plan &lt;yêu cầu&gt;
+          <article class="rounded-lg border border-stone-200 bg-white p-5">
+            <h3 class="flex items-center gap-2 font-bold text-stone-950">
+              <i
+                data-lucide="clipboard-list"
+                aria-hidden="true"
+                class="h-5 w-5 text-rose-700"
+              ></i>
+              Lên plan
+            </h3>
+            <p class="mt-2 text-sm leading-6 text-stone-600">
+              Plan cần ghi rõ phần sẽ làm, phần không làm, rủi ro, test và điểm
+              cần approval.
+            </p>
+            <pre
+              class="mt-4"
+            ><code class="language-text">/banking-plan &lt;yêu cầu&gt;
 Nêu affected files, business rule, data integrity, rollback và verification command.</code></pre>
-        </article>
+          </article>
 
-        <article class="rounded-lg border border-stone-200 bg-white p-5">
-          <h3 class="flex items-center gap-2 font-bold text-stone-950"><i data-lucide="shield-alert" aria-hidden="true" class="h-5 w-5 text-indigo-700"></i> Review tự động</h3>
-          <p class="mt-2 text-sm leading-6 text-stone-600">Review phải ưu tiên bug, regression, bảo mật, dữ liệu, logging và test gap.</p>
-          <pre class="mt-4"><code class="language-text">/line-review Review toàn bộ diff.
+          <article class="rounded-lg border border-stone-200 bg-white p-5">
+            <h3 class="flex items-center gap-2 font-bold text-stone-950">
+              <i
+                data-lucide="shield-alert"
+                aria-hidden="true"
+                class="h-5 w-5 text-indigo-700"
+              ></i>
+              Review tự động
+            </h3>
+            <p class="mt-2 text-sm leading-6 text-stone-600">
+              Review phải ưu tiên bug, regression, bảo mật, dữ liệu, logging và
+              test gap.
+            </p>
+            <pre
+              class="mt-4"
+            ><code class="language-text">/line-review Review toàn bộ diff.
 Tập trung vào security, data integrity, exception, logging, audit, performance và backward compatibility.</code></pre>
-        </article>
-      </div>
-
-      <div class="mt-6">
-        <div class="mermaid">
-flowchart LR
-    A[Read instructions and references] --> B[Analyze system and codebase]
-    B --> C[Create plan]
-    C --> D{Human approval}
-    D -- Revise --> C
-    D -- Approved --> E[Implement smallest fitting change]
-    E --> F[Run real verification]
-    F --> G[Line-by-line review]
-    G --> H[Update docs]
-    H --> I[Delivery summary with evidence]
+          </article>
         </div>
-      </div>
-    </section>
 
-    <section id="external-context" class="section-panel mb-8 p-6 sm:p-8">
-      <div class="mb-6 flex items-start gap-3">
-        <div class="rounded-lg bg-indigo-100 p-2 text-indigo-800"><i data-lucide="plug-zap" aria-hidden="true"></i></div>
-        <div>
-          <p class="text-sm font-bold uppercase text-indigo-700">MCP, Knowledge, Research</p>
-          <h2 class="mt-1 text-2xl font-extrabold text-stone-950">Kết nối context ngoài repo một cách có kiểm soát</h2>
+        <div class="mt-6">
+          <div class="mermaid">
+            flowchart LR A[Read instructions and references] --> B[Analyze
+            system and codebase] B --> C[Create plan] C --> D{Human approval} D
+            -- Revise --> C D -- Approved --> E[Implement smallest fitting
+            change] E --> F[Run real verification] F --> G[Line-by-line review]
+            G --> H[Update docs] H --> I[Delivery summary with evidence]
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div class="grid gap-5 lg:grid-cols-3">
-        <article class="rounded-lg border border-stone-200 bg-white p-5">
-          <i data-lucide="git-pull-request-arrow" aria-hidden="true" class="mb-3 h-6 w-6 text-teal-700"></i>
-          <h3 class="font-bold text-stone-950">Azure DevOps MCP</h3>
-          <p class="mt-2 text-sm leading-6 text-stone-600">Dùng `dev.azure.com` để đọc work item, acceptance criteria, wiki, repo metadata và pipeline status theo hướng read-only.</p>
-          <pre class="mt-4"><code class="language-text">/azure-devops-intake &lt;Azure DevOps work item URL hoặc ID&gt;
+      <section id="external-context" class="section-panel mb-8 p-6 sm:p-8">
+        <div class="mb-6 flex items-start gap-3">
+          <div class="rounded-lg bg-indigo-100 p-2 text-indigo-800">
+            <i data-lucide="plug-zap" aria-hidden="true"></i>
+          </div>
+          <div>
+            <p class="text-sm font-bold uppercase text-indigo-700">
+              MCP, Knowledge, Research
+            </p>
+            <h2 class="mt-1 text-2xl font-extrabold text-stone-950">
+              Kết nối context ngoài repo một cách có kiểm soát
+            </h2>
+          </div>
+        </div>
+
+        <div class="grid gap-5 lg:grid-cols-3">
+          <article class="rounded-lg border border-stone-200 bg-white p-5">
+            <i
+              data-lucide="git-pull-request-arrow"
+              aria-hidden="true"
+              class="mb-3 h-6 w-6 text-teal-700"
+            ></i>
+            <h3 class="font-bold text-stone-950">Azure DevOps MCP</h3>
+            <p class="mt-2 text-sm leading-6 text-stone-600">
+              Dùng `dev.azure.com` để đọc work item, acceptance criteria, wiki,
+              repo metadata và pipeline status theo hướng read-only.
+            </p>
+            <pre
+              class="mt-4"
+            ><code class="language-text">/azure-devops-intake &lt;Azure DevOps work item URL hoặc ID&gt;
 Đọc requirement, acceptance criteria, linked context và đề xuất code structure phù hợp.</code></pre>
-        </article>
+          </article>
 
-        <article class="rounded-lg border border-stone-200 bg-white p-5">
-          <i data-lucide="book-open-check" aria-hidden="true" class="mb-3 h-6 w-6 text-amber-700"></i>
-          <h3 class="font-bold text-stone-950">NotebookLM nội bộ</h3>
-          <p class="mt-2 text-sm leading-6 text-stone-600">Tra cứu coding convention, ADR, tài liệu kỹ thuật, incident note và bài học từ dự án cũ.</p>
-          <pre class="mt-4"><code class="language-text">@Notebook Task Analyst
-Paste NotebookLM Task Brief + citations.
-Map document facts to codebase evidence and create planner handoff.</code></pre>
-        </article>
-
-        <article class="rounded-lg border border-stone-200 bg-white p-5">
-          <i data-lucide="microscope" aria-hidden="true" class="mb-3 h-6 w-6 text-rose-700"></i>
-          <h3 class="font-bold text-stone-950">Deep Research</h3>
-          <p class="mt-2 text-sm leading-6 text-stone-600">So sánh thư viện, framework, kiến trúc và tạo báo cáo R&D có nguồn, trade-off và khuyến nghị.</p>
-          <pre class="mt-4"><code class="language-text">/architecture-research So sánh modular monolith và microservices cho domain mới.
+          <article class="rounded-lg border border-stone-200 bg-white p-5">
+            <i
+              data-lucide="microscope"
+              aria-hidden="true"
+              class="mb-3 h-6 w-6 text-rose-700"
+            ></i>
+            <h3 class="font-bold text-stone-950">Deep Research</h3>
+            <p class="mt-2 text-sm leading-6 text-stone-600">
+              So sánh thư viện, framework, kiến trúc và tạo báo cáo R&D có
+              nguồn, trade-off và khuyến nghị.
+            </p>
+            <pre
+              class="mt-4"
+            ><code class="language-text">/architecture-research So sánh modular monolith và microservices cho domain mới.
 Xuất báo cáo gồm tiêu chí, bảng so sánh, khuyến nghị, rủi ro và bước thử nghiệm.</code></pre>
-        </article>
-      </div>
-
-      <div class="callout mt-6 border-rose-200 bg-rose-50 text-rose-950">
-        <strong><i data-lucide="triangle-alert" aria-hidden="true" class="h-4 w-4"></i> Cẩn trọng</strong>
-        <p class="text-sm leading-6">Không đưa secrets, raw log, dữ liệu khách hàng hoặc thông tin nhạy cảm vào prompt. Khi requirement mơ hồ, AI phải ghi assumption và hỏi lại thay vì tự đoán nghiệp vụ.</p>
-      </div>
-    </section>
-
-    <section id="cheatsheet" class="section-panel mb-8 p-6 sm:p-8">
-      <div class="mb-6 flex items-start gap-3">
-        <div class="rounded-lg bg-teal-100 p-2 text-teal-800"><i data-lucide="list-checks" aria-hidden="true"></i></div>
-        <div>
-          <p class="text-sm font-bold uppercase text-teal-700">Cheat Sheet</p>
-          <h2 class="mt-1 text-2xl font-extrabold text-stone-950">Bảng lệnh thao tác nhanh</h2>
+          </article>
         </div>
-      </div>
 
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Mục tiêu</th>
-              <th>Lệnh/prompt</th>
-              <th>Output mong muốn</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>Hiểu nhanh repo</td><td><code>/scout</code></td><td>Folder map, entry point, docs/test/config cần đọc</td></tr>
-            <tr><td>Phân tích flow</td><td><code>/analyze-code</code></td><td>Layer path, business rule, side effect, test gap</td></tr>
-            <tr><td>Giải thích code</td><td><code>/explain-code</code></td><td>Diễn giải dễ hiểu theo runtime</td></tr>
-            <tr><td>Kiểm tra logic</td><td><code>/logic-check</code></td><td>Nhánh thiếu, bug boundary, transaction/logging risk</td></tr>
-            <tr><td>Lập kế hoạch</td><td><code>/plan</code>, <code>/banking-plan</code></td><td>Plan có scope, risk, verification và rollback</td></tr>
-            <tr><td>Implement</td><td><code>/implement</code></td><td>Code change nhỏ, hợp pattern</td></tr>
-            <tr><td>Debug</td><td><code>/fix</code></td><td>Root cause, patch, regression test</td></tr>
-            <tr><td>Test</td><td><code>/test</code></td><td>Verification thật và kết quả</td></tr>
-            <tr><td>Review</td><td><code>/review</code>, <code>/line-review</code></td><td>Finding theo file/dòng, mức độ rủi ro</td></tr>
-            <tr><td>Cập nhật docs</td><td><code>/docs-update</code>, <code>/docs-base-update</code></td><td>Tài liệu, changelog, delivery log</td></tr>
-            <tr><td>Đọc Azure DevOps</td><td><code>/azure-devops-intake</code>, <code>/mcp</code></td><td>Requirement, acceptance criteria, linked context</td></tr>
-            <tr><td>Tài liệu nội bộ</td><td><code>/internal-knowledge</code></td><td>Rule áp dụng, nguồn nội bộ, điểm chưa chắc</td></tr>
-            <tr><td>Nghiên cứu chuyên sâu</td><td><code>/deep-research</code>, <code>/architecture-research</code></td><td>Báo cáo R&D, trade-off, khuyến nghị</td></tr>
-            <tr><td>Vòng dev đầy đủ</td><td><code>/devloop</code></td><td>Plan -> implement -> verify -> review -> docs</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="section-panel p-6 sm:p-8">
-      <div class="mb-6 flex items-start gap-3">
-        <div class="rounded-lg bg-amber-100 p-2 text-amber-800"><i data-lucide="shield-check" aria-hidden="true"></i></div>
-        <div>
-          <p class="text-sm font-bold uppercase text-amber-700">Checklist cuối</p>
-          <h2 class="mt-1 text-2xl font-extrabold text-stone-950">Trước khi tin output của AI</h2>
+        <div class="callout mt-6 border-rose-200 bg-rose-50 text-rose-950">
+          <strong
+            ><i
+              data-lucide="triangle-alert"
+              aria-hidden="true"
+              class="h-4 w-4"
+            ></i>
+            Cẩn trọng</strong
+          >
+          <p class="text-sm leading-6">
+            Không đưa secrets, raw log, dữ liệu khách hàng hoặc thông tin nhạy
+            cảm vào prompt. Khi requirement mơ hồ, AI phải ghi assumption và hỏi
+            lại thay vì tự đoán nghiệp vụ.
+          </p>
         </div>
-      </div>
-      <div class="grid gap-3 md:grid-cols-2">
-        <div class="flex gap-3 rounded-lg border border-stone-200 bg-white p-4"><i data-lucide="check" aria-hidden="true" class="mt-1 h-5 w-5 text-teal-700"></i><span>AI đã đọc instructions và playbook liên quan.</span></div>
-        <div class="flex gap-3 rounded-lg border border-stone-200 bg-white p-4"><i data-lucide="check" aria-hidden="true" class="mt-1 h-5 w-5 text-teal-700"></i><span>Output có file thật, function thật, test thật.</span></div>
-        <div class="flex gap-3 rounded-lg border border-stone-200 bg-white p-4"><i data-lucide="check" aria-hidden="true" class="mt-1 h-5 w-5 text-teal-700"></i><span>Plan có business rule, data integrity và rollback.</span></div>
-        <div class="flex gap-3 rounded-lg border border-stone-200 bg-white p-4"><i data-lucide="check" aria-hidden="true" class="mt-1 h-5 w-5 text-teal-700"></i><span>Logging không lộ dữ liệu nhạy cảm.</span></div>
-        <div class="flex gap-3 rounded-lg border border-stone-200 bg-white p-4"><i data-lucide="check" aria-hidden="true" class="mt-1 h-5 w-5 text-teal-700"></i><span>Verification command đã chạy thật.</span></div>
-        <div class="flex gap-3 rounded-lg border border-stone-200 bg-white p-4"><i data-lucide="check" aria-hidden="true" class="mt-1 h-5 w-5 text-teal-700"></i><span>Docs, changelog và feature log đã được cập nhật.</span></div>
-      </div>
-      <p class="mt-6 leading-8 text-stone-700">Kết luận: Project AI giúp Developer nhìn hệ thống nhanh hơn, đặt câu hỏi tốt hơn, triển khai gọn hơn và review chắc hơn. AI không thay quyết định nghiệp vụ; AI giúp team ra quyết định trên nhiều bằng chứng hơn.</p>
-    </section>
-  </main>
+      </section>
 
-  <script>
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: "base",
-      themeVariables: {
-        primaryColor: "#f7f2ea",
-        primaryTextColor: "#1f2933",
-        primaryBorderColor: "#d6cec1",
-        lineColor: "#5f6c7b",
-        secondaryColor: "#e6f4f1",
-        tertiaryColor: "#fff7ed",
-        fontFamily: "Inter, system-ui, sans-serif"
+      <section id="cheatsheet" class="section-panel mb-8 p-6 sm:p-8">
+        <div class="mb-6 flex items-start gap-3">
+          <div class="rounded-lg bg-teal-100 p-2 text-teal-800">
+            <i data-lucide="list-checks" aria-hidden="true"></i>
+          </div>
+          <div>
+            <p class="text-sm font-bold uppercase text-teal-700">Cheat Sheet</p>
+            <h2 class="mt-1 text-2xl font-extrabold text-stone-950">
+              Bảng lệnh thao tác nhanh
+            </h2>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Mục tiêu</th>
+                <th>Lệnh/prompt</th>
+                <th>Output mong muốn</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Hiểu nhanh repo</td>
+                <td><code>/scout</code></td>
+                <td>Folder map, entry point, docs/test/config cần đọc</td>
+              </tr>
+              <tr>
+                <td>Phân tích flow</td>
+                <td><code>/analyze-code</code></td>
+                <td>Layer path, business rule, side effect, test gap</td>
+              </tr>
+              <tr>
+                <td>Giải thích code</td>
+                <td><code>/explain-code</code></td>
+                <td>Diễn giải dễ hiểu theo runtime</td>
+              </tr>
+              <tr>
+                <td>Kiểm tra logic</td>
+                <td><code>/logic-check</code></td>
+                <td>Nhánh thiếu, bug boundary, transaction/logging risk</td>
+              </tr>
+              <tr>
+                <td>Lập kế hoạch</td>
+                <td><code>/plan</code>, <code>/banking-plan</code></td>
+                <td>Plan có scope, risk, verification và rollback</td>
+              </tr>
+              <tr>
+                <td>Implement</td>
+                <td><code>/implement</code></td>
+                <td>Code change nhỏ, hợp pattern</td>
+              </tr>
+              <tr>
+                <td>Debug</td>
+                <td><code>/fix</code></td>
+                <td>Root cause, patch, regression test</td>
+              </tr>
+              <tr>
+                <td>Test</td>
+                <td><code>/test</code></td>
+                <td>Verification thật và kết quả</td>
+              </tr>
+              <tr>
+                <td>Review</td>
+                <td><code>/review</code>, <code>/line-review</code></td>
+                <td>Finding theo file/dòng, mức độ rủi ro</td>
+              </tr>
+              <tr>
+                <td>Cập nhật docs</td>
+                <td>
+                  <code>/docs-update</code>, <code>/docs-base-update</code>
+                </td>
+                <td>Tài liệu, changelog, delivery log</td>
+              </tr>
+              <tr>
+                <td>Đọc Azure DevOps</td>
+                <td><code>/azure-devops-intake</code>, <code>/mcp</code></td>
+                <td>Requirement, acceptance criteria, linked context</td>
+              </tr>
+              <tr>
+                <td>Tài liệu nội bộ</td>
+                <td><code>/internal-knowledge</code></td>
+                <td>Rule áp dụng, nguồn nội bộ, điểm chưa chắc</td>
+              </tr>
+              <tr>
+                <td>Nghiên cứu chuyên sâu</td>
+                <td>
+                  <code>/deep-research</code>,
+                  <code>/architecture-research</code>
+                </td>
+                <td>Báo cáo R&D, trade-off, khuyến nghị</td>
+              </tr>
+              <tr>
+                <td>Vòng dev đầy đủ</td>
+                <td><code>/devloop</code></td>
+                <td>Plan -> implement -> verify -> review -> docs</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section-panel p-6 sm:p-8">
+        <div class="mb-6 flex items-start gap-3">
+          <div class="rounded-lg bg-amber-100 p-2 text-amber-800">
+            <i data-lucide="shield-check" aria-hidden="true"></i>
+          </div>
+          <div>
+            <p class="text-sm font-bold uppercase text-amber-700">
+              Checklist cuối
+            </p>
+            <h2 class="mt-1 text-2xl font-extrabold text-stone-950">
+              Trước khi tin output của AI
+            </h2>
+          </div>
+        </div>
+        <div class="grid gap-3 md:grid-cols-2">
+          <div
+            class="flex gap-3 rounded-lg border border-stone-200 bg-white p-4"
+          >
+            <i
+              data-lucide="check"
+              aria-hidden="true"
+              class="mt-1 h-5 w-5 text-teal-700"
+            ></i
+            ><span>AI đã đọc instructions và playbook liên quan.</span>
+          </div>
+          <div
+            class="flex gap-3 rounded-lg border border-stone-200 bg-white p-4"
+          >
+            <i
+              data-lucide="check"
+              aria-hidden="true"
+              class="mt-1 h-5 w-5 text-teal-700"
+            ></i
+            ><span>Output có file thật, function thật, test thật.</span>
+          </div>
+          <div
+            class="flex gap-3 rounded-lg border border-stone-200 bg-white p-4"
+          >
+            <i
+              data-lucide="check"
+              aria-hidden="true"
+              class="mt-1 h-5 w-5 text-teal-700"
+            ></i
+            ><span>Plan có business rule, data integrity và rollback.</span>
+          </div>
+          <div
+            class="flex gap-3 rounded-lg border border-stone-200 bg-white p-4"
+          >
+            <i
+              data-lucide="check"
+              aria-hidden="true"
+              class="mt-1 h-5 w-5 text-teal-700"
+            ></i
+            ><span>Logging không lộ dữ liệu nhạy cảm.</span>
+          </div>
+          <div
+            class="flex gap-3 rounded-lg border border-stone-200 bg-white p-4"
+          >
+            <i
+              data-lucide="check"
+              aria-hidden="true"
+              class="mt-1 h-5 w-5 text-teal-700"
+            ></i
+            ><span>Verification command đã chạy thật.</span>
+          </div>
+          <div
+            class="flex gap-3 rounded-lg border border-stone-200 bg-white p-4"
+          >
+            <i
+              data-lucide="check"
+              aria-hidden="true"
+              class="mt-1 h-5 w-5 text-teal-700"
+            ></i
+            ><span>Docs, changelog và feature log đã được cập nhật.</span>
+          </div>
+        </div>
+        <p class="mt-6 leading-8 text-stone-700">
+          Kết luận: Project AI giúp Developer nhìn hệ thống nhanh hơn, đặt câu
+          hỏi tốt hơn, triển khai gọn hơn và review chắc hơn. AI không thay
+          quyết định nghiệp vụ; AI giúp team ra quyết định trên nhiều bằng chứng
+          hơn.
+        </p>
+      </section>
+    </main>
+
+    <script>
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: "base",
+        themeVariables: {
+          primaryColor: "#f7f2ea",
+          primaryTextColor: "#1f2933",
+          primaryBorderColor: "#d6cec1",
+          lineColor: "#5f6c7b",
+          secondaryColor: "#e6f4f1",
+          tertiaryColor: "#fff7ed",
+          fontFamily: "Inter, system-ui, sans-serif",
+        },
+      });
+
+      if (window.lucide) {
+        lucide.createIcons();
       }
-    });
-
-    if (window.lucide) {
-      lucide.createIcons();
-    }
-  </script>
-</body>
+    </script>
+  </body>
 </html>

@@ -2,14 +2,134 @@
 
 Use this log after every feature, fix, migration, architecture change, security change, operational change, or setup change to this standalone `.github/` package.
 
+## 2026-05-13 - Package Cleanup: Remove Redundant Skills, Agents, and Prompts
+
+### Plan
+
+- Remove `Knowledge Curator` agent (role not needed without dedicated knowledge tool).
+- Remove `codebase-reading` and `code-solution-fit` skills (covered by `system-analysis` and `banking-grade-engineering`).
+- Remove `internal-knowledge-governance` skill, `internal-knowledge-playbook.md`, `knowledge-source-register.template.md`, and `/internal-knowledge` prompt (NotebookLM flow removed).
+- Clean all stale refs including NotebookLM nodes in Mermaid diagrams.
+
+### Changed Files
+
+- `.github/agents/knowledge-curator.agent.md` (deleted)
+- `.github/skills/codebase-reading/` (deleted)
+- `.github/skills/code-solution-fit/` (deleted)
+- `.github/skills/internal-knowledge-governance/` (deleted)
+- `.github/prompts/internal-knowledge.prompt.md` (deleted)
+- `.github/copilot/internal-knowledge-playbook.md` (deleted)
+- `.github/copilot/knowledge-source-register.template.md` (deleted)
+- `.github/copilot/agent-catalog.md`
+- `.github/copilot/skills-index.md`
+- `.github/copilot/prompt-catalog.md`
+- `.github/copilot/README.md`
+- `.github/copilot/official-docs-snapshot.md`
+- `.github/copilot/copilot-project-assessment.md`
+- `.github/scripts/pre-push-governance-check.ps1`
+- `.github/docs/ai-project-developer-guide.md`
+- `.github/docs/ai-project-presentation.html`
+- `.github/docs/huong-dan-su-dung.md`
+- `.github/docs/project-docs-base.md`
+- `.github/docs/project-changelog.md`
+
+### Verification
+
+- Agent count: 9 (was 11).
+- Skill count: 15 (was 18).
+- Prompt count: 21 (was 22).
+- No stale refs to deleted files in active package files.
+- Filesystem matches docs.
+
+### Security, Privacy, Data Impact
+
+- None.
+
+### Rollback
+
+- Restore deleted files from git history and revert catalog/docs/index edits.
+
+---
+
+- Remove `codebase-reading` skill (covered by `system-analysis`).
+- Remove `code-solution-fit` skill (covered by `banking-grade-engineering` and `planning-governance`).
+- Remove `internal-knowledge-governance` skill (content now in `internal-knowledge-playbook.md` and prompt).
+- Clean up all stale refs including NotebookLM nodes in Mermaid diagrams.
+
+### Changed Files
+
+- `.github/agents/knowledge-curator.agent.md` (deleted)
+- `.github/skills/codebase-reading/` (deleted)
+- `.github/skills/code-solution-fit/` (deleted)
+- `.github/skills/internal-knowledge-governance/` (deleted — was already missing)
+- `.github/copilot/agent-catalog.md`
+- `.github/copilot/skills-index.md`
+- `.github/docs/ai-project-developer-guide.md`
+- `.github/docs/ai-project-presentation.html`
+- `.github/docs/huong-dan-su-dung.md`
+- `.github/docs/project-docs-base.md`
+- `.github/docs/project-changelog.md`
+- `.github/prompts/internal-knowledge.prompt.md`
+
+### Verification
+
+- Agent count: 9 (was 11).
+- Skill count: 15 (was 18).
+- No stale refs to deleted skills/agents in active package files.
+- Mermaid diagrams updated; NotebookLM nodes removed.
+
+### Security, Privacy, Data Impact
+
+- None.
+
+### Rollback
+
+- Restore deleted files from git history and revert catalog/docs/index edits.
+
+---
+
+## 2026-05-13 - Remove Notebook Task Analyst Agent
+
+### Plan
+
+- Remove the Notebook Task Analyst agent and all NotebookLM-flow references from the package.
+- Internal knowledge queries are handled by `/internal-knowledge` prompt and `internal-knowledge-playbook.md`.
+
+### Changed Files
+
+- `.github/agents/notebook-task-analyst.agent.md` (deleted)
+- `.github/copilot/agent-catalog.md`
+- `.github/docs/ai-project-developer-guide.md`
+- `.github/docs/ai-project-presentation.html`
+- `.github/docs/huong-dan-su-dung.md`
+- `.github/docs/project-changelog.md`
+- `.github/docs/feature-delivery-log.md`
+
+### Verification
+
+- Agent count: 10 (was 11).
+- No remaining references to `notebook-task-analyst` or `@Notebook Task Analyst` in active package files.
+
+### Security, Privacy, Data Impact
+
+- None.
+
+### Rollback
+
+- Restore `.github/agents/notebook-task-analyst.agent.md` from git history and revert catalog/docs edits.
+
+---
+
 ## 2026-05-13 - Notebook Task Analyst Agent
 
 ### Plan
+
 - Add a dedicated agent for document-heavy tasks that begin with NotebookLM task briefs and cited internal sources.
 - Keep the agent bounded: validate source hygiene, analyze the codebase, produce planner-ready output, and avoid implementation before approval.
 - Update agent catalog and developer docs so the team knows when to use this agent before `/banking-plan`.
 
 ### Changed Files
+
 - `.github/agents/notebook-task-analyst.agent.md`
 - `.github/copilot/agent-catalog.md`
 - `.github/docs/ai-project-developer-guide.md`
@@ -19,6 +139,7 @@ Use this log after every feature, fix, migration, architecture change, security 
 - `.github/docs/feature-delivery-log.md`
 
 ### Verification
+
 - Commands run:
   - `.github\scripts\pre-push-governance-check.ps1 -Mode Warn`
   - agent count check for `.github/agents/*.agent.md`
@@ -30,6 +151,7 @@ Use this log after every feature, fix, migration, architecture change, security 
   - Secret pattern scan passed.
 
 ### Line Review
+
 - Reviewer: Codex
 - Critical/high findings:
   - None known at edit time.
@@ -37,12 +159,14 @@ Use this log after every feature, fix, migration, architecture change, security 
   - The agent cannot directly access NotebookLM unless the client exposes an approved connector; it expects pasted NotebookLM brief/citations or approved internal knowledge summaries.
 
 ### Security, Privacy, Data Impact
+
 - Sensitive data touched: none.
 - Auth/authz impact: none.
 - Logging impact: none.
 - Data integrity impact: none.
 
 ### Docs Updated
+
 - `.github/docs/ai-project-developer-guide.md`
 - `.github/docs/ai-project-presentation.html`
 - `.github/docs/huong-dan-su-dung.md`
@@ -50,16 +174,19 @@ Use this log after every feature, fix, migration, architecture change, security 
 - `.github/docs/feature-delivery-log.md`
 
 ### Rollback
+
 - Remove `.github/agents/notebook-task-analyst.agent.md` and revert the catalog/docs updates.
 
 ## 2026-05-13 - Local Pre-Push Governance Warning
 
 ### Plan
+
 - Replace the manual GitHub Actions governance workflow with a local `git push` warning mechanism.
 - Keep the checks developer-friendly: warn before push by default, allow strict local enforcement when explicitly requested.
 - Preserve the same governance intent: package validation, frontmatter checks, skill inventory, secret scan, and conditional .NET restore/build/format/test/dependency audit.
 
 ### Changed Files
+
 - `.github/workflows/manual-governance-checks.yml`
 - `.github/hooks/pre-push`
 - `.github/scripts/pre-push-governance-check.ps1`
@@ -75,6 +202,7 @@ Use this log after every feature, fix, migration, architecture change, security 
 - `.github/docs/feature-delivery-log.md`
 
 ### Verification
+
 - Commands run:
   - `.github\scripts\pre-push-governance-check.ps1 -Mode Warn`
   - `rg --files -uu .github | Measure-Object`
@@ -89,6 +217,7 @@ Use this log after every feature, fix, migration, architecture change, security 
   - The shell hook wrapper was not executed in this PowerShell environment because `sh` is not on PATH; Git for Windows normally runs hook files through its bundled shell when `core.hooksPath` is enabled.
 
 ### Line Review
+
 - Reviewer: Codex
 - Critical/high findings:
   - None found.
@@ -97,12 +226,14 @@ Use this log after every feature, fix, migration, architecture change, security 
   - Warning mode does not block push. Use `AI_GOVERNANCE_STRICT=1` or `-Mode Strict` for local blocking behavior.
 
 ### Security, Privacy, Data Impact
+
 - Sensitive data touched: none.
 - Auth/authz impact: reduced server-side workflow permissions by removing the GitHub Actions workflow.
 - Logging impact: governance warnings are printed locally before push.
 - Data integrity impact: none.
 
 ### Docs Updated
+
 - `.github/docs/ai-project-developer-guide.md`
 - `.github/docs/ai-project-presentation.html`
 - `.github/docs/huong-dan-su-dung.md`
@@ -115,15 +246,18 @@ Use this log after every feature, fix, migration, architecture change, security 
 - `.github/copilot/manual-tooling-guide.md`
 
 ### Rollback
+
 - Restore `.github/workflows/manual-governance-checks.yml` and remove `.github/hooks/pre-push` plus `.github/scripts/pre-push-governance-check.ps1`.
 
 ## 2026-05-13 - Remove Duplicate Docs Index
 
 ### Plan
+
 - Remove `.github/docs/docs.html` because the Markdown developer guide and HTML presentation now cover the onboarding/documentation surface.
 - Update documentation inventory and counts after the removal.
 
 ### Changed Files
+
 - `.github/docs/docs.html`
 - `.github/docs/project-docs-base.md`
 - `.github/docs/project-changelog.md`
@@ -132,6 +266,7 @@ Use this log after every feature, fix, migration, architecture change, security 
 - `.github/docs/huong-dan-su-dung.md`
 
 ### Verification
+
 - Commands run:
   - `rg --files -uu .github | Measure-Object`
   - `Test-Path .github\docs\docs.html`
@@ -144,6 +279,7 @@ Use this log after every feature, fix, migration, architecture change, security 
   - Secret pattern scan passed.
 
 ### Line Review
+
 - Reviewer: Codex
 - Critical/high findings:
   - None known at edit time.
@@ -151,12 +287,14 @@ Use this log after every feature, fix, migration, architecture change, security 
   - Historical delivery-log entries may still mention files that existed at the time of those deliveries.
 
 ### Security, Privacy, Data Impact
+
 - Sensitive data touched: none.
 - Auth/authz impact: none.
 - Logging impact: none.
 - Data integrity impact: none.
 
 ### Docs Updated
+
 - `.github/docs/project-docs-base.md`
 - `.github/docs/project-changelog.md`
 - `.github/docs/feature-delivery-log.md`
@@ -164,17 +302,20 @@ Use this log after every feature, fix, migration, architecture change, security 
 - `.github/docs/huong-dan-su-dung.md`
 
 ### Rollback
+
 - Restore `.github/docs/docs.html` and revert the inventory/count updates if a separate docs index is needed again.
 
 ## 2026-05-13 - Developer Guide And Presentation Refresh
 
 ### Plan
+
 - Read the current `.github` AI package and turn the architecture, workflows, prompts, agents, skills, MCP, internal knowledge, and Deep Research governance into developer-facing documentation.
 - Add a Vietnamese Markdown guide with Mermaid architecture/data-flow diagrams and practical prompt examples.
 - Redesign the HTML presentation as a single-file guide with sidebar navigation, Tailwind layout, Prism code highlighting, Lucide icons, Inter font, Mermaid diagrams, callouts, and step-by-step execution sections.
 - Keep active documentation aligned with Azure DevOps as the work item source and avoid reintroducing removed payment or web-specific guidance.
 
 ### Changed Files
+
 - `.github/docs/ai-project-developer-guide.md`
 - `.github/docs/ai-project-presentation.html`
 - `.github/docs/project-docs-base.md`
@@ -184,6 +325,7 @@ Use this log after every feature, fix, migration, architecture change, security 
 - `.github/docs/huong-dan-su-dung.md`
 
 ### Verification
+
 - Commands run:
   - `rg --files -uu .github | Measure-Object`
   - prompt count check for `.github/prompts/*.prompt.md`
@@ -207,6 +349,7 @@ Use this log after every feature, fix, migration, architecture change, security 
   - Browser screenshot review not run; HTML is static and can be opened directly from `.github/docs/ai-project-presentation.html`.
 
 ### Line Review
+
 - Reviewer: Codex
 - Critical/high findings:
   - None found.
@@ -216,12 +359,14 @@ Use this log after every feature, fix, migration, architecture change, security 
   - The HTML uses CDN-hosted Tailwind, Prism, Lucide, Mermaid, and Inter assets; diagrams and styling require network access when opened offline.
 
 ### Security, Privacy, Data Impact
+
 - Sensitive data touched: none.
 - Auth/authz impact: none.
 - Logging impact: none.
 - Data integrity impact: none.
 
 ### Docs Updated
+
 - `.github/docs/ai-project-developer-guide.md`
 - `.github/docs/ai-project-presentation.html`
 - `.github/docs/project-docs-base.md`
@@ -231,21 +376,25 @@ Use this log after every feature, fix, migration, architecture change, security 
 - `.github/docs/huong-dan-su-dung.md`
 
 ### Rollback
+
 - Remove `.github/docs/ai-project-developer-guide.md` and revert the presentation/docs index/changelog/log updates to restore the prior documentation set.
 
 ### Follow-Ups
+
 - Open `.github/docs/ai-project-presentation.html` in a browser and review visual rendering after CDN assets load.
 - Add real Azure DevOps MCP connector details only after enterprise owners approve scope and permissions.
 
 ## 2026-05-13 - Azure DevOps MCP And R&D Governance
 
 ### Plan
+
 - Add governed Azure DevOps MCP intake for `dev.azure.com`.
 - Add internal knowledge governance for NotebookLM-style source curation and private docs.
 - Add Deep Research governance for evidence-backed architecture and library research.
 - Keep all external context read-only by default and approval-gated for writes.
 
 ### Changed Files
+
 - `.github/copilot-instructions.md`
 - `.github/copilot/README.md`
 - `.github/copilot/workflow-playbook.md`
@@ -276,6 +425,7 @@ Use this log after every feature, fix, migration, architecture change, security 
 - `.github/docs/*`
 
 ### Verification
+
 - Commands run:
   - `rg --files -uu .github`
   - frontmatter and `SKILL.md` inventory check
@@ -294,6 +444,7 @@ Use this log after every feature, fix, migration, architecture change, security 
   - GitHub Actions not run because this repository is package-only and workflow is manual-only.
 
 ### Line Review
+
 - Reviewer: Codex
 - Critical/high findings:
   - None known at plan time.
@@ -303,12 +454,14 @@ Use this log after every feature, fix, migration, architecture change, security 
   - Actual MCP connectors still require enterprise approval and runtime setup outside this package.
 
 ### Security, Privacy, Data Impact
+
 - Sensitive data touched: none.
 - Auth/authz impact: positive governance impact through allowlist and read-only defaults.
 - Logging impact: pipeline logs and chat exports are explicitly caution-gated.
 - Data integrity impact: database schema context is metadata-only by default.
 
 ### Docs Updated
+
 - `.github/docs/project-docs-base.md`
 - `.github/docs/project-changelog.md`
 - `.github/docs/feature-delivery-log.md`
@@ -317,25 +470,30 @@ Use this log after every feature, fix, migration, architecture change, security 
 - `.github/docs/huong-dan-su-dung.md`
 
 ### Rollback
+
 - Remove the new MCP, knowledge, and deep research files and revert the catalog/docs updates if the target repository does not want external context governance.
 
 ### Follow-Ups
+
 - Add real project MCP connector entries after Azure DevOps, Slack, database schema, and internal knowledge owners approve scope.
 - Decide whether Deep Research uses ChatGPT, OpenAI API, or another enterprise-approved research tool.
 
 ## 2026-05-13 - AI Project Presentation & Vietnamese User Guide
 
 ### Plan
+
 - Đọc toàn bộ project, phân tích kiến trúc, agents, skills, prompts, instructions.
 - Viết tài liệu hướng dẫn sử dụng bằng tiếng Việt, có sơ đồ Mermaid, dành cho team dev chưa nắm về AI.
 - Tập trung: (1) sức mạnh AI vs project; (2) 7 luồng sử dụng chính.
 - Tổng hợp thành HTML file hoàn chỉnh với Mermaid.js diagrams.
 
 ### Changed Files
+
 - `.github/docs/ai-project-presentation.html` — **NEW**: HTML presentation tiếng Việt, 6 phần, 10+ Mermaid diagrams
 - `.github/docs/feature-delivery-log.md` — entry này
 
 ### Verification
+
 - File created: `.github/docs/ai-project-presentation.html` ✓
 - Nội dung bao gồm:
   - Phần 1: Sức mạnh AI (evolution diagram, comparison table, stats)
@@ -346,23 +504,28 @@ Use this log after every feature, fix, migration, architecture change, security 
   - Phần 6: Target model diagram, summary cards
 
 ### Line Review
+
 - Reviewer: Copilot
 - Critical/high findings: none
 - Security: không có PII, credentials, production data trong HTML
 - Residual risk: Mermaid.js load từ CDN — cần internet để render diagrams
 
 ### Security, Privacy, Data Impact
+
 - Sensitive data: none — tài liệu nội bộ, không có production data
 - Auth/authz: none
 - Data integrity: none
 
 ### Docs Updated
+
 - `.github/docs/feature-delivery-log.md` — entry này
 
 ### Rollback
+
 - Xóa file `.github/docs/ai-project-presentation.html` để revert.
 
 ### Follow-Ups
+
 - Mở file HTML trong browser để xem presentation hoàn chỉnh.
 - Khi cần update: chỉnh sửa file `.github/docs/ai-project-presentation.html` trực tiếp.
 
@@ -371,10 +534,12 @@ Use this log after every feature, fix, migration, architecture change, security 
 ## 2026-05-13 - Post-Generate Format Rule And User Guide
 
 ### Plan
+
 - Add a rule requiring Copilot to format only the `.cs`/`.razor`/`.cshtml` files it just wrote, immediately after generation — not the whole project.
 - Add user guide (`huong-dan-su-dung.md`) to `.github/docs/`.
 
 ### Changed Files
+
 - `.github/copilot-instructions.md` — step 6 now includes immediate post-gen format command
 - `.github/instructions/aspnet-core.instructions.md` — added Formatting Rules section
 - `.github/prompts/implement.prompt.md` — format rule embedded in implementation rules
@@ -386,6 +551,7 @@ Use this log after every feature, fix, migration, architecture change, security 
 - `.github/docs/huong-dan-su-dung.md` — new user guide (HTML+Markdown)
 
 ### Verification
+
 - Commands run:
   - Grep scan: no references to removed hooks/ directory remain in any active file
   - Grep scan: format rule present in all 5 target files (copilot-instructions.md, aspnet-core.instructions.md, implement/fix/devloop prompts)
@@ -393,26 +559,31 @@ Use this log after every feature, fix, migration, architecture change, security 
   - Runtime dotnet format execution (package-only repo, no .NET application code present)
 
 ### Line Review
+
 - Reviewer: Copilot
 - Critical/high findings: none
 - Resolved findings: removed pre-commit hook approach (wrong timing); replaced with post-gen inline rule
 - Residual risk: rule is instruction-level — actual execution depends on Copilot following the instruction at inference time
 
 ### Security, Privacy, Data Impact
+
 - Sensitive data touched: none
 - Auth/authz impact: none
 - Logging impact: none
 - Data integrity impact: none
 
 ### Docs Updated
+
 - `.github/docs/project-docs-base.md`
 - `.github/docs/project-changelog.md`
 - `.github/docs/feature-delivery-log.md`
 
 ### Rollback
+
 - Remove the Formatting Rules sections from the five changed files to revert format behavior.
 
 ### Follow-Ups
+
 - When this package is installed into a real .NET repository, validate that `dotnet format --include` works with the actual solution path.
 
 ---
@@ -420,11 +591,13 @@ Use this log after every feature, fix, migration, architecture change, security 
 ## 2026-05-13 - Manual Governance Workflows And Scope Trim
 
 ### Plan
+
 - Add manual-only governance workflow checks while CI is not yet enabled for this package repository.
 - Remove out-of-scope payment-specific and web-frontend-specific Copilot assets.
 - Replace generic npm verification examples with commands that match this `.github`-only repository.
 
 ### Changed Files
+
 - `.github/workflows/manual-governance-checks.yml`
 - `.github/copilot-instructions.md`
 - `.github/instructions/banking-grade-engineering.instructions.md`
@@ -436,12 +609,14 @@ Use this log after every feature, fix, migration, architecture change, security 
 - `.github/docs/*`
 
 ### Removed Files
+
 - `.github/skills/payments-risk-governance/SKILL.md`
 - `.github/skills/frontend-quality/SKILL.md`
 - `.github/agents/ui-ux-designer.agent.md`
 - `.github/prompts/design.prompt.md`
 
 ### Verification
+
 - Commands run:
   - `rg --files -uu .github`
   - `rg -n -i "payment|payments|frontend|front-end|ui ux|ui/ux|web frontend" .github`
@@ -453,6 +628,7 @@ Use this log after every feature, fix, migration, architecture change, security 
   - GitHub Actions not run because this repository is package-only and CI is intentionally manual for now.
 
 ### Line Review
+
 - Reviewer: Codex
 - Critical/high findings:
   - Initial workflow validation would have scanned docs history and failed on expected removal notes.
@@ -462,20 +638,24 @@ Use this log after every feature, fix, migration, architecture change, security 
   - Target application repository still needs branch protection and CODEOWNERS to enforce these checks.
 
 ### Security, Privacy, Data Impact
+
 - Sensitive data touched: none.
 - Auth/authz impact: none.
 - Logging impact: none.
 - Data integrity impact: none.
 
 ### Docs Updated
+
 - `.github/docs/project-docs-base.md`
 - `.github/docs/project-changelog.md`
 - `.github/docs/feature-delivery-log.md`
 
 ### Rollback
+
 - Revert this delivery if the target repository later needs payment or web frontend Copilot guidance.
 
 ### Follow-Ups
+
 - Enable pull request triggers after this package is installed into a real application repository.
 - Add CODEOWNERS and branch protection in the target repository.
 
@@ -485,47 +665,57 @@ Use this log after every feature, fix, migration, architecture change, security 
 ## YYYY-MM-DD - [Feature or Change Name]
 
 ### Plan
+
 - Plan path or summary:
 - Approvals required:
 
 ### Changed Files
-- 
+
+-
 
 ### Verification
+
 - Commands run:
 - Results:
 - Checks not run:
 
 ### Line Review
+
 - Reviewer:
 - Critical/high findings:
 - Resolved findings:
 - Residual risk:
 
 ### Security, Privacy, Data Impact
+
 - Sensitive data touched:
 - Auth/authz impact:
 - Logging impact:
 - Data integrity impact:
 
 ### Docs Updated
-- 
+
+-
 
 ### Rollback
-- 
+
+-
 
 ### Follow-Ups
-- 
+
+-
 ```
 
 ## 2026-05-13 - Standalone Banking Grade Copilot Package
 
 ### Plan
+
 - Converted the Copilot customization into a standalone `.github/` package.
 - Promoted only reviewed, Markdown-only, governance-safe skills.
 - Removed dependency on external local folders.
 
 ### Changed Files
+
 - `.github/copilot-instructions.md`
 - `.github/instructions/banking-grade-engineering.instructions.md`
 - `.github/instructions/copilot-package-knowledge-base.instructions.md`
@@ -538,6 +728,7 @@ Use this log after every feature, fix, migration, architecture change, security 
 - `.github/docs/*`
 
 ### Verification
+
 - File inventory completed for `.github/`.
 - Markdown/frontmatter inspection completed for active Copilot files.
 - `.github/copilot-instructions.md` kept compact so banking gates remain near the top.
@@ -546,32 +737,39 @@ Use this log after every feature, fix, migration, architecture change, security 
 - Runtime tests not applicable because this repository currently contains documentation/configuration only.
 
 ### Line Review
+
 - Completed for the changed Copilot configuration and docs files in this delivery.
 
 ### Security, Privacy, Data Impact
+
 - No production or customer data introduced.
 - Added explicit sensitive-data handling rules.
 - No shell scripts or tool automation copied into promoted skills.
 
 ### Docs Updated
+
 - `.github/docs/project-docs-base.md`
 - `.github/docs/project-changelog.md`
 - `.github/docs/feature-delivery-log.md`
 
 ### Rollback
+
 - Revert the listed `.github/` files to the previous Copilot configuration if the policy is too strict for a target project.
 
 ### Follow-Ups
+
 - Add CI, CODEOWNERS, branch protection, secret scanning, and stack-specific instructions when installed into a real codebase.
 
 ## 2026-05-13 - System Analysis And Codebase-Fit Hardening
 
 ### Plan
+
 - Compared the trusted reference package against the current standalone package.
 - Preserved current banking-grade standalone structure.
 - Imported the stronger reference behaviors as clean Copilot-native files: system analysis, codebase reading, logic checking, ASP.NET/.NET governance, and dev-loop approval flow.
 
 ### Changed Files
+
 - `.github/copilot-instructions.md`
 - `.github/agents/system-analyst.agent.md`
 - `.github/agents/planner.agent.md`
@@ -600,6 +798,7 @@ Use this log after every feature, fix, migration, architecture change, security 
 - `.github/docs/*`
 
 ### Verification
+
 - File inventory completed for `.github/`.
 - Reference scan completed: no dependency on external local folders.
 - Markdown/frontmatter inspection completed for active Copilot files.
@@ -608,31 +807,38 @@ Use this log after every feature, fix, migration, architecture change, security 
 - Runtime tests not applicable because this repository currently contains documentation/configuration only.
 
 ### Line Review
+
 - Completed for the changed Copilot configuration and docs files in this delivery.
 
 ### Security, Privacy, Data Impact
+
 - No production or customer data introduced.
 - No scripts or tool automation copied from reference package.
 - Added codebase-first and business-logic controls without importing unsafe hooks/scripts.
 
 ### Docs Updated
+
 - `.github/docs/project-docs-base.md`
 - `.github/docs/project-changelog.md`
 - `.github/docs/feature-delivery-log.md`
 
 ### Rollback
+
 - Revert the listed files if the target repository should not include ASP.NET/.NET or system-analysis enhancements.
 
 ### Follow-Ups
+
 - Add target-repository-specific docs paths once this package is installed into a real codebase.
 
 ## 2026-05-13 - Reference-First Banking Flow Highlight
 
 ### Plan
+
 - Checked whether the package already enforced: read old/reference project first, compare with current `.github`, create a short plan, wait for review/approval, then patch.
 - Gap found: codebase-first and plan gates existed, but reference-first comparison was not promoted as a top critical gate.
 
 ### Changed Files
+
 - `.github/copilot-instructions.md`
 - `.github/instructions/banking-grade-engineering.instructions.md`
 - `.github/copilot/codebase-analysis-playbook.md`
@@ -644,6 +850,7 @@ Use this log after every feature, fix, migration, architecture change, security 
 - `.github/docs/feature-delivery-log.md`
 
 ### Verification
+
 - Commands run:
   - `rg -n "reference|old project|compare|plan|approval|business logic|codebase|debug|system analysis|changed line" .github`
   - `(Get-Content .github\copilot-instructions.md -Raw).Length`
@@ -654,6 +861,7 @@ Use this log after every feature, fix, migration, architecture change, security 
   - Runtime tests not applicable because this package is Markdown configuration and documentation only.
 
 ### Line Review
+
 - Reviewer: Codex
 - Critical/high findings:
   - Missing explicit top-level reference-first comparison gate before this update.
@@ -663,30 +871,36 @@ Use this log after every feature, fix, migration, architecture change, security 
   - Target repository still needs stack-specific verification commands after this standalone `.github/` package is moved.
 
 ### Security, Privacy, Data Impact
+
 - Sensitive data touched: none.
 - Auth/authz impact: none.
 - Logging impact: none.
 - Data integrity impact: none.
 
 ### Docs Updated
+
 - `.github/docs/project-docs-base.md`
 - `.github/docs/project-changelog.md`
 - `.github/docs/feature-delivery-log.md`
 
 ### Rollback
+
 - Revert the listed files if a target repository does not want reference-first migration workflow enforced.
 
 ### Follow-Ups
+
 - Add target-repository-specific docs paths and verification commands after installation into a real codebase.
 
 ## 2026-05-13 - Sanitized Reference Knowledge Migration
 
 ### Plan
+
 - Compare old `skills/*/references` structure with current `.github/skills`.
 - Keep skills short and governance-safe.
 - Add sanitized reference knowledge under `.github/copilot/references/` for deeper Copilot retrieval.
 
 ### Changed Files
+
 - `.github/copilot/references/README.md`
 - `.github/copilot/references/aspnet-core-service-patterns.md`
 - `.github/copilot/references/dotnet-data-integration-patterns.md`
@@ -703,6 +917,7 @@ Use this log after every feature, fix, migration, architecture change, security 
 - `.github/docs/feature-delivery-log.md`
 
 ### Verification
+
 - Commands run:
   - `rg --files -uu [old-reference-package]\.github\skills`
   - `Get-ChildItem -Recurse .github\skills -Force`
@@ -714,6 +929,7 @@ Use this log after every feature, fix, migration, architecture change, security 
   - Runtime tests not applicable because this package is Markdown configuration and documentation only.
 
 ### Line Review
+
 - Reviewer: Codex
 - Critical/high findings:
   - Detailed ASP.NET/data/debug reference depth was underrepresented after the first migration.
@@ -723,18 +939,22 @@ Use this log after every feature, fix, migration, architecture change, security 
   - Some old provider-specific/cloud/script references remain intentionally excluded until a bank-approved tool review.
 
 ### Security, Privacy, Data Impact
+
 - Sensitive data touched: none.
 - Auth/authz impact: none.
 - Logging impact: none.
 - Data integrity impact: positive governance impact through explicit data/integration reference rules.
 
 ### Docs Updated
+
 - `.github/docs/project-docs-base.md`
 - `.github/docs/project-changelog.md`
 - `.github/docs/feature-delivery-log.md`
 
 ### Rollback
+
 - Remove `.github/copilot/references/` and revert linked docs if the target repository wants only compact skills.
 
 ### Follow-Ups
+
 - Add target-repository-specific architecture docs after installing this package into a real codebase.

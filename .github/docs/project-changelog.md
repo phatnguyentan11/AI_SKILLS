@@ -1,40 +1,58 @@
 # Project Changelog
 
-## 2026-05-13
+All meaningful changes to the AI Copilot package are documented here.  
+Format: `[vMAJOR.MINOR.PATCH] YYYY-MM-DD — Summary`  
+Versioning: MAJOR = breaking architecture change; MINOR = new capability; PATCH = fix/update/cleanup.
 
-- Added `Notebook Task Analyst` agent for document-heavy tasks that start from NotebookLM briefs, source citations, and internal knowledge summaries before planner handoff.
-- Replaced the manual GitHub Actions governance workflow with a local pre-push warning hook and auditable PowerShell script.
-- Removed `.github/docs/docs.html` because the package now uses the Markdown developer guide and the single-file presentation as the primary onboarding documentation.
-- Added `.github/docs/ai-project-developer-guide.md`, a Vietnamese Markdown onboarding guide for developers covering the AI vision, codebase analysis, trace flows, Plan -> Implement -> Review workflow, Azure DevOps MCP, internal knowledge, and Deep Research.
-- Redesigned `.github/docs/ai-project-presentation.html` as a single-file developer guide/presentation with Tailwind layout, Prism code highlighting, Lucide icons, Inter font, Mermaid diagrams, callouts, responsive sidebar navigation, and step-by-step workflow sections.
-- Added Azure DevOps MCP governance for `dev.azure.com` work item, repo, wiki, and pipeline context.
-- Added internal knowledge governance for NotebookLM-style private docs, coding conventions, and sanitized old project references.
-- Added Deep Research governance for source-backed library and architecture research with ADR-ready outputs.
-- Added prompts for Azure DevOps intake, database schema context, internal knowledge, deep research, and architecture research.
-- Added Knowledge Curator and Research Architect agents.
-- Added MCP and knowledge source registry templates.
-- Added local pre-push governance checks for package validation, secret pattern scanning, and conditional .NET restore/build/format/test/dependency audit.
-- Removed out-of-scope payment-specific and web-frontend-specific Copilot assets and catalog references.
-- Replaced generic npm verification examples with repository-accurate `.github` package verification commands.
-- Added system-analysis focus based on trusted reference package:
-  - codebase reading before planning
-  - code explanation prompts
-  - business logic and logic-check prompts
-  - codebase-fit solution rules
-  - ASP.NET Core and dotnet testing governance
-  - system analyst custom agent
-- Added plan approval gate before implementation.
-- Promoted reference/old-project-first comparison into the critical banking gates and delivery workflow.
-- Added sanitized `.github/copilot/references/` knowledge so old skill references are represented without copying unsafe scripts or project-specific local material.
-- Converted the Copilot base into a standalone `.github/` package.
-- Moved explanatory knowledge into `.github/copilot/`.
-- Moved docs base into `.github/docs/`.
-- Removed package references to external local folders.
-- Replaced migration-only skill with curated Copilot skills.
-- Added banking-grade engineering gates:
-  - plan before dev
-  - line-by-line review
-  - security/privacy/data controls
-  - rollback notes
-  - verification evidence
-  - docs base update after every feature
+---
+
+## [v1.1.0] 2026-05-13 — Architecture diagram refresh + post-clone setup
+
+- Added `.github/scripts/setup.ps1`: post-clone setup script that installs git hooks, validates Copilot package structure, checks agent/skill inventory, and prints onboarding summary. Replaces the manual `git config core.hooksPath` step.
+- Updated `.github/docs/ai-project-developer-guide.md`:
+  - Added 5-layer architecture diagram (Layer 1–5: instructions → conditional rules → agents → skills → prompts).
+  - Added runtime integration diagram showing developer → chat → layers → enforcement → external context.
+  - Updated component table with accurate file counts (81 total), added rows for conditional instructions, reference knowledge, and setup scripts.
+  - Added Step 0 (post-clone setup) in Quick Start section referencing `setup.ps1`.
+- Re-initialized `project-changelog.md` with semantic version tags.
+
+---
+
+## [v1.0.0] 2026-05-13 — Initial stable package
+
+Standalone banking-grade Copilot governance package. Zero runtime dependencies. Portable to any repository.
+
+### Instructions (4 files)
+
+- `copilot-instructions.md`: always-on foundation — 10 critical banking gates + mandatory 10-step workflow (read → search → analyze → plan → implement → verify → review → docs → summarize).
+- `banking-grade-engineering.instructions.md`: regulated delivery rules applied to all files (`applyTo: **`).
+- `aspnet-core.instructions.md`: ASP.NET Core / C# / .NET patterns applied to `*.cs`, `*.csproj`, `*.sln`.
+- `copilot-package-knowledge-base.instructions.md`: meta rules for maintaining the Copilot package itself (`applyTo: .github/**`).
+
+### Agents (9 personas)
+
+`Planner` · `System Analyst` · `Researcher` · `Code Reviewer` · `Security Reviewer` · `Tester` · `Debugger` · `Docs Manager` · `Research Architect`
+
+### Skills (15 domain modules)
+
+`banking-grade-engineering` · `planning-governance` · `secure-code-review` · `system-analysis` · `business-logic-analysis` · `root-cause-debugging` · `aspnet-core-governance` · `backend-api-governance` · `database-data-integrity` · `dotnet-testing` · `release-devops-governance` · `docs-base-maintenance` · `deep-research-governance` · `mcp-integration-governance` · `testing-verification`
+
+### Prompts (21 slash-command workflows)
+
+`plan` · `banking-plan` · `implement` · `test` · `fix` · `devloop` · `review` · `line-review` · `logic-check` · `scout` · `analyze-code` · `explain-code` · `ask` · `git` · `deep-research` · `architecture-research` · `mcp` · `azure-devops-intake` · `db-schema-context` · `docs-update` · `docs-base-update`
+
+### Knowledge base (`.github/copilot/` — 14 files + 4 references)
+
+Playbooks: `workflow-playbook.md` · `banking-grade-engineering.md` · `codebase-analysis-playbook.md` · `azure-devops-mcp-playbook.md` · `deep-research-playbook.md` · `manual-tooling-guide.md` · `copilot-architecture.md` · `agent-catalog.md` · `skills-index.md` · `prompt-catalog.md` · `mcp-tool-registry.template.md` · `official-docs-snapshot.md` · `copilot-project-assessment.md` · `README.md`
+
+References: `aspnet-core-service-patterns.md` · `dotnet-data-integration-patterns.md` · `analysis-debug-review-patterns.md` · `README.md`
+
+### Local enforcement
+
+- `pre-commit` hook → `format-staged-files.ps1` (format warn, never blocks).
+- `pre-push` hook → `pre-push-governance-check.ps1` (validates package files, scans secrets, delegates to `pre-push-dotnet-check.ps1` when `.sln`/`.csproj` present).
+- `install-hooks.ps1`: manual hook installer with optional `-Strict` mode.
+
+### Docs base (`.github/docs/` — 7 files)
+
+`project-docs-base.md` · `project-changelog.md` · `feature-delivery-log.md` · `ai-project-developer-guide.md` · `ai-project-presentation.html` · `huong-dan-su-dung.md` · `README.md`

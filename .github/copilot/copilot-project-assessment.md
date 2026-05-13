@@ -29,7 +29,7 @@ Score after this revision: 9.2/10 for a portable instruction package.
 - No CODEOWNERS or branch protection can be enforced from this package alone.
 - Secret scanning and dependency checks are provided as local warning checks; target repositories still need CI enforcement if they require server-side gates.
 - Human accountable review remains mandatory for regulated banking code.
-- External connectors such as Azure DevOps, Slack, database schema readers, NotebookLM-style sources, and Deep Research require enterprise approval before use.
+- External connectors such as Azure DevOps, Slack, database schema readers, private knowledge sources, and Deep Research require enterprise approval before use.
 
 ## Required Target-Repo Hardening
 

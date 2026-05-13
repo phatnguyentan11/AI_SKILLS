@@ -70,8 +70,9 @@ if (Test-Path $prePushHook) {
 
 # Optionally enable strict mode
 if ($Strict) {
-    Write-Step "Setting AI_GOVERNANCE_STRICT=1 in local git config ..."
-    git config --local "env.AI_GOVERNANCE_STRICT" "1"
+    Write-Step "Setting ai-governance.strict = 1 in local git config ..."
+    # Use a proper git config key; env.* namespace does NOT set shell environment variables
+    git config --local "ai-governance.strict" "1"
     Write-OK "Strict mode enabled. Pre-push hook will BLOCK push on governance failures."
 } else {
     Write-Host "[hooks-install] Strict mode NOT enabled (default: warn only). Use -Strict to block pushes on failures." -ForegroundColor Cyan
