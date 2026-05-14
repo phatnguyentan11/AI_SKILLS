@@ -88,6 +88,7 @@ Write-Step "Validating Copilot package required files ..."
 
 $required = @(
     ".github/copilot-instructions.md",
+    ".github/copilot/blocked-rules.md",
     ".github/copilot/workflow-playbook.md",
     ".github/copilot/banking-grade-engineering.md",
     ".github/copilot/codebase-analysis-playbook.md",

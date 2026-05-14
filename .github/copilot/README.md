@@ -10,11 +10,12 @@ This directory belongs inside the standalone `.github/` Copilot package. It cont
 - `.github/hooks/pre-push`
 - `.github/scripts/pre-push-governance-check.ps1`
 - `.github/docs/*.md`
-- `.github/docs/ai-project-presentation.html`
+- `.github/introduce/*.md`
 
 ## Start Here
 
 - [Copilot Architecture](copilot-architecture.md): package layout and placement rules.
+- [Introduce Docs](../introduce/README.md): professional onboarding, usage guide, presentation script, and quick reference.
 - [Banking Grade Engineering](banking-grade-engineering.md): regulated financial-services delivery policy.
 - [Workflow Playbook](workflow-playbook.md): planning, implementation, verification, review, docs, and release flow.
 - [Codebase Analysis Playbook](codebase-analysis-playbook.md): system analysis, code explanation, business logic, and blast-radius workflow.

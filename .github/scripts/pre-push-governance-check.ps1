@@ -79,6 +79,7 @@ if ($hasCopilotPackage) {
   Invoke-Step "Validate Copilot package required files" {
     $requiredFiles = @(
       ".github/copilot-instructions.md",
+      ".github/copilot/blocked-rules.md",
       ".github/copilot/workflow-playbook.md",
       ".github/copilot/banking-grade-engineering.md",
       ".github/copilot/codebase-analysis-playbook.md",
@@ -140,6 +141,73 @@ Invoke-Step "Scan for likely secrets" {
     $matches = $files | Select-String -Pattern $pattern -ErrorAction SilentlyContinue
     foreach ($match in $matches) {
       Add-Failure "$($match.Path):$($match.LineNumber): potential secret pattern"
+    }
+  }
+}
+
+Invoke-Step "Scan for banking .NET policy violations" {
+  $blockedRulesPath = ".github/copilot/blocked-rules.md"
+  if (-not (Test-Path $blockedRulesPath)) {
+    throw "Missing blocked rules source: $blockedRulesPath"
+  }
+
+  $scanRules = New-Object System.Collections.Generic.List[object]
+  $inScanBlock = $false
+
+  foreach ($line in Get-Content $blockedRulesPath) {
+    $trimmed = $line.Trim()
+
+    if ($trimmed -eq '```blocked-scan') {
+      $inScanBlock = $true
+      continue
+    }
+
+    if ($inScanBlock -and $trimmed -eq '```') {
+      $inScanBlock = $false
+      continue
+    }
+
+    if (-not $inScanBlock -or [string]::IsNullOrWhiteSpace($line)) {
+      continue
+    }
+
+    $parts = $line -split "`t", 4
+    if ($parts.Count -ne 4) {
+      throw "Invalid blocked scan rule format in ${blockedRulesPath}: $line"
+    }
+
+    $scanRules.Add([pscustomobject]@{
+      Id = $parts[0]
+      Globs = $parts[1]
+      Pattern = $parts[2]
+      Message = $parts[3]
+    }) | Out-Null
+  }
+
+  if ($scanRules.Count -eq 0) {
+    throw "No blocked scan rules found in $blockedRulesPath"
+  }
+
+  $policyTargets = Get-ChildItem -Recurse -File -Force -Include *.cs,*.csproj,*.props,*.targets |
+    Where-Object {
+      $_.FullName -notmatch "[\\/]\.git[\\/]" -and
+      $_.FullName -notmatch "[\\/](bin|obj|node_modules|dist|coverage)[\\/]"
+    }
+
+  foreach ($rule in $scanRules) {
+    $globs = @($rule.Globs -split "," | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+    $targetFiles = foreach ($file in $policyTargets) {
+      foreach ($glob in $globs) {
+        if ($glob -eq "*" -or $file.Name -like $glob) {
+          $file
+          break
+        }
+      }
+    }
+
+    $matches = $targetFiles | Select-String -Pattern $rule.Pattern -ErrorAction SilentlyContinue
+    foreach ($match in $matches) {
+      Add-Failure "$($match.Path):$($match.LineNumber): $($rule.Id): $($rule.Message)"
     }
   }
 }

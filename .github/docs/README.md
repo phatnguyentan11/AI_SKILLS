@@ -6,6 +6,7 @@ Update it after every feature, fix, migration, architecture change, security cha
 
 Start with:
 
+- [Introduce Docs](../introduce/README.md)
 - [Project Docs Base](project-docs-base.md)
 - [Project Changelog](project-changelog.md)
 - [Feature Delivery Log](feature-delivery-log.md)
@@ -13,4 +14,3 @@ Start with:
 ## Rule
 
 No package change is complete until implementation, verification, line review, and docs base update are recorded or explicitly marked not applicable with reason.
-

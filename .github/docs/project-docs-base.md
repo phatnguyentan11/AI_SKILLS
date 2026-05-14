@@ -1,6 +1,6 @@
 # Project Docs Base
 
-Last updated: 2026-05-13
+Last updated: 2026-05-14
 
 ## Purpose
 
@@ -11,6 +11,7 @@ This document is the living docs base for the standalone `.github/` GitHub Copil
 This package contains banking-grade GitHub Copilot customization assets:
 
 - `.github/copilot-instructions.md`
+- `.github/copilot/blocked-rules.md`
 - `.github/instructions/*.instructions.md`
 - `.github/prompts/*.prompt.md`
 - `.github/agents/*.agent.md`
@@ -19,17 +20,25 @@ This package contains banking-grade GitHub Copilot customization assets:
 - `.github/scripts/pre-push-governance-check.ps1`
 - `.github/copilot/**/*.md`
 - `.github/docs/*.md`
-- `.github/docs/ai-project-presentation.html`
-- `.github/docs/*.pdf`
+- `.github/introduce/*.md`
+- `.github/introduce/html/*.html`
+- `.github/introduce/html/assets/*.css`
 
 ## Developer-Facing Documentation
 
-The current package includes two primary onboarding outputs for developers new to this AI layer:
+Developer-facing Project AI usage documents live under `.github/introduce/` so `.github/docs/` can remain focused on technical package records:
 
-- `.github/docs/ai-project-developer-guide.md` - Markdown guide in Vietnamese with the project vision, architecture diagrams, data flow, workflow guidance, command cheat sheet, Azure DevOps MCP, internal knowledge, and Deep Research usage.
-- `.github/docs/ai-project-presentation.html` - single-file HTML guide/presentation with Tailwind-based layout, Prism code highlighting, Lucide icons, Mermaid diagrams, responsive sidebar navigation, callouts, and step-by-step execution sections.
+- `.github/introduce/README.md` - entry point for the introduction docs.
+- `.github/introduce/html/index.html` - visual CSS entry page for using Project AI.
+- `.github/introduce/html/*.html` - separate visual pages for usage guide, overview, tutorial, and quick reference.
+- `.github/introduce/html/assets/sea.css` - responsive sea-blue CSS for the visual introduce pages.
+- `.github/introduce/html/assets/docs.js` - lightweight bundled page routing, stable sidebar search/collapse, scroll TOC tracking, code copy, diagram hover, tooltips, and tutorial steps.
+- `.github/introduce/html/assets/docs.js` now renders HTML content from local `PAGE_DATA` so the introduce site can work smoothly from `file://` without a fetch-driven full-page reload.
+- `.github/introduce/01-system-overview.md` - architect-level overview, current scope, local-only boundary, and system diagrams.
+- `.github/introduce/02-huong-dan-su-dung.md` - concise Vietnamese usage guide for developers.
+- `.github/introduce/04-quick-reference.md` - daily prompt, agent, command, and safety cheat sheet.
 
-The older `.github/docs/docs.html` index was removed because it duplicated these docs and added maintenance overhead.
+The older guide and presentation files under `.github/docs/` were removed because they duplicated the introduce layer and made the docs folder mix technical records with onboarding content.
 
 ## Analysis-First Focus
 
@@ -77,12 +86,17 @@ All external sources are read-only by default, least-privilege, approval-gated f
 
 ## Banking Grade Delivery Rules
 
+- `.github/copilot/blocked-rules.md` is the single source of truth for non-negotiable blocked rules and wins over conflicting guidance.
 - Reference/old project comparison is mandatory when such input is provided.
 - Plan before dev.
 - Developer/user reviews and approves the plan before implementation.
 - Solution must fit the existing codebase first.
+- Existing approved components must be searched and suggested before generating new helpers, middleware, libraries, DI/config patterns, serializers, validators, logging wrappers, or exception handling.
+- Blocked dependency, serializer, DI/config, logging, exception, and architecture rules are maintained only in `.github/copilot/blocked-rules.md`.
+- Dependency injection, configuration, middleware, serialization, logging, and exception handling must follow the existing centralized composition pattern.
 - Review every changed line.
 - Protect secrets, credentials, customer data, account data, card data, PII, and internal bank identifiers.
+- Never log sensitive banking data or return stack traces/internal exception details to clients.
 - Run or record verification checks.
 - Update this docs base after each feature or behavior change.
 - Record rollback and residual risk for production-impacting changes.
