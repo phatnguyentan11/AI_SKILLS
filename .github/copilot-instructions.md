@@ -32,6 +32,7 @@ Use these gates to eliminate free-style implementation:
 - Centralized DI/config: changes must go through existing composition roots such as `Program.cs`, startup extensions, module installers, `IOptions<T>` registrations, or the repository's established equivalent. Avoid ad hoc `new ServiceCollection`, static config reads, service locator usage, or per-file setup.
 - KISS by default: choose the smallest readable code that satisfies current requirements. Avoid speculative layers, generic frameworks, base classes, reflection, dynamic dispatch, or cross-cutting abstractions unless the codebase already depends on that pattern.
 - DRY with restraint: consolidate only meaningful duplication. Do not add a shared abstraction for a single caller or hypothetical future variants.
+- YAGNI: do not implement features, parameters, or abstractions that are not currently required by the implementation or explicitly planned for in the approval. Avoid speculative future-proofing.
 - Security red lines: flag and block anything listed in `.github/copilot/blocked-rules.md`.
 
 ## Package Map

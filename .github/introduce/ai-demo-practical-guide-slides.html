@@ -1071,14 +1071,6 @@
                 rollback được
               </li>
               <li>
-                <strong>Security boundary</strong> — auth/authz, least
-                privilege, masking, encryption
-              </li>
-              <li>
-                <strong>Data integrity</strong> — concurrency, idempotency,
-                transaction boundary
-              </li>
-              <li>
                 <strong>Codebase legacy</strong> — pattern cũ, constraint nội
                 bộ, component approved
               </li>
@@ -1095,6 +1087,7 @@
               xmlns="http://www.w3.org/2000/svg"
             >
               <rect width="420" height="380" fill="#070e1c" rx="14" />
+              <!-- Center circle -->
               <circle
                 cx="210"
                 cy="190"
@@ -1124,18 +1117,19 @@
               >
                 domain
               </text>
+              <!-- Top-left: PII / Secrets -->
               <rect
                 x="10"
-                y="55"
-                width="100"
+                y="80"
+                width="110"
                 height="42"
                 rx="8"
                 fill="rgba(239,80,80,.1)"
                 stroke="rgba(239,80,80,.3)"
               />
               <text
-                x="60"
-                y="72"
+                x="65"
+                y="97"
                 text-anchor="middle"
                 font-size="10"
                 fill="#ef5050"
@@ -1145,8 +1139,8 @@
                 PII / Secrets
               </text>
               <text
-                x="60"
-                y="88"
+                x="65"
+                y="113"
                 text-anchor="middle"
                 font-size="9"
                 fill="#7a9dbf"
@@ -1154,18 +1148,19 @@
               >
                 masked, encrypted
               </text>
+              <!-- Top-right: Audit Trail -->
               <rect
-                x="310"
-                y="55"
-                width="100"
+                x="300"
+                y="80"
+                width="110"
                 height="42"
                 rx="8"
                 fill="rgba(245,187,48,.1)"
                 stroke="rgba(245,187,48,.3)"
               />
               <text
-                x="360"
-                y="72"
+                x="355"
+                y="97"
                 text-anchor="middle"
                 font-size="10"
                 fill="#f5bb30"
@@ -1175,179 +1170,106 @@
                 Audit Trail
               </text>
               <text
-                x="360"
-                y="88"
+                x="355"
+                y="113"
                 text-anchor="middle"
                 font-size="9"
                 fill="#7a9dbf"
                 font-family="Segoe UI,sans-serif"
               >
-                traceable
+                traceable, rollback
               </text>
+              <!-- Bottom-left: Business Logic -->
               <rect
                 x="10"
-                y="168"
-                width="100"
-                height="42"
-                rx="8"
-                fill="rgba(61,148,255,.1)"
-                stroke="rgba(61,148,255,.3)"
-              />
-              <text
-                x="60"
-                y="185"
-                text-anchor="middle"
-                font-size="10"
-                fill="#3d94ff"
-                font-family="Segoe UI,sans-serif"
-                font-weight="700"
-              >
-                Auth / Authz
-              </text>
-              <text
-                x="60"
-                y="201"
-                text-anchor="middle"
-                font-size="9"
-                fill="#7a9dbf"
-                font-family="Segoe UI,sans-serif"
-              >
-                least privilege
-              </text>
-              <rect
-                x="310"
-                y="168"
-                width="100"
+                y="258"
+                width="110"
                 height="42"
                 rx="8"
                 fill="rgba(160,107,255,.1)"
                 stroke="rgba(160,107,255,.3)"
               />
               <text
-                x="360"
-                y="185"
+                x="65"
+                y="275"
                 text-anchor="middle"
                 font-size="10"
                 fill="#a06bff"
                 font-family="Segoe UI,sans-serif"
                 font-weight="700"
               >
-                Idempotency
+                Business Logic
               </text>
               <text
-                x="360"
-                y="201"
+                x="65"
+                y="291"
                 text-anchor="middle"
                 font-size="9"
                 fill="#7a9dbf"
                 font-family="Segoe UI,sans-serif"
               >
-                concurrency safe
+                hạn mức, reversal
               </text>
+              <!-- Bottom-right: Codebase Legacy -->
               <rect
-                x="10"
-                y="278"
-                width="100"
+                x="300"
+                y="258"
+                width="110"
                 height="42"
                 rx="8"
-                fill="rgba(14,207,173,.1)"
-                stroke="rgba(14,207,173,.3)"
+                fill="rgba(61,148,255,.1)"
+                stroke="rgba(61,148,255,.3)"
               />
               <text
-                x="60"
-                y="295"
+                x="355"
+                y="275"
                 text-anchor="middle"
                 font-size="10"
-                fill="#0ecfad"
+                fill="#3d94ff"
                 font-family="Segoe UI,sans-serif"
                 font-weight="700"
               >
-                Rollback
+                Codebase Legacy
               </text>
               <text
-                x="60"
-                y="311"
+                x="355"
+                y="291"
                 text-anchor="middle"
                 font-size="9"
                 fill="#7a9dbf"
                 font-family="Segoe UI,sans-serif"
               >
-                migration safe
+                pattern approved
               </text>
-              <rect
-                x="310"
-                y="278"
-                width="100"
-                height="42"
-                rx="8"
-                fill="rgba(239,80,80,.1)"
-                stroke="rgba(239,80,80,.3)"
-              />
-              <text
-                x="360"
-                y="295"
-                text-anchor="middle"
-                font-size="10"
-                fill="#ef5050"
-                font-family="Segoe UI,sans-serif"
-                font-weight="700"
-              >
-                Invariants
-              </text>
-              <text
-                x="360"
-                y="311"
-                text-anchor="middle"
-                font-size="9"
-                fill="#7a9dbf"
-                font-family="Segoe UI,sans-serif"
-              >
-                business rules
-              </text>
+              <!-- Connecting lines -->
               <line
-                x1="110"
-                y1="76"
-                x2="162"
-                y2="160"
+                x1="120"
+                y1="101"
+                x2="163"
+                y2="155"
                 stroke="#1a3050"
                 stroke-width="1.5"
               />
               <line
-                x1="310"
-                y1="76"
-                x2="258"
-                y2="160"
+                x1="300"
+                y1="101"
+                x2="257"
+                y2="155"
                 stroke="#1a3050"
                 stroke-width="1.5"
               />
               <line
-                x1="110"
-                y1="189"
-                x2="158"
-                y2="189"
-                stroke="#1a3050"
-                stroke-width="1.5"
-              />
-              <line
-                x1="310"
-                y1="189"
-                x2="262"
-                y2="189"
-                stroke="#1a3050"
-                stroke-width="1.5"
-              />
-              <line
-                x1="110"
-                y1="299"
-                x2="162"
+                x1="120"
+                y1="279"
+                x2="163"
                 y2="228"
                 stroke="#1a3050"
                 stroke-width="1.5"
               />
               <line
-                x1="310"
-                y1="299"
-                x2="258"
+                x1="300"
+                y1="279"
+                x2="257"
                 y2="228"
                 stroke="#1a3050"
                 stroke-width="1.5"
@@ -1380,7 +1302,8 @@
               <li>Tự thêm package, tự chọn pattern ngoài chuẩn team</li>
               <li>
                 Bỏ qua
-                <strong>auth/authz, idempotency, concurrency, audit log</strong>
+                <strong>business rule, audit log</strong>
+                của domain
               </li>
               <li>Log nhầm <strong>PII, token, account/card data</strong></li>
               <li>Refactor quá rộng — blast radius lớn, không kiểm soát</li>
@@ -1435,7 +1358,7 @@
                 font-family="Segoe UI,sans-serif"
                 font-weight="700"
               >
-                Missing auth check
+                Missing audit log
               </text>
               <rect
                 x="260"
@@ -1529,40 +1452,53 @@
               <span class="gtxt">có rule</span>
             </h2>
             <p class="slead">
-              AI_SKILLS xây một lớp
-              <strong style="color: #ddeeff">governance</strong> nằm ngay trong
-              repo, ép Copilot làm việc theo tiêu chuẩn banking.
+              Copilot, Cursor, ChatGPT đều đã có
+              <strong style="color: #ddeeff">4 layer đầu</strong> — sinh code,
+              đọc file, chạy lệnh, tạo diff. Vấn đề là không tool nào biết
+              <strong style="color: #ddeeff">rule banking nội bộ</strong> của
+              team bạn.
             </p>
             <div class="lstack">
               <div class="lrow l5">
                 <div class="lrow-num" style="color: #0ecfad">⑤</div>
                 <div class="lrow-title">Governance Layer</div>
-                <div class="lrow-tag"><span class="tag g">AI_SKILLS</span></div>
+                <div class="lrow-tag">
+                  <span class="tag g">AI_SKILLS thêm vào</span>
+                </div>
               </div>
               <div class="lrow l4">
                 <div class="lrow-num" style="color: #a06bff">④</div>
                 <div class="lrow-title">Apply / Diff Layer</div>
-                <div class="lrow-tag">patch · branch · PR</div>
+                <div class="lrow-tag" style="color: var(--dim)">
+                  AI show diff → bạn accept/reject → apply workspace
+                </div>
               </div>
               <div class="lrow l3">
                 <div class="lrow-num" style="color: #3d94ff">③</div>
                 <div class="lrow-title">Tool / Action Layer</div>
-                <div class="lrow-tag">file · terminal · test</div>
+                <div class="lrow-tag" style="color: var(--dim)">
+                  sửa file · chạy test · terminal
+                </div>
               </div>
               <div class="lrow l2">
                 <div class="lrow-num" style="color: #f5bb30">②</div>
                 <div class="lrow-title">Context Engine</div>
-                <div class="lrow-tag">indexing · RAG · diff</div>
+                <div class="lrow-tag" style="color: var(--dim)">
+                  đọc file · index workspace · RAG
+                </div>
               </div>
               <div class="lrow l1">
                 <div class="lrow-num" style="color: #ef5050">①</div>
                 <div class="lrow-title">Model Layer</div>
-                <div class="lrow-tag">Claude · GPT · Gemini</div>
+                <div class="lrow-tag" style="color: var(--dim)">
+                  sinh code · reasoning · trả lời
+                </div>
               </div>
             </div>
             <div class="callout">
-              Project tập trung lớp ⑤ — lớp mà tool thị trường
-              <strong>không tự biết</strong> rule banking của team bạn.
+              Layer ⑤ là lớp duy nhất tool thị trường
+              <strong>không thể tự có</strong> — chỉ team bạn mới biết chuẩn
+              banking nội bộ.
             </div>
           </div>
           <div class="sright">
@@ -1696,6 +1632,42 @@
                 font-family="Segoe UI,sans-serif"
               >
                 AI_SKILLS focus ↑
+              </text>
+              <!-- Bracket: layers ①–④ already built-in -->
+              <line
+                x1="358"
+                y1="130"
+                x2="368"
+                y2="130"
+                stroke="#364d65"
+                stroke-width="1.2"
+              />
+              <line
+                x1="368"
+                y1="130"
+                x2="368"
+                y2="346"
+                stroke="#364d65"
+                stroke-width="1.2"
+              />
+              <line
+                x1="358"
+                y1="346"
+                x2="368"
+                y2="346"
+                stroke="#364d65"
+                stroke-width="1.2"
+              />
+              <text
+                x="372"
+                y="242"
+                font-size="8.5"
+                fill="#364d65"
+                font-family="Segoe UI,sans-serif"
+                writing-mode="tb"
+                text-anchor="middle"
+              >
+                Copilot · Cursor · ChatGPT có sẵn
               </text>
             </svg>
           </div>
@@ -2645,9 +2617,7 @@
               </div>
               <div class="ccard r">
                 <div class="cc-title">🛡️ Security Reviewer</div>
-                <div class="cc-text">
-                  PII · auth/authz · secrets · data integrity
-                </div>
+                <div class="cc-text">PII · auth/authz · secrets</div>
               </div>
               <div class="ccard a">
                 <div class="cc-title">🧪 Tester</div>
@@ -3104,7 +3074,6 @@
                 <ul class="blist sm muted">
                   <li>Banking Grade Engineering</li>
                   <li>Secure Code Review</li>
-                  <li>Database Data Integrity</li>
                   <li>Business Logic Analysis</li>
                   <li>Dotnet Testing · ASP.NET Core</li>
                   <li>Backend API Governance</li>
