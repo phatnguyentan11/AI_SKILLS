@@ -1,30 +1,27 @@
 ---
 name: plan
-agent: agent
-description: Create a comprehensive implementation plan for a task or feature
-argument-hint: Describe the feature or task to plan
+description: Create a concise implementation plan for a feature, bug, migration, or refactor.
+argument-hint: "[goal]"
+agent: plan
 ---
 
-## Your Mission
+# Plan Work
 
-Task to plan:
-```
-${input:task}
-```
+Use `#codebase` to inspect relevant files before planning.
 
-## Workflow
+Create a plan with:
 
-- Analyze the given task and ask for more details if needed.
-- Activate the `planning` skill from `.github/skills/planning/`.
-- Spawn multiple `@researcher` subagents in parallel to research different relevant technical topics.
-- Create a comprehensive implementation plan saved to `./plans/<feature-name>/` directory with:
-  - `plan.md` — Overview, goals, risks, tech stack decisions, phase breakdown
-  - `phase-1.md`, `phase-2.md`, etc. — Detailed task breakdowns per phase
+- goal
+- system/codebase context
+- constraints
+- affected files
+- business logic and data flow
+- implementation phases
+- risks and mitigations
+- verification commands
+- docs updates
+- unresolved questions
 
-## Important Notes
+Do not implement during this prompt unless the user explicitly asks.
 
-- **IMPORTANT**: Analyze the skills catalog at `.github/skills/*` and activate skills needed for the task.
-- **IMPORTANT**: Sacrifice grammar for the sake of concision when writing reports.
-- **IMPORTANT**: Ensure token efficiency while maintaining high quality.
-- **IMPORTANT**: In reports, list any unresolved questions at the end.
-- **IMPORTANT**: **Do not** start implementing — return the summary and file path of the plan.
+Follow `.github/copilot-instructions.md`, `.github/copilot/workflow-playbook.md`, and `.github/copilot/codebase-analysis-playbook.md`.

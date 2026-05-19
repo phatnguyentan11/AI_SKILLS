@@ -1,0 +1,24 @@
+#!/usr/bin/env sh
+
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
+if [ -z "$ROOT" ]; then
+  echo "[format][warning] Cannot resolve repository root. Skipping format check."
+  exit 0
+fi
+
+SCRIPT="$ROOT/.github/scripts/format-staged-files.ps1"
+if [ ! -f "$SCRIPT" ]; then
+  echo "[format][warning] Missing $SCRIPT. Skipping format check."
+  exit 0
+fi
+
+if command -v pwsh >/dev/null 2>&1; then
+  pwsh -NoProfile -File "$SCRIPT"
+elif command -v powershell >/dev/null 2>&1; then
+  powershell -NoProfile -ExecutionPolicy Bypass -File "$SCRIPT"
+else
+  echo "[format][warning] PowerShell not available. Skipping format check."
+fi
+
+# Always allow the commit to proceed (warn only).
+exit 0

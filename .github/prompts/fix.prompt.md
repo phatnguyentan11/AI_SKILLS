@@ -1,21 +1,23 @@
 ---
 name: fix
+description: Diagnose and fix a bug, failing test, type error, UI issue, log issue, or CI failure.
+argument-hint: "[issue, log, or failing command]"
 agent: agent
-description: Analyze and fix issues (auto-detects complexity)
-argument-hint: Describe the issue or paste the error message
 ---
 
-**Reported Issues:**
-```
-${input:issues}
-```
+# Fix
 
-If there is a markdown implementation plan already in `./plans/`, reference it and implement the fix following the `code` prompt workflow.
+Use `#codebase` to trace the issue before editing.
 
-Otherwise:
-- Analyze the issues and ask for more details if needed.
-- For **simple issues** (clear root cause, < 30 lines of changes): fix directly.
-- For **complex issues** (unclear root cause, architectural impact, > 30 lines): use `@planner` agent to create a fix plan first, then use the `code` prompt to implement it.
+Process:
 
-**IMPORTANT**: Analyze skills at `.github/skills/*` and activate skills needed for the task.
-**IMPORTANT**: After implementing the fix, delegate to `@tester` to verify the fix doesn't introduce regressions.
+1. Reproduce or identify evidence.
+2. Explain the affected code path and business rule.
+3. Trace root cause.
+4. Make the smallest safe change based on existing patterns.
+5. Add regression coverage when appropriate.
+6. Run or provide verification commands.
+
+Do not weaken tests, hide errors, or fake data just to pass.
+
+Follow `.github/copilot-instructions.md`, `.github/copilot/workflow-playbook.md`, `.github/copilot/codebase-analysis-playbook.md`, and `.github/copilot/manual-tooling-guide.md`.

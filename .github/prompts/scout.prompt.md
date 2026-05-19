@@ -1,28 +1,23 @@
 ---
 name: scout
-agent: agent
-description: Search the codebase for files relevant to a specific task
-argument-hint: Describe the task or feature to search files for
+description: Locate files, symbols, tests, configs, and docs relevant to a task.
+argument-hint: "[task or topic]"
+agent: ask
 ---
 
-## Purpose
+# Scout
 
-Search the codebase for files needed to complete the task using fast, parallel, token-efficient searches.
+Use `#codebase` and workspace search to locate relevant context.
 
-## Search Task
+Return:
 
-```
-${input:task}
-```
+- grouped file paths
+- why each file matters
+- likely owner modules
+- tests and docs to inspect
+- unknowns or missing context
 
-## Workflow
+Do not modify files.
 
-Use the `@scout` agent to search the codebase for files needed to complete the task:
-1. Analyze the task and identify key directories that likely contain relevant files.
-2. Divide the codebase into logical sections and search them in parallel.
-3. Synthesize the results into an organized, deduplicated file list.
+Follow `.github/copilot-instructions.md`.
 
-**How to write reports:**
-- **IMPORTANT**: Sacrifice grammar for the sake of concision when writing reports.
-- **IMPORTANT**: In reports, list any unresolved questions at the end.
-- Organize findings by category (core files, tests, config, etc.).
